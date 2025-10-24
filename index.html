@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBTI 人格测试 - 探索真实的自己</title>
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <!-- 统一的 Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#8B5CF6', // 紫色
+            secondary: '#3B82F6', // 蓝色
+            accent: '#F59E0B', // 橙色
+            dark: '#1F2937',
+            light: '#F3F4F6',
+            // MBTI 类型颜色
+            'type-e': '#3B82F6', // 外向
+            'type-i': '#8B5CF6', // 内向
+            'type-s': '#10B981', // 感觉
+            'type-n': '#F59E0B', // 直觉
+            'type-t': '#EF4444', // 思考
+            'type-f': '#EC4899', // 情感
+            'type-j': '#6366F1', // 判断
+            'type-p': '#14B8A6', // 知觉
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'slide-up': 'slideUp 0.5s ease-in-out',
+            'pulse-slow': 'pulse 3s infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            },
+          },
+          boxShadow: {
+            'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          },
+          backdropBlur: {
+            'glass': '4px',
+          },
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .text-shadow-lg {
+        text-shadow: 0 4px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+      }
+      .bg-gradient-primary {
+        background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+      }
+      .bg-gradient-secondary {
+        background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+      }
+      .bg-gradient-glass {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+      .transition-all-300 {
+        transition: all 300ms ease-in-out;
+      }
+      .scale-hover {
+        transition: transform 0.3s ease;
+      }
+      .scale-hover:hover {
+        transform: scale(1.05);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+  <!-- 页面容器 -->
+  <div id="app" class="min-h-screen flex flex-col">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <img src="https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1875933206918332428~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776761993&x-signature=PpBrW2c0BELbbGDuyBMFtYZ980E%3D" alt="MBTI Logo" class="h-10 w-10 object-contain">
+          <span class="text-xl font-bold text-gray-800">MBTI 人格测试</span>
+        </div>
+        <div class="hidden md:flex space-x-6">
+          <a href="#" class="text-gray-600 hover:text-primary transition-all-300" onclick="showPage('home')">首页</a>
+          <a href="#" class="text-gray-600 hover:text-primary transition-all-300" onclick="showPage('about')">关于MBTI</a>
+          <a href="#" class="text-gray-600 hover:text-primary transition-all-300" onclick="showPage('test')">开始测试</a>
+          <a href="#" class="text-gray-600 hover:text-primary transition-all-300" onclick="showPage('types')">人格类型</a>
+        </div>
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="text-gray-600 hover:text-primary focus:outline-none">
+            <i class="fa fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+      <!-- 移动端菜单 -->
+      <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute w-full z-50">
+        <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+          <a href="#" class="text-gray-600 hover:text-primary py-2 transition-all-300" onclick="showPage('home'); toggleMobileMenu()">首页</a>
+          <a href="#" class="text-gray-600 hover:text-primary py-2 transition-all-300" onclick="showPage('about'); toggleMobileMenu()">关于MBTI</a>
+          <a href="#" class="text-gray-600 hover:text-primary py-2 transition-all-300" onclick="showPage('test'); toggleMobileMenu()">开始测试</a>
+          <a href="#" class="text-gray-600 hover:text-primary py-2 transition-all-300" onclick="showPage('types'); toggleMobileMenu()">人格类型</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="flex-grow">
+      <!-- 首页 -->
+      <section id="home" class="page active">
+        <!-- 英雄区域 -->
+        <div class="relative overflow-hidden bg-gradient-primary text-white py-16 md:py-24">
+          <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-8 md:mb-0 z-10">
+              <h1 class="text-4xl md:text-5xl font-bold mb-4 text-shadow-lg animate-fade-in">探索你的人格类型</h1>
+              <p class="text-xl mb-8 text-gray-100 animate-slide-up">通过MBTI测试，了解真实的自己，发现你的优势与潜能</p>
+              <button onclick="showPage('test')" class="bg-white text-primary font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all-300 scale-hover">
+                开始测试
+              </button>
+            </div>
+            <div class="md:w-1/2 flex justify-center z-10">
+              <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/58cec4eb9b8548ccaa46a49df7dd0c99~tplv-a9rns2rl98-image.image?rcl=2025102316594374449F0D0DEFF0298B90&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1763802019&x-signature=OlirLzcF%2FJ0uyoF7bnooJdgE%2Ft0%3D" alt="MBTI Dimensions" class="w-full max-w-md rounded-lg shadow-2xl animate-fade-in">
+            </div>
+          </div>
+          <!-- 装饰元素 -->
+          <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20">
+            <div class="absolute top-10 left-10 w-20 h-20 rounded-full bg-white"></div>
+            <div class="absolute bottom-10 right-10 w-32 h-32 rounded-full bg-white"></div>
+            <div class="absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-white"></div>
+          </div>
+        </div>
+
+        <!-- 特点介绍 -->
+        <div class="py-16 bg-white">
+          <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">为什么选择我们的MBTI测试？</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <!-- 特点1 -->
+              <div class="bg-gray-50 rounded-xl p-6 shadow-md card-hover">
+                <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <i class="fa fa-check-circle text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 text-gray-800">科学精准</h3>
+                <p class="text-gray-600">基于卡尔·荣格的心理学理论，经过多年研究验证的MBTI测试题库，结果准确可靠。</p>
+              </div>
+              <!-- 特点2 -->
+              <div class="bg-gray-50 rounded-xl p-6 shadow-md card-hover">
+                <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <i class="fa fa-clock-o text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 text-gray-800">快速便捷</h3>
+                <p class="text-gray-600">仅需20分钟即可完成测试，立即获取详细的人格分析报告，随时随地探索自我。</p>
+              </div>
+              <!-- 特点3 -->
+              <div class="bg-gray-50 rounded-xl p-6 shadow-md card-hover">
+                <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <i class="fa fa-share-alt text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 text-gray-800">分享互动</h3>
+                <p class="text-gray-600">生成精美的结果分享卡片，与朋友分享你的人格类型，了解彼此的性格差异。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 人格类型预览 -->
+        <div class="py-16 bg-gray-50">
+          <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">16种人格类型</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">MBTI测试将人格分为16种类型，每种类型都有其独特的优势、特点和适合的职业方向。</p>
+            
+            <div class="flex justify-center mb-8">
+              <img src="https://p26-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1855964924681519107~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776761993&x-signature=sahKkqAVQQ%2BhVjmjE%2FfV4MJ%2F7Lk%3D" alt="MBTI 16 Types" class="max-w-full h-auto rounded-lg shadow-lg">
+            </div>
+            
+            <div class="text-center">
+              <button onclick="showPage('types')" class="bg-primary text-white font-bold py-3 px-8 rounded-full shadow-md hover:shadow-lg transition-all-300 scale-hover">
+                了解更多人格类型
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 用户评价 -->
+        <div class="py-16 bg-white">
+          <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">用户评价</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <!-- 评价1 -->
+              <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+                <div class="flex items-center mb-4">
+                  <div class="text-yellow-400 flex">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                  <span class="ml-2 text-gray-600">5.0</span>
+                </div>
+                <p class="text-gray-700 mb-6">"测试结果非常准确，让我对自己有了更深入的了解。分析报告详细且有启发性，推荐给所有想了解自己的人！"</p>
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">L</div>
+                  <div class="ml-3">
+                    <p class="font-semibold text-gray-800">李小姐</p>
+                    <p class="text-sm text-gray-500">INFJ - 咨询师</p>
+                  </div>
+                </div>
+              </div>
+              <!-- 评价2 -->
+              <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+                <div class="flex items-center mb-4">
+                  <div class="text-yellow-400 flex">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-o"></i>
+                  </div>
+                  <span class="ml-2 text-gray-600">4.5</span>
+                </div>
+                <p class="text-gray-700 mb-6">"界面设计很漂亮，测试过程流畅。结果解释通俗易懂，还提供了职业发展建议，对我帮助很大。"</p>
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center text-secondary font-bold">W</div>
+                  <div class="ml-3">
+                    <p class="font-semibold text-gray-800">王先生</p>
+                    <p class="text-sm text-gray-500">ESTP - 企业家</p>
+                  </div>
+                </div>
+              </div>
+              <!-- 评价3 -->
+              <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+                <div class="flex items-center mb-4">
+                  <div class="text-yellow-400 flex">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                  <span class="ml-2 text-gray-600">5.0</span>
+                </div>
+                <p class="text-gray-700 mb-6">"作为心理学专业的学生，我认为这个测试的信度和效度都很高。题目设计合理，结果分析专业且全面。"</p>
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center text-accent font-bold">Z</div>
+                  <div class="ml-3">
+                    <p class="font-semibold text-gray-800">张同学</p>
+                    <p class="text-sm text-gray-500">INTP - 心理学学生</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 关于MBTI -->
+      <section id="about" class="page hidden py-16 bg-white">
+        <div class="container mx-auto px-4">
+          <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">关于MBTI</h1>
+          
+          <div class="max-w-3xl mx-auto mb-16">
+            <p class="text-lg text-gray-700 mb-6">
+              MBTI（迈尔斯-布里格斯类型指标）是一种基于卡尔·荣格的心理学理论发展而来的人格评估工具。它由伊莎贝尔·布里格斯·迈尔斯和凯瑟琳·库克·布里格斯母女在20世纪中叶开发，旨在帮助人们理解自己的人格类型和偏好。
+            </p>
+            <p class="text-lg text-gray-700 mb-6">
+              MBTI测试通过四个维度来描述人格，每个维度有两个相反的偏好：
+            </p>
+          </div>
+          
+          <!-- 四个维度 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <!-- 维度1：外向(E) vs 内向(I) -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-type-e to-type-i flex items-center justify-center text-white font-bold">
+                  E/I
+                </div>
+                <h3 class="text-xl font-semibold ml-4 text-gray-800">外向(E) vs 内向(I)</h3>
+              </div>
+              <p class="text-gray-700 mb-4">这个维度描述了你如何获取能量。</p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-type-e/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-e mb-2">外向(E)</h4>
+                  <p class="text-gray-600 text-sm">从与他人的互动中获取能量，喜欢社交活动，思维外向。</p>
+                </div>
+                <div class="bg-type-i/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-i mb-2">内向(I)</h4>
+                  <p class="text-gray-600 text-sm">从独处中获取能量，喜欢安静思考，思维内向。</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 维度2：感觉(S) vs 直觉(N) -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-type-s to-type-n flex items-center justify-center text-white font-bold">
+                  S/N
+                </div>
+                <h3 class="text-xl font-semibold ml-4 text-gray-800">感觉(S) vs 直觉(N)</h3>
+              </div>
+              <p class="text-gray-700 mb-4">这个维度描述了你如何获取信息。</p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-type-s/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-s mb-2">感觉(S)</h4>
+                  <p class="text-gray-600 text-sm">关注实际、具体的信息，注重细节和事实，喜欢按部就班。</p>
+                </div>
+                <div class="bg-type-n/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-n mb-2">直觉(N)</h4>
+                  <p class="text-gray-600 text-sm">关注抽象、未来的信息，注重模式和可能性，喜欢创新和变化。</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 维度3：思考(T) vs 情感(F) -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-type-t to-type-f flex items-center justify-center text-white font-bold">
+                  T/F
+                </div>
+                <h3 class="text-xl font-semibold ml-4 text-gray-800">思考(T) vs 情感(F)</h3>
+              </div>
+              <p class="text-gray-700 mb-4">这个维度描述了你如何做决策。</p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-type-t/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-t mb-2">思考(T)</h4>
+                  <p class="text-gray-600 text-sm">基于逻辑和客观分析做决策，注重公平和原则。</p>
+                </div>
+                <div class="bg-type-f/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-f mb-2">情感(F)</h4>
+                  <p class="text-gray-600 text-sm">基于价值观和人际关系做决策，注重和谐和情感。</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 维度4：判断(J) vs 知觉(P) -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-type-j to-type-p flex items-center justify-center text-white font-bold">
+                  J/P
+                </div>
+                <h3 class="text-xl font-semibold ml-4 text-gray-800">判断(J) vs 知觉(P)</h3>
+              </div>
+              <p class="text-gray-700 mb-4">这个维度描述了你如何组织生活。</p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-type-j/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-j mb-2">判断(J)</h4>
+                  <p class="text-gray-600 text-sm">喜欢有计划、有条理的生活方式，倾向于控制局面。</p>
+                </div>
+                <div class="bg-type-p/10 p-4 rounded-lg">
+                  <h4 class="font-semibold text-type-p mb-2">知觉(P)</h4>
+                  <p class="text-gray-600 text-sm">喜欢灵活、开放的生活方式，倾向于适应变化。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- MBTI的应用 -->
+          <div class="max-w-3xl mx-auto mb-16">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">MBTI的应用</h2>
+            <p class="text-lg text-gray-700 mb-6">
+              MBTI测试广泛应用于职业规划、团队建设、人际关系改善、教育和个人发展等领域。通过了解自己的人格类型，你可以：
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+              <li>发现自己的优势和潜能</li>
+              <li>了解适合自己的职业方向</li>
+              <li>改善沟通方式和人际关系</li>
+              <li>提高团队协作效率</li>
+              <li>促进个人成长和自我实现</li>
+            </ul>
+          </div>
+          
+          <!-- 开始测试按钮 -->
+          <div class="text-center">
+            <button onclick="showPage('test')" class="bg-primary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all-300 scale-hover">
+              开始测试
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 测试页面 -->
+      <section id="test" class="page hidden py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <!-- 测试标题 -->
+          <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">MBTI人格测试</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">请根据你的真实情况回答以下问题，选择最符合你偏好的选项。测试大约需要20分钟完成。</p>
+          </div>
+          
+          <!-- 测试进度 -->
+          <div class="max-w-3xl mx-auto mb-8">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-gray-600">问题 <span id="current-question">1</span>/<span id="total-questions">60</span></span>
+              <span class="text-gray-600" id="progress-percentage">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div id="progress-bar" class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+          </div>
+          
+          <!-- 测试内容 -->
+          <div id="test-container" class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <!-- 问题卡片 -->
+            <div id="question-card" class="mb-6 animate-fade-in">
+              <h2 id="question-text" class="text-xl font-semibold mb-6 text-gray-800">在社交场合中，你通常：</h2>
+              
+              <div class="space-y-4">
+                <!-- 选项A -->
+                <div class="flex items-center">
+                  <input type="radio" id="option-a" name="answer" value="a" class="w-5 h-5 text-primary focus:ring-primary">
+                  <label for="option-a" id="option-a-text" class="ml-3 text-gray-700">主动与他人交流，享受成为关注的焦点</label>
+                </div>
+                
+                <!-- 选项B -->
+                <div class="flex items-center">
+                  <input type="radio" id="option-b" name="answer" value="b" class="w-5 h-5 text-primary focus:ring-primary">
+                  <label for="option-b" id="option-b-text" class="ml-3 text-gray-700">等待他人主动交流，喜欢在一旁观察</label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 导航按钮 -->
+            <div class="flex justify-between">
+              <button id="prev-btn" onclick="prevQuestion()" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <i class="fa fa-arrow-left mr-2"></i>上一题
+              </button>
+              <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all-300">
+                下一题<i class="fa fa-arrow-right ml-2"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- 测试说明 -->
+          <div class="max-w-3xl mx-auto mt-8 text-center text-gray-600 text-sm">
+            <p>测试过程中可以随时返回修改答案，完成后将立即显示结果。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 结果页面 -->
+      <section id="result" class="page hidden py-16 bg-white">
+        <div class="container mx-auto px-4">
+          <!-- 结果标题 -->
+          <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">你的MBTI人格类型</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">基于你的回答，我们分析出你的人格类型如下：</p>
+          </div>
+          
+          <!-- 结果卡片 -->
+          <div class="max-w-3xl mx-auto bg-gradient-primary text-white rounded-xl shadow-xl overflow-hidden mb-12">
+            <div class="p-8">
+              <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+                <div class="text-center md:text-left mb-6 md:mb-0">
+                  <h2 id="personality-type" class="text-5xl font-bold mb-2">INFJ</h2>
+                  <p id="personality-name" class="text-xl text-gray-100">提倡者</p>
+                </div>
+                <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
+                  <i id="personality-icon" class="fa fa-heart text-4xl"></i>
+                </div>
+              </div>
+              
+              <p id="personality-description" class="text-gray-100 mb-6">
+                提倡者人格类型的人充满热情和理想主义，他们富有创造力和洞察力，致力于帮助他人实现潜能。他们具有强烈的个人价值观，追求意义和目的，善于发现他人的优点。
+              </p>
+              
+              <!-- 维度结果 -->
+              <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>外向 (E)</span>
+                    <span id="e-score">30%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="e-bar" class="bg-type-e h-2 rounded-full" style="width: 30%"></div>
+                  </div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>内向 (I)</span>
+                    <span id="i-score">70%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="i-bar" class="bg-type-i h-2 rounded-full" style="width: 70%"></div>
+                  </div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>感觉 (S)</span>
+                    <span id="s-score">40%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="s-bar" class="bg-type-s h-2 rounded-full" style="width: 40%"></div>
+                  </div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>直觉 (N)</span>
+                    <span id="n-score">60%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="n-bar" class="bg-type-n h-2 rounded-full" style="width: 60%"></div>
+                  </div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>思考 (T)</span>
+                    <span id="t-score">35%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="t-bar" class="bg-type-t h-2 rounded-full" style="width: 35%"></div>
+                  </div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>情感 (F)</span>
+                    <span id="f-score">65%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="f-bar" class="bg-type-f h-2 rounded-full" style="width: 65%"></div>
+                  </div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>判断 (J)</span>
+                    <span id="j-score">60%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="j-bar" class="bg-type-j h-2 rounded-full" style="width: 60%"></div>
+                  </div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                    <span>知觉 (P)</span>
+                    <span id="p-score">40%</span>
+                  </div>
+                  <div class="w-full bg-white/20 rounded-full h-2">
+                    <div id="p-bar" class="bg-type-p h-2 rounded-full" style="width: 40%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 详细分析 -->
+          <div class="max-w-3xl mx-auto mb-12">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">详细分析</h2>
+            
+            <!-- 优势 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md mb-6">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fa fa-plus-circle text-green-500 mr-2"></i>你的优势
+              </h3>
+              <ul id="strengths-list" class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>富有洞察力和创造力</li>
+                <li>具有强烈的个人价值观</li>
+                <li>善于理解他人的情感和需求</li>
+                <li>致力于实现理想和帮助他人</li>
+                <li>具有优秀的沟通和表达能力</li>
+              </ul>
+            </div>
+            
+            <!-- 潜在挑战 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md mb-6">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fa fa-exclamation-circle text-yellow-500 mr-2"></i>潜在挑战
+              </h3>
+              <ul id="challenges-list" class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>可能过于理想化，不切实际</li>
+                <li>容易受到他人情感的影响</li>
+                <li>可能对批评过于敏感</li>
+                <li>有时会过度思考和分析</li>
+                <li>可能难以在压力下做出决策</li>
+              </ul>
+            </div>
+            
+            <!-- 职业建议 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md mb-6">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fa fa-briefcase text-blue-500 mr-2"></i>职业建议
+              </h3>
+              <p class="text-gray-700 mb-4">根据你的人格类型，以下职业可能适合你：</p>
+              <div id="careers-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="bg-white p-3 rounded-lg shadow-sm flex items-center">
+                  <i class="fa fa-check text-green-500 mr-2"></i>
+                  <span>心理咨询师</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg shadow-sm flex items-center">
+                  <i class="fa fa-check text-green-500 mr-2"></i>
+                  <span>作家/编辑</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg shadow-sm flex items-center">
+                  <i class="fa fa-check text-green-500 mr-2"></i>
+                  <span>教育工作者</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg shadow-sm flex items-center">
+                  <i class="fa fa-check text-green-500 mr-2"></i>
+                  <span>人力资源管理</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg shadow-sm flex items-center">
+                  <i class="fa fa-check text-green-500 mr-2"></i>
+                  <span>社会工作者</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg shadow-sm flex items-center">
+                  <i class="fa fa-check text-green-500 mr-2"></i>
+                  <span>艺术家/设计师</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 人际关系 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-md">
+              <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fa fa-users text-purple-500 mr-2"></i>人际关系
+              </h3>
+              <p id="relationships-description" class="text-gray-700 mb-4">
+                作为提倡者，你在人际关系中通常表现出真诚、关怀和理解力。你重视深度和意义，喜欢与他人建立真实的情感连接。你善于倾听和支持他人，但也需要注意在关系中保持平衡，照顾自己的需求。
+              </p>
+              <p class="text-gray-700">
+                <strong>最匹配的人格类型：</strong>
+                <span id="compatible-types" class="ml-2">ENFP, ENTP, INTJ, INTP</span>
+              </p>
+            </div>
+          </div>
+          
+          <!-- 分享和重新测试 -->
+          <div class="max-w-3xl mx-auto flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+            <button id="share-btn" onclick="shareResult()" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all-300 scale-hover">
+              <i class="fa fa-share-alt mr-2"></i>分享结果
+            </button>
+            <button id="retest-btn" onclick="resetTest()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all-300 scale-hover">
+              <i class="fa fa-refresh mr-2"></i>重新测试
+            </button>
+            <button id="explore-btn" onclick="showPage('types')" class="px-6 py-3 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-all-300 scale-hover">
+              <i class="fa fa-info-circle mr-2"></i>探索其他类型
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 人格类型页面 -->
+      <section id="types" class="page hidden py-16 bg-white">
+        <div class="container mx-auto px-4">
+          <!-- 页面标题 -->
+          <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">16种MBTI人格类型</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">每种人格类型都有其独特的优势、特点和适合的职业方向。点击下方卡片了解更多详情。</p>
+          </div>
+          
+          <!-- 人格类型分类标签 -->
+          <div class="flex flex-wrap justify-center gap-2 mb-8">
+            <button class="type-filter px-4 py-2 rounded-full bg-primary text-white" data-filter="all">全部</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="e">外向(E)</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="i">内向(I)</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="s">感觉(S)</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="n">直觉(N)</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="t">思考(T)</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="f">情感(F)</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="j">判断(J)</button>
+            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="p">知觉(P)</button>
+          </div>
+          
+          <!-- 人格类型卡片网格 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- INFJ 提倡者 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,n,f,j">
+              <div class="bg-gradient-to-r from-type-i to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">INFJ</h3>
+                <p class="text-white/80">提倡者</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">富有洞察力和创造力，致力于帮助他人实现潜能。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>N</span>
+                  <span>F</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- INTJ 建筑师 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,n,t,j">
+              <div class="bg-gradient-to-r from-type-i to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">INTJ</h3>
+                <p class="text-white/80">建筑师</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">富有战略眼光和创新思维，善于规划和执行复杂项目。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>N</span>
+                  <span>T</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- INFP 调停者 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,n,f,p">
+              <div class="bg-gradient-to-r from-type-i to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">INFP</h3>
+                <p class="text-white/80">调停者</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">理想主义者，富有创造力和同情心，追求个人价值和意义。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>N</span>
+                  <span>F</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- INTP 逻辑学家 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,n,t,p">
+              <div class="bg-gradient-to-r from-type-i to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">INTP</h3>
+                <p class="text-white/80">逻辑学家</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">理性思考者，善于分析和解决复杂问题，追求知识和真理。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>N</span>
+                  <span>T</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ENFJ 主人公 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,n,f,j">
+              <div class="bg-gradient-to-r from-type-e to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">ENFJ</h3>
+                <p class="text-white/80">主人公</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">富有魅力和领导力，善于激励和引导他人，追求共同目标。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>N</span>
+                  <span>F</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ENTJ 指挥官 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,n,t,j">
+              <div class="bg-gradient-to-r from-type-e to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">ENTJ</h3>
+                <p class="text-white/80">指挥官</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">天生的领导者，善于组织和管理，追求高效和成果。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>N</span>
+                  <span>T</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ENFP 活动家 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,n,f,p">
+              <div class="bg-gradient-to-r from-type-e to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">ENFP</h3>
+                <p class="text-white/80">活动家</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">充满热情和创造力，善于沟通和启发他人，追求新奇体验。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>N</span>
+                  <span>F</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ENTP 辩论家 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,n,t,p">
+              <div class="bg-gradient-to-r from-type-e to-type-n p-4">
+                <h3 class="text-xl font-bold text-white">ENTP</h3>
+                <p class="text-white/80">辩论家</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">聪明机智，善于辩论和创新，喜欢挑战和解决问题。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>N</span>
+                  <span>T</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ISFJ 守卫者 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,s,f,j">
+              <div class="bg-gradient-to-r from-type-i to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ISFJ</h3>
+                <p class="text-white/80">守卫者</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">忠诚可靠，善于照顾他人，注重传统和责任。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>S</span>
+                  <span>F</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ISTJ 检查员 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,s,t,j">
+              <div class="bg-gradient-to-r from-type-i to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ISTJ</h3>
+                <p class="text-white/80">检查员</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">务实可靠，善于组织和管理，注重规则和秩序。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>S</span>
+                  <span>T</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ISFP 艺术家 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,s,f,p">
+              <div class="bg-gradient-to-r from-type-i to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ISFP</h3>
+                <p class="text-white/80">艺术家</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">富有创造力和艺术感，善于表达和感受，追求和谐和美好。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>S</span>
+                  <span>F</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ISTP 手艺人 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="i,s,t,p">
+              <div class="bg-gradient-to-r from-type-i to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ISTP</h3>
+                <p class="text-white/80">手艺人</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">实用主义者，善于解决实际问题，喜欢动手和探索。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>I</span>
+                  <span>S</span>
+                  <span>T</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ESFJ 执政官 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,s,f,j">
+              <div class="bg-gradient-to-r from-type-e to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ESFJ</h3>
+                <p class="text-white/80">执政官</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">热情友好，善于组织和协调，注重传统和人际关系。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>S</span>
+                  <span>F</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ESTJ 总经理 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,s,t,j">
+              <div class="bg-gradient-to-r from-type-e to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ESTJ</h3>
+                <p class="text-white/80">总经理</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">天生的管理者，善于组织和领导，注重效率和结果。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>S</span>
+                  <span>T</span>
+                  <span>J</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ESFP 表演者 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,s,f,p">
+              <div class="bg-gradient-to-r from-type-e to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ESFP</h3>
+                <p class="text-white/80">表演者</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">活泼开朗，善于表达和娱乐，喜欢享受生活和与人交往。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>S</span>
+                  <span>F</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ESTP 企业家 -->
+            <div class="personality-card bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover" data-types="e,s,t,p">
+              <div class="bg-gradient-to-r from-type-e to-type-s p-4">
+                <h3 class="text-xl font-bold text-white">ESTP</h3>
+                <p class="text-white/80">企业家</p>
+              </div>
+              <div class="p-6">
+                <p class="text-gray-600 text-sm mb-4">务实果断，善于把握机会和解决问题，喜欢挑战和冒险。</p>
+                <div class="flex justify-between text-xs text-gray-500">
+                  <span>E</span>
+                  <span>S</span>
+                  <span>T</span>
+                  <span>P</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 人格类型关系图 -->
+          <div class="mt-16 text-center">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">人格类型关系图</h2>
+            <div class="max-w-3xl mx-auto">
+              <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/3c11ce08eab1445f847c3dd7f2863da7~tplv-a9rns2rl98-image.image?rcl=2025102316594374449F0D0DEFF0298B90&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1763802020&x-signature=r2Hw17FC1WcEFc84mvHeO%2FNbXbM%3D" alt="MBTI Personality Types Relationship" class="w-full h-auto rounded-lg shadow-lg">
+            </div>
+          </div>
+          
+          <!-- 开始测试按钮 -->
+          <div class="mt-16 text-center">
+            <button onclick="showPage('test')" class="bg-primary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all-300 scale-hover">
+              开始测试
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- 关于我们 -->
+          <div>
+            <h3 class="text-xl font-semibold mb-4">关于我们</h3>
+            <p class="text-gray-400">
+              我们致力于提供专业、准确的MBTI人格测试，帮助人们了解自己的性格特点，发现潜能，实现自我成长。
+            </p>
+          </div>
+          
+          <!-- 快速链接 -->
+          <div>
+            <h3 class="text-xl font-semibold mb-4">快速链接</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-all-300" onclick="showPage('home')">首页</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-all-300" onclick="showPage('about')">关于MBTI</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-all-300" onclick="showPage('test')">开始测试</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-all-300" onclick="showPage('types')">人格类型</a></li>
+            </ul>
+          </div>
+          
+          <!-- 联系我们 -->
+          <div>
+            <h3 class="text-xl font-semibold mb-4">联系我们</h3>
+            <ul class="space-y-2">
+              <li class="flex items-center">
+                <i class="fa fa-envelope text-gray-400 mr-2"></i>
+                <a href="mailto:contact@mbti-test.com" class="text-gray-400 hover:text-white transition-all-300">contact@mbti-test.com</a>
+              </li>
+              <li class="flex items-center">
+                <i class="fa fa-weixin text-gray-400 mr-2"></i>
+                <span class="text-gray-400">MBTI测试官方</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fa fa-weibo text-gray-400 mr-2"></i>
+                <a href="#" class="text-gray-400 hover:text-white transition-all-300">@MBTI测试</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+          <p class="text-gray-400">&copy; 2025 MBTI人格测试. 保留所有权利.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 分享模态框 -->
+  <div id="share-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 animate-fade-in">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-gray-800">分享你的MBTI结果</h3>
+        <button onclick="toggleShareModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fa fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <div id="share-content" class="bg-gradient-primary text-white p-6 rounded-lg mb-6">
+        <div class="flex flex-col items-center">
+          <h4 id="share-type" class="text-3xl font-bold mb-2">INFJ</h4>
+          <p id="share-name" class="text-lg mb-4">提倡者</p>
+          <p id="share-description" class="text-center text-gray-100 mb-4">
+            富有洞察力和创造力，致力于帮助他人实现潜能。
+          </p>
+          <div class="w-full h-1 bg-white/20 rounded-full mb-4">
+            <div class="h-1 bg-white rounded-full" style="width: 70%"></div>
+          </div>
+          <p class="text-sm text-center">扫码或点击链接查看详细结果</p>
+        </div>
+      </div>
+      
+      <div class="flex flex-col space-y-4">
+        <button class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all-300">
+          <i class="fa fa-weixin text-xl mr-2"></i>
+          分享到微信
+        </button>
+        <button class="flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all-300">
+          <i class="fa fa-weibo text-xl mr-2"></i>
+          分享到微博
+        </button>
+        <div class="flex items-center">
+          <input type="text" id="share-link" value="https://mbti-test.com/result/infj" class="flex-grow px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary" readonly>
+          <button onclick="copyShareLink()" class="px-4 py-2 bg-primary text-white rounded-r-lg hover:bg-primary/90 transition-all-300">
+            <i class="fa fa-copy"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // 页面导航
+    function showPage(pageId) {
+      // 隐藏所有页面
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.add('hidden');
+        page.classList.remove('active');
+      });
+      
+      // 显示目标页面
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+        targetPage.classList.add('active');
+      }
+      
+      // 滚动到顶部
+      window.scrollTo(0, 0);
+    }
+    
+    // 移动端菜单切换
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    }
+    
+    // 人格类型筛选
+    document.querySelectorAll('.type-filter').forEach(button => {
+      button.addEventListener('click', function() {
+        // 更新按钮样式
+        document.querySelectorAll('.type-filter').forEach(btn => {
+          btn.classList.remove('bg-primary', 'text-white');
+          btn.classList.add('bg-gray-200', 'text-gray-700');
+        });
+        this.classList.remove('bg-gray-200', 'text-gray-700');
+        this.classList.add('bg-primary', 'text-white');
+        
+        // 筛选卡片
+        const filter = this.getAttribute('data-filter');
+        document.querySelectorAll('.personality-card').forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-types').includes(filter)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+    
+    // 分享模态框
+    function toggleShareModal() {
+      const shareModal = document.getElementById('share-modal');
+      shareModal.classList.toggle('hidden');
+    }
+    
+    function copyShareLink() {
+      const shareLink = document.getElementById('share-link');
+      shareLink.select();
+      document.execCommand('copy');
+      
+      // 显示复制成功提示
+      alert('链接已复制到剪贴板！');
+    }
+    
+    // MBTI测试功能
+    const questions = [
+      // E/I 外向/内向
+      {
+        text: "在社交场合中，你通常：",
+        a: "主动与他人交流，享受成为关注的焦点",
+        b: "等待他人主动交流，喜欢在一旁观察",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "当你感到疲惫时，你倾向于：",
+        a: "与朋友聚会放松",
+        b: "独自安静地休息",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你更喜欢：",
+        a: "有很多朋友，广泛社交",
+        b: "有几个亲密朋友，深入交流",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "在会议中，你通常：",
+        a: "积极发言，表达自己的想法",
+        b: "先倾听他人，再整理自己的想法",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你更喜欢的活动是：",
+        a: "参加派对或社交活动",
+        b: "阅读或独自思考",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "当你需要做出重要决定时，你倾向于：",
+        a: "与他人讨论，寻求建议",
+        b: "独自思考，权衡利弊",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你如何看待新认识的人？",
+        a: "很容易与他们建立联系",
+        b: "需要时间才能真正了解他们",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "在工作环境中，你更喜欢：",
+        a: "团队合作，与他人互动",
+        b: "独立工作，减少干扰",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "当你有空闲时间时，你通常：",
+        a: "寻找新的活动或体验",
+        b: "享受熟悉的活动或爱好",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你如何处理压力？",
+        a: "与他人交流，寻求支持",
+        b: "独自处理，寻找内心平静",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      
+      // S/N 感觉/直觉
+      {
+        text: "你更相信：",
+        a: "具体的事实和数据",
+        b: "直觉和可能性",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "当学习新事物时，你更喜欢：",
+        a: "按照步骤和指南学习",
+        b: "通过探索和发现学习",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更关注：",
+        a: "当前的现实情况",
+        b: "未来的可能性和趋势",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在解决问题时，你倾向于：",
+        a: "基于经验和已知信息",
+        b: "考虑创新的方法和可能性",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你如何看待细节？",
+        a: "注重细节，认为它们很重要",
+        b: "更容易看到整体，细节可以稍后处理",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在描述事物时，你通常：",
+        a: "具体、准确地描述",
+        b: "使用比喻和抽象概念",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你对以下哪项更感兴趣？",
+        a: "实际应用和技术",
+        b: "理论和概念",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在规划时，你更喜欢：",
+        a: "具体的计划和时间表",
+        b: "灵活的框架，留出调整空间",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你如何做出判断？",
+        a: "基于实际经验和观察",
+        b: "基于模式和可能性",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更擅长：",
+        a: "记住具体的事实和细节",
+        b: "理解抽象的概念和关系",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      
+      // T/F 思考/情感
+      {
+        text: "在做决定时，你更注重：",
+        a: "逻辑和客观分析",
+        b: "价值观和人际关系",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "当他人遇到问题时，你倾向于：",
+        a: "提供解决方案和建议",
+        b: "表达理解和支持",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你认为以下哪项更重要？",
+        a: "公平和原则",
+        b: "和谐和情感",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "在讨论中，你更喜欢：",
+        a: "直接、坦率地表达观点",
+        b: "考虑他人感受，委婉表达",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何评价他人？",
+        a: "基于他们的能力和成就",
+        b: "基于他们的品格和价值观",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "在处理冲突时，你倾向于：",
+        a: "理性分析，寻找解决方案",
+        b: "关注情感需求，寻求和谐",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更欣赏：",
+        a: "聪明和能力",
+        b: "善良和同理心",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "在工作中，你更喜欢：",
+        a: "明确的目标和结果",
+        b: "良好的工作氛围和关系",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何表达自己的想法？",
+        a: "直接、简洁地表达",
+        b: "考虑他人感受，详细解释",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更关注：",
+        a: "任务的完成和结果",
+        b: "团队的感受和关系",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      
+      // J/P 判断/知觉
+      {
+        text: "你更喜欢：",
+        a: "有计划、有条理的生活",
+        b: "灵活、自发的生活",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "在工作中，你倾向于：",
+        a: "提前完成任务，避免压力",
+        b: "在截止日期前集中精力完成",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何看待变化？",
+        a: "更喜欢稳定和可预测性",
+        b: "享受变化和新鲜感",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "在组织活动时，你通常：",
+        a: "提前详细计划",
+        b: "即兴发挥，根据情况调整",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你更擅长：",
+        a: "做出决定并坚持执行",
+        b: "保持开放，灵活调整",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "在日常生活中，你倾向于：",
+        a: "遵循规律和习惯",
+        b: "尝试新事物和方法",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何处理任务？",
+        a: "一次专注于一项任务，完成后再开始下一项",
+        b: "同时处理多项任务，根据优先级调整",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你更喜欢：",
+        a: "明确的规则和指导方针",
+        b: "灵活的框架，自主决策",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "在计划未来时，你倾向于：",
+        a: "制定详细的长期计划",
+        b: "保持开放，根据情况调整",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何应对意外情况？",
+        a: "感到不安，尽快恢复计划",
+        b: "感到兴奋，灵活应对变化",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      
+      // 第二组问题，增加测试的准确性
+      // E/I 外向/内向
+      {
+        text: "在社交活动后，你通常感到：",
+        a: "精力充沛，满足",
+        b: "疲惫，需要休息",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你更喜欢的沟通方式是：",
+        a: "面对面交流",
+        b: "文字交流（如邮件、消息）",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "在团队中，你通常：",
+        a: "主动参与讨论，引领方向",
+        b: "观察和分析，提供支持",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你如何获取新想法？",
+        a: "与他人讨论和交流",
+        b: "独自思考和阅读",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你对新环境的适应能力：",
+        a: "很快适应，感到舒适",
+        b: "需要时间适应，感到谨慎",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      
+      // S/N 感觉/直觉
+      {
+        text: "你更关注事物的：",
+        a: "实际用途和功能",
+        b: "象征意义和可能性",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在阅读时，你更喜欢：",
+        a: "非虚构类和实用书籍",
+        b: "小说和科幻作品",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你如何看待过去的经验？",
+        a: "作为未来决策的参考",
+        b: "作为学习的机会，但不一定限制未来",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更擅长：",
+        a: "记住具体的事实和细节",
+        b: "理解抽象的概念和关系",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在解决问题时，你倾向于：",
+        a: "使用已有的方法和技术",
+        b: "尝试新的方法和思路",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      
+      // T/F 思考/情感
+      {
+        text: "你如何评价一个想法？",
+        a: "基于其逻辑性和实用性",
+        b: "基于其对他人的影响和价值",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "在团队中，你更关注：",
+        a: "目标的实现和效率",
+        b: "成员的感受和关系",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何处理批评？",
+        a: "客观分析，从中学习",
+        b: "感到受伤，需要时间调整",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更欣赏他人的：",
+        a: "理性和能力",
+        b: "情感和价值观",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "在做决定时，你更依赖：",
+        a: "头脑和逻辑",
+        b: "心和情感",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      
+      // J/P 判断/知觉
+      {
+        text: "你更喜欢的工作环境是：",
+        a: "结构化和有组织的",
+        b: "灵活和开放的",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "在截止日期前，你通常：",
+        a: "提前完成，有时间检查和修改",
+        b: "在最后一刻集中精力完成",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何看待未完成的任务？",
+        a: "感到不安，尽快完成",
+        b: "保持开放，根据优先级调整",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "在规划时，你倾向于：",
+        a: "制定详细的步骤和时间表",
+        b: "设定大致方向，灵活执行",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何应对变化？",
+        a: "需要时间适应，喜欢稳定",
+        b: "迅速适应，享受变化",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      }
+    ];
+
+    // 人格类型数据
+    const personalityTypes = {
+      INFJ: {
+        name: "提倡者",
+        description: "提倡者人格类型的人充满热情和理想主义，他们富有创造力和洞察力，致力于帮助他人实现潜能。他们具有强烈的个人价值观，追求意义和目的，善于发现他人的优点。",
+        strengths: ["富有洞察力和创造力", "具有强烈的个人价值观", "善于理解他人的情感和需求", "致力于实现理想和帮助他人", "具有优秀的沟通和表达能力"],
+        challenges: ["可能过于理想化，不切实际", "容易受到他人情感的影响", "可能对批评过于敏感", "有时会过度思考和分析", "可能难以在压力下做出决策"],
+        careers: ["心理咨询师", "作家/编辑", "教育工作者", "人力资源管理", "社会工作者", "艺术家/设计师"],
+        relationships: "作为提倡者，你在人际关系中通常表现出真诚、关怀和理解力。你重视深度和意义，喜欢与他人建立真实的情感连接。你善于倾听和支持他人，但也需要注意在关系中保持平衡，照顾自己的需求。",
+        compatibleTypes: "ENFP, ENTP, INTJ, INTP",
+        icon: "heart"
+      },
+      INTJ: {
+        name: "建筑师",
+        description: "建筑师人格类型的人是战略思想家，他们富有洞察力和创新精神，善于规划和执行复杂项目。他们具有强烈的逻辑性和分析能力，追求知识和效率，善于从长远角度思考问题。",
+        strengths: ["富有战略眼光和创新思维", "具有强大的分析和解决问题能力", "善于规划和执行复杂项目", "具有独立思考和判断能力", "追求卓越和持续改进"],
+        challenges: ["可能过于理性，忽视情感因素", "可能显得冷漠或傲慢", "可能对他人的能力持怀疑态度", "可能难以表达自己的情感", "可能过于追求完美"],
+        careers: ["科学家/研究员", "工程师", "软件开发", "战略顾问", "项目经理", "金融分析师"],
+        relationships: "作为建筑师，你在人际关系中通常表现出忠诚和可靠性，但可能不善于表达情感。你重视智力和能力，喜欢与志同道合的人建立深度连接。你需要学习更加开放地表达自己的情感，关注他人的感受。",
+        compatibleTypes: "ENTP, ENFJ, INFJ, ISTP",
+        icon: "chess-king"
+      },
+      INFP: {
+        name: "调停者",
+        description: "调停者人格类型的人是理想主义者，他们富有创造力和同情心，追求个人价值和意义。他们善于理解他人的情感和需求，具有强烈的同理心，致力于实现和平与和谐。",
+        strengths: ["富有创造力和想象力", "具有强烈的同理心和理解力", "追求个人价值和意义", "善于表达自己的情感和想法", "致力于帮助他人和创造美好"],
+        challenges: ["可能过于理想化，不切实际", "容易受到他人情感的影响", "可能避免冲突，难以面对批评", "可能缺乏自信和决断力", "可能过于关注他人，忽视自己的需求"],
+        careers: ["作家/诗人", "艺术家/设计师", "心理咨询师", "社会工作者", "教育工作者", "人力资源"],
+        relationships: "作为调停者，你在人际关系中通常表现出温柔、关怀和理解力。你重视深度和真实的情感连接，善于倾听和支持他人。你需要学习在关系中设定边界，照顾自己的需求，同时也要学会面对冲突。",
+        compatibleTypes: "ENFJ, ESFJ, INFJ, ISFJ",
+        icon: "feather"
+      },
+      INTP: {
+        name: "逻辑学家",
+        description: "逻辑学家人格类型的人是理性思考者，他们善于分析和解决复杂问题，追求知识和真理。他们具有强烈的好奇心和批判性思维，喜欢探索抽象概念和理论，善于发现事物的规律和逻辑。",
+        strengths: ["具有强大的分析和逻辑思维能力", "善于解决复杂问题和 puzzles", "具有强烈的好奇心和求知欲", "善于独立思考和创新", "追求知识和真理"],
+        challenges: ["可能过于理性，忽视情感因素", "可能显得冷漠或脱离实际", "可能过度思考，难以做出决策", "可能不善于表达自己的想法", "可能对细节过于关注，忽视整体"],
+        careers: ["科学家/研究员", "软件开发", "数学家/统计学家", "哲学家", "工程师", "系统分析师"],
+        relationships: "作为逻辑学家，你在人际关系中通常表现出聪明和独立，但可能不善于表达情感。你重视智力和能力，喜欢与志同道合的人进行深入的思想交流。你需要学习更加关注他人的情感需求，提高自己的沟通和社交能力。",
+        compatibleTypes: "ENTP, ENFJ, INTJ, ISTP",
+        icon: "lightbulb-o"
+      },
+      ENFJ: {
+        name: "主人公",
+        description: "主人公人格类型的人富有魅力和领导力，他们善于激励和引导他人，追求共同目标。他们具有强烈的同理心和沟通能力，善于理解他人的需求和动机，致力于帮助他人成长和发展。",
+        strengths: ["富有魅力和领导力", "善于沟通和表达", "具有强烈的同理心和理解力", "善于激励和引导他人", "致力于实现共同目标和价值"],
+        challenges: ["可能过于理想化，不切实际", "可能过于关注他人，忽视自己的需求", "可能对批评过于敏感", "可能难以说“不”", "可能过于控制或主导"],
+        careers: ["领导者/管理者", "教育工作者", "心理咨询师", "人力资源管理", "公共关系", "社会工作者"],
+        relationships: "作为主人公，你在人际关系中通常表现出热情、关怀和领导力。你重视和谐和共同成长，善于激励和支持他人。你需要学习在关系中保持平衡，照顾自己的需求，同时也要学会放手，给他人更多的空间。",
+        compatibleTypes: "INFP, ISFP, ENFP, ESFP",
+        icon: "star"
+      },
+      ENTJ: {
+        name: "指挥官",
+        description: "指挥官人格类型的人是天生的领导者，他们善于组织和管理，追求高效和成果。他们具有强烈的逻辑性和决断力，善于制定战略和计划，能够迅速做出决策并付诸行动。",
+        strengths: ["具有强大的领导力和组织能力", "善于制定战略和计划", "具有强烈的决断力和执行力", "善于分析和解决复杂问题", "追求高效和成果"],
+        challenges: ["可能过于强势或控制", "可能忽视他人的情感和需求", "可能过于理性，缺乏同理心", "可能难以接受批评或失败", "可能过于关注目标，忽视过程"],
+        careers: ["CEO/高管", "项目经理", "律师", "政治家", "军事领袖", "战略顾问"],
+        relationships: "作为指挥官，你在人际关系中通常表现出自信和决断力，但可能显得强势或控制。你重视效率和成果，喜欢与有能力的人合作。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力。",
+        compatibleTypes: "INTP, ISTP, ENTP, ESTP",
+        icon: "trophy"
+      },
+      ENFP: {
+        name: "活动家",
+        description: "活动家人格类型的人充满热情和创造力，他们善于沟通和启发他人，追求新奇体验。他们具有强烈的好奇心和乐观精神，善于发现可能性和机会，能够迅速适应变化的环境。",
+        strengths: ["充满热情和创造力", "善于沟通和表达", "具有强烈的好奇心和乐观精神", "善于启发和激励他人", "能够迅速适应变化"],
+        challenges: ["可能缺乏专注力和执行力", "可能过于乐观，忽视风险", "可能难以做出决策", "可能对细节不够关注", "可能容易感到无聊或疲倦"],
+        careers: ["市场营销", "公共关系", "创业者", "演员/表演者", "培训师", "旅行作家"],
+        relationships: "作为活动家，你在人际关系中通常表现出热情、活力和创造力。你重视多样性和新奇体验，善于与人建立连接。你需要学习在关系中保持专注和承诺，提高自己的执行力和责任感。",
+        compatibleTypes: "INFJ, INTJ, ENFJ, ENTJ",
+        icon: "smile-o"
+      },
+      ENTP: {
+        name: "辩论家",
+        description: "辩论家人格类型的人聪明机智，善于辩论和创新，喜欢挑战和解决问题。他们具有强烈的好奇心和批判性思维，善于发现事物的漏洞和可能性，能够提出创新的解决方案。",
+        strengths: ["聪明机智，善于辩论", "具有强烈的好奇心和求知欲", "善于创新和提出新想法", "能够迅速适应变化", "善于解决复杂问题"],
+        challenges: ["可能过于争论或挑衅", "可能缺乏专注力和执行力", "可能忽视他人的情感和需求", "可能难以做出决策", "可能对细节不够关注"],
+        careers: ["律师", "创业者", "营销策划", "记者/编辑", "喜剧演员", "战略顾问"],
+        relationships: "作为辩论家，你在人际关系中通常表现出聪明、幽默和挑战性。你重视智力和创新，喜欢与有能力的人进行思想交流。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力。",
+        compatibleTypes: "INFJ, INTJ, ENFJ, ENTJ",
+        icon: "comment"
+      },
+      ISFJ: {
+        name: "守卫者",
+        description: "守卫者人格类型的人忠诚可靠，善于照顾他人，注重传统和责任。他们具有强烈的责任感和同情心，善于记住细节和他人的需求，致力于为他人提供支持和帮助。",
+        strengths: ["忠诚可靠，负责任", "善于照顾他人和细节", "具有强烈的同情心和理解力", "注重传统和稳定", "善于组织和管理"],
+        challenges: ["可能过于保守，抵制变化", "可能过于关注他人，忽视自己的需求", "可能难以说“不”", "可能对批评过于敏感", "可能缺乏自信和决断力"],
+        careers: ["护士/医生", "教师", "图书馆员", "行政助理", "人力资源", "社会工作者"],
+        relationships: "作为守卫者，你在人际关系中通常表现出忠诚、关怀和可靠性。你重视传统和稳定，善于照顾他人的需求。你需要学习在关系中设定边界，照顾自己的需求，同时也要学会接受变化和不确定性。",
+        compatibleTypes: "ESFP, ESTP, ISFP, ISTP",
+        icon: "home"
+      },
+      ISTJ: {
+        name: "检查员",
+        description: "检查员人格类型的人务实可靠，善于组织和管理，注重规则和秩序。他们具有强烈的责任感和执行力，善于制定计划和流程，能够确保任务的准确和及时完成。",
+        strengths: ["务实可靠，负责任", "善于组织和管理", "具有强烈的执行力和专注力", "注重规则和秩序", "善于处理细节和数据"],
+        challenges: ["可能过于保守，抵制变化", "可能过于关注规则，缺乏灵活性", "可能忽视他人的情感和需求", "可能难以表达自己的情感", "可能对批评过于敏感"],
+        careers: ["会计/财务", "项目经理", "行政主管", "警察/军人", "工程师", "图书管理员"],
+        relationships: "作为检查员，你在人际关系中通常表现出忠诚、可靠和负责任。你重视稳定和秩序，善于履行自己的承诺。你需要学习更加关注他人的情感需求，提高自己的沟通和表达能力，同时也要学会接受变化和不确定性。",
+        compatibleTypes: "ESFP, ESTP, ISFP, ISTP",
+        icon: "check-square-o"
+      },
+      ISFP: {
+        name: "艺术家",
+        description: "艺术家人格类型的人富有创造力和艺术感，善于表达和感受，追求和谐和美好。他们具有强烈的审美能力和同理心，善于通过艺术和行动表达自己的情感和想法。",
+        strengths: ["富有创造力和艺术感", "善于表达和感受", "具有强烈的审美能力和同理心", "注重和谐和美好", "善于通过行动表达自己"],
+        challenges: ["可能过于敏感，容易受伤", "可能难以表达自己的想法", "可能缺乏自信和决断力", "可能避免冲突，难以面对批评", "可能过于关注当下，忽视未来"],
+        careers: ["艺术家/设计师", "音乐家", "摄影师", "厨师", "美容师", "手工艺术家"],
+        relationships: "作为艺术家，你在人际关系中通常表现出温柔、敏感和创造力。你重视和谐和美好，善于通过行动表达自己的情感。你需要学习更加自信地表达自己的想法，提高自己的沟通和社交能力，同时也要学会面对冲突和批评。",
+        compatibleTypes: "ESFJ, ESTJ, ISFJ, ISTJ",
+        icon: "paint-brush"
+      },
+      ISTP: {
+        name: "手艺人",
+        description: "手艺人人格类型的人是实用主义者，他们善于解决实际问题，喜欢动手和探索。他们具有强烈的观察力和分析能力，善于理解事物的工作原理，能够迅速找到问题的解决方案。",
+        strengths: ["善于解决实际问题", "具有强烈的观察力和分析能力", "善于动手和探索", "能够迅速适应变化", "注重实效和结果"],
+        challenges: ["可能过于理性，忽视情感因素", "可能显得冷漠或疏离", "可能难以表达自己的情感", "可能缺乏长期规划能力", "可能对理论和抽象概念不感兴趣"],
+        careers: ["工程师", "机械师", "程序员", "运动员", "侦探", "厨师"],
+        relationships: "作为手艺人，你在人际关系中通常表现出独立、可靠和实用主义。你重视能力和实效，喜欢通过行动表达自己的关心。你需要学习更加关注他人的情感需求，提高自己的沟通和表达能力，同时也要学会制定长期计划。",
+        compatibleTypes: "ESFJ, ESTJ, ISFJ, ISTJ",
+        icon: "wrench"
+      },
+      ESFJ: {
+        name: "执政官",
+        description: "执政官人格类型的人热情友好，善于组织和协调，注重传统和人际关系。他们具有强烈的责任感和同理心，善于记住细节和他人的需求，致力于维护和谐的人际关系。",
+        strengths: ["热情友好，善于交际", "善于组织和协调", "具有强烈的责任感和同理心", "注重传统和人际关系", "善于记住细节和他人的需求"],
+        challenges: ["可能过于关注他人，忽视自己的需求", "可能难以说“不”", "可能对批评过于敏感", "可能过于保守，抵制变化", "可能过于关注细节，忽视整体"],
+        careers: ["教师", "护士/医生", "人力资源", "活动策划", "行政主管", "社会工作者"],
+        relationships: "作为执政官，你在人际关系中通常表现出热情、友好和关怀。你重视传统和和谐，善于照顾他人的需求。你需要学习在关系中设定边界，照顾自己的需求，同时也要学会接受变化和不确定性。",
+        compatibleTypes: "ISFP, ISTP, INFP, INTP",
+        icon: "users"
+      },
+      ESTJ: {
+        name: "总经理",
+        description: "总经理人格类型的人是天生的管理者，他们善于组织和领导，注重效率和结果。他们具有强烈的责任感和决断力，善于制定计划和流程，能够确保团队的高效运作和目标的实现。",
+        strengths: ["具有强大的组织和领导能力", "善于制定计划和流程", "具有强烈的责任感和决断力", "注重效率和结果", "善于管理和协调资源"],
+        challenges: ["可能过于强势或控制", "可能忽视他人的情感和需求", "可能过于理性，缺乏同理心", "可能难以接受批评或失败", "可能过于关注规则，缺乏灵活性"],
+        careers: ["CEO/高管", "项目经理", "行政主管", "警察/军人", "教师", "财务经理"],
+        relationships: "作为总经理，你在人际关系中通常表现出自信、决断和负责任。你重视效率和结果，善于组织和协调。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力，同时也要学会接受变化和不确定性。",
+        compatibleTypes: "ISFP, ISTP, INFP, INTP",
+        icon: "briefcase"
+      },
+      ESFP: {
+        name: "表演者",
+        description: "表演者人格类型的人活泼开朗，善于表达和娱乐，喜欢享受生活和与人交往。他们具有强烈的好奇心和乐观精神，善于适应变化的环境，能够给周围的人带来欢乐和活力。",
+        strengths: ["活泼开朗，善于表达", "具有强烈的好奇心和乐观精神", "善于娱乐和与人交往", "能够迅速适应变化", "善于给他人带来欢乐和活力"],
+        challenges: ["可能缺乏专注力和执行力", "可能过于关注当下，忽视未来", "可能难以做出决策", "可能对细节不够关注", "可能容易感到无聊或疲倦"],
+        careers: ["演员/表演者", "主持人", "销售", "旅游顾问", "活动策划", "厨师"],
+        relationships: "作为表演者，你在人际关系中通常表现出活泼、开朗和热情。你重视快乐和体验，善于与人建立连接。你需要学习在关系中保持专注和承诺，提高自己的执行力和责任感，同时也要学会关注未来和长期规划。",
+        compatibleTypes: "ISFJ, ISTJ, INFJ, INTJ",
+        icon: "music"
+      },
+      ESTP: {
+        name: "企业家",
+        description: "企业家人格类型的人务实果断，善于把握机会和解决问题，喜欢挑战和冒险。他们具有强烈的观察力和行动力，善于在实践中学习和成长，能够迅速适应变化的环境。",
+        strengths: ["务实果断，善于把握机会", "具有强烈的观察力和行动力", "善于解决实际问题", "喜欢挑战和冒险", "能够迅速适应变化"],
+        challenges: ["可能过于冲动，缺乏规划", "可能忽视他人的情感和需求", "可能难以坚持长期目标", "可能对理论和抽象概念不感兴趣", "可能过于关注结果，忽视过程"],
+        careers: ["企业家", "销售", "运动员", "警察/军人", "消防员", "项目经理"],
+        relationships: "作为企业家，你在人际关系中通常表现出自信、果断和活力。你重视行动和结果，喜欢与有能力的人合作。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力，同时也要学会制定长期计划和坚持目标。",
+        compatibleTypes: "ISFJ, ISTJ, INFJ, INTJ",
+        icon: "rocket"
+      }
+    };
+
+    // 测试状态
+    let currentQuestion = 0;
+    const answers = {};
+    let result = null;
+
+    // 初始化测试
+    function initTest() {
+      currentQuestion = 0;
+      Object.keys(answers).forEach(key => delete answers[key]);
+      result = null;
+      
+      // 更新问题计数
+      document.getElementById('total-questions').textContent = questions.length;
+      
+      // 显示第一题
+      showQuestion(0);
+      
+      // 更新进度条
+      updateProgress();
+      
+      // 更新按钮状态
+      document.getElementById('prev-btn').disabled = true;
+      document.getElementById('next-btn').textContent = '下一题';
+      document.getElementById('next-btn').innerHTML = '下一题<i class="fa fa-arrow-right ml-2"></i>';
+    }
+
+    // 显示当前问题
+    function showQuestion(index) {
+      const question = questions[index];
+      document.getElementById('question-text').textContent = question.text;
+      document.getElementById('option-a-text').textContent = question.a;
+      document.getElementById('option-b-text').textContent = question.b;
+      
+      // 更新当前问题计数
+      document.getElementById('current-question').textContent = index + 1;
+      
+      // 恢复之前的选择
+      if (answers[index] === 'a') {
+        document.getElementById('option-a').checked = true;
+      } else if (answers[index] === 'b') {
+        document.getElementById('option-b').checked = true;
+      } else {
+        document.getElementById('option-a').checked = false;
+        document.getElementById('option-b').checked = false;
+      }
+    }
+
+    // 更新进度条
+    function updateProgress() {
+      const progress = (currentQuestion / questions.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+      document.getElementById('progress-percentage').textContent = `${Math.round(progress)}%`;
+    }
+
+    // 下一题
+    function nextQuestion() {
+      // 检查是否选择了选项
+      const selectedOption = document.querySelector('input[name="answer"]:checked');
+      if (!selectedOption) {
+        alert('请选择一个选项');
+        return;
+      }
+      
+      // 保存答案
+      answers[currentQuestion] = selectedOption.value;
+      
+      // 如果是最后一题，显示结果
+      if (currentQuestion === questions.length - 1) {
+        calculateResult();
+        showPage('result');
+        return;
+      }
+      
+      // 否则显示下一题
+      currentQuestion++;
+      showQuestion(currentQuestion);
+      updateProgress();
+      
+      // 更新按钮状态
+      document.getElementById('prev-btn').disabled = false;
+      
+      // 如果是最后一题，更改按钮文本
+      if (currentQuestion === questions.length - 1) {
+        document.getElementById('next-btn').textContent = '完成测试';
+        document.getElementById('next-btn').innerHTML = '完成测试<i class="fa fa-check ml-2"></i>';
+      }
+    }
+
+    // 上一题
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+        updateProgress();
+        
+        // 更新按钮状态
+        document.getElementById('prev-btn').disabled = currentQuestion === 0;
+        document.getElementById('next-btn').textContent = '下一题';
+        document.getElementById('next-btn').innerHTML = '下一题<i class="fa fa-arrow-right ml-2"></i>';
+      }
+    }
+
+    // 计算测试结果
+    function calculateResult() {
+      const scores = {
+        E: 0,
+        I: 0,
+        S: 0,
+        N: 0,
+        T: 0,
+        F: 0,
+        J: 0,
+        P: 0
+      };
+      
+      // 计算每个维度的得分
+      for (let i = 0; i < questions.length; i++) {
+        const question = questions[i];
+        const answer = answers[i];
+        
+        if (answer === 'a') {
+          scores[question.aValue]++;
+        } else if (answer === 'b') {
+          scores[question.bValue]++;
+        }
+      }
+      
+      // 确定每个维度的偏好
+      const eiPreference = scores.E > scores.I ? 'E' : 'I';
+      const snPreference = scores.S > scores.N ? 'S' : 'N';
+      const tfPreference = scores.T > scores.F ? 'T' : 'F';
+      const jpPreference = scores.J > scores.P ? 'J' : 'P';
+      
+      // 组合人格类型
+      const type = eiPreference + snPreference + tfPreference + jpPreference;
+      
+      // 计算每个维度的百分比
+      const eiTotal = scores.E + scores.I;
+      const snTotal = scores.S + scores.N;
+      const tfTotal = scores.T + scores.F;
+      const jpTotal = scores.J + scores.P;
+      
+      const percentages = {
+        E: (scores.E / eiTotal) * 100,
+        I: (scores.I / eiTotal) * 100,
+        S: (scores.S / snTotal) * 100,
+        N: (scores.N / snTotal) * 100,
+        T: (scores.T / tfTotal) * 100,
+        F: (scores.F / tfTotal) * 100,
+        J: (scores.J / jpTotal) * 100,
+        P: (scores.P / jpTotal) * 100
+      };
+      
+      // 保存结果
+      result = {
+        type,
+        scores,
+        percentages,
+        details: personalityTypes[type]
+      };
+      
+      // 更新结果页面
+      updateResultPage();
+    }
+
+    // 更新结果页面
+    function updateResultPage() {
+      if (!result) return;
+      
+      // 更新人格类型和名称
+      document.getElementById('personality-type').textContent = result.type;
+      document.getElementById('personality-name').textContent = result.details.name;
+      document.getElementById('personality-description').textContent = result.details.description;
+      
+      // 更新图标
+      document.getElementById('personality-icon').className = `fa fa-${result.details.icon} text-4xl`;
+      
+      // 更新维度得分
+      document.getElementById('e-score').textContent = `${Math.round(result.percentages.E)}%`;
+      document.getElementById('i-score').textContent = `${Math.round(result.percentages.I)}%`;
+      document.getElementById('s-score').textContent = `${Math.round(result.percentages.S)}%`;
+      document.getElementById('n-score').textContent = `${Math.round(result.percentages.N)}%`;
+      document.getElementById('t-score').textContent = `${Math.round(result.percentages.T)}%`;
+      document.getElementById('f-score').textContent = `${Math.round(result.percentages.F)}%`;
+      document.getElementById('j-score').textContent = `${Math.round(result.percentages.J)}%`;
+      document.getElementById('p-score').textContent = `${Math.round(result.percentages.P)}%`;
+      
+      // 更新维度进度条
+      document.getElementById('e-bar').style.width = `${result.percentages.E}%`;
+      document.getElementById('i-bar').style.width = `${result.percentages.I}%`;
+      document.getElementById('s-bar').style.width = `${result.percentages.S}%`;
+      document.getElementById('n-bar').style.width = `${result.percentages.N}%`;
+      document.getElementById('t-bar').style.width = `${result.percentages.T}%`;
+      document.getElementById('f-bar').style.width = `${result.percentages.F}%`;
+      document.getElementById('j-bar').style.width = `${result.percentages.J}%`;
+      document.getElementById('p-bar').style.width = `${result.percentages.P}%`;
+      
+      // 更新优势列表
+      const strengthsList = document.getElementById('strengths-list');
+      strengthsList.innerHTML = '';
+      result.details.strengths.forEach(strength => {
+        const li = document.createElement('li');
+        li.textContent = strength;
+        strengthsList.appendChild(li);
+      });
+      
+      // 更新挑战列表
+      const challengesList = document.getElementById('challenges-list');
+      challengesList.innerHTML = '';
+      result.details.challenges.forEach(challenge => {
+        const li = document.createElement('li');
+        li.textContent = challenge;
+        challengesList.appendChild(li);
+      });
+      
+      // 更新职业建议列表
+      const careersList = document.getElementById('careers-list');
+      careersList.innerHTML = '';
+      result.details.careers.forEach(career => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-3 rounded-lg shadow-sm flex items-center';
+        div.innerHTML = `<i class="fa fa-check text-green-500 mr-2"></i><span>${career}</span>`;
+        careersList.appendChild(div);
+      });
+      
+      // 更新人际关系描述
+      document.getElementById('relationships-description').textContent = result.details.relationships;
+      
+      // 更新匹配类型
+      document.getElementById('compatible-types').textContent = result.details.compatibleTypes;
+      
+      // 更新分享内容
+      document.getElementById('share-type').textContent = result.type;
+      document.getElementById('share-name').textContent = result.details.name;
+      document.getElementById('share-description').textContent = result.details.description;
+      
+      // 更新分享链接
+      document.getElementById('share-link').value = `https://mbti-test.com/result/${result.type.toLowerCase()}`;
+    }
+
+    // 分享结果
+    function shareResult() {
+      toggleShareModal();
+    }
+
+    // 重置测试
+    function resetTest() {
+      initTest();
+      showPage('test');
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初始化测试
+      initTest();
+      
+      // 移动端菜单按钮点击事件
+      document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
+      
+      // 人格类型卡片点击事件
+      document.querySelectorAll('.personality-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const type = this.querySelector('h3').textContent;
+          alert(`${type} - ${personalityTypes[type].name}\n\n${personalityTypes[type].description}`);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
