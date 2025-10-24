@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息查询平台 - 专业的个人与企业信息查询服务</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+            .btn-primary {
+                @apply bg-primary text-white px-6 py-2 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-300;
+            }
+            .btn-secondary {
+                @apply bg-secondary text-white px-6 py-2 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-300;
+            }
+            .btn-outline {
+                @apply border border-primary text-primary px-6 py-2 rounded-lg hover:bg-primary hover:text-white transition-all duration-300;
+            }
+            .input-field {
+                @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+            }
+            .section-fade {
+                @apply opacity-0 transition-opacity duration-500;
+            }
+            .section-fade.active {
+                @apply opacity-100;
+            }
+            .skeleton {
+                @apply animate-pulse bg-gray-200 rounded;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 背景图 -->
+    <div class="fixed inset-0 z-0 opacity-10">
+        <img src="https://p26-doubao-search-sign.byteimg.com/labis/3308ff7025812c6c328cfcc966615ec5~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776837270&x-signature=iXu828shubpPu4TwJz0lZjwlVCc%3D" 
+             alt="背景" class="w-full h-full object-cover">
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white bg-opacity-90 bg-blur shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/909600629409710102~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776837270&x-signature=yZ59xvon4G2z%2FxpqrruD4lh32MA%3D" 
+                     alt="Logo" class="h-8 w-8">
+                <span class="text-xl font-bold text-primary">信息查询平台</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="help-btn" class="text-gray-600 hover:text-primary">
+                    <i class="fa fa-question-circle text-xl"></i>
+                </button>
+                <button id="user-btn" class="text-gray-600 hover:text-primary">
+                    <i class="fa fa-user-circle text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 pt-24 pb-16 relative z-10">
+        <!-- 页面容器 -->
+        <div id="page-container">
+            <!-- 首页/查询页 -->
+            <section id="search-page" class="section active">
+                <div class="max-w-md mx-auto">
+                    <!-- 标题 -->
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-dark mb-2">专业信息查询</h1>
+                        <p class="text-gray-600">快速获取个人与企业关键信息</p>
+                    </div>
+
+                    <!-- 查询类型选择 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h2 class="text-xl font-semibold text-dark mb-4">选择查询类型</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="personal-query-btn" class="query-type-btn bg-primary text-white py-3 px-4 rounded-lg flex flex-col items-center justify-center">
+                                <i class="fa fa-user-circle text-2xl mb-2"></i>
+                                <span>个人信息查询</span>
+                            </button>
+                            <button id="company-query-btn" class="query-type-btn bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-lg flex flex-col items-center justify-center">
+                                <i class="fa fa-building text-2xl mb-2"></i>
+                                <span>企业信息查询</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 查询表单 -->
+                    <div id="query-form-container" class="bg-white rounded-xl shadow-md p-6">
+                        <!-- 个人信息查询表单 -->
+                        <div id="personal-query-form">
+                            <h2 class="text-xl font-semibold text-dark mb-4">个人信息查询</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">姓名</label>
+                                    <input type="text" id="personal-name" class="input-field" placeholder="请输入姓名">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">身份证号</label>
+                                    <input type="text" id="personal-id" class="input-field" placeholder="请输入身份证号">
+                                </div>
+                                <div class="pt-2">
+                                    <button id="personal-search-btn" class="btn-primary w-full">
+                                        <i class="fa fa-search mr-2"></i>开始查询
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 企业信息查询表单 -->
+                        <div id="company-query-form" class="hidden">
+                            <h2 class="text-xl font-semibold text-dark mb-4">企业信息查询</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">公司名称</label>
+                                    <input type="text" id="company-name" class="input-field" placeholder="请输入公司名称">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">统一社会信用代码 (可选)</label>
+                                    <input type="text" id="company-code" class="input-field" placeholder="请输入统一社会信用代码">
+                                </div>
+                                <div class="pt-2">
+                                    <button id="company-search-btn" class="btn-primary w-full">
+                                        <i class="fa fa-search mr-2"></i>开始查询
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 服务说明 -->
+                    <div class="mt-8 bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-dark mb-3">我们提供的服务</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2 text-gray-700">
+                                <i class="fa fa-check-circle text-green-500"></i>
+                                <span>个人婚姻状态</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-700">
+                                <i class="fa fa-check-circle text-green-500"></i>
+                                <span>名下车辆信息</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-700">
+                                <i class="fa fa-check-circle text-green-500"></i>
+                                <span>个人涉案记录</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-700">
+                                <i class="fa fa-check-circle text-green-500"></i>
+                                <span>开房记录查询</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-700">
+                                <i class="fa fa-check-circle text-green-500"></i>
+                                <span>企业基本信息</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-700">
+                                <i class="fa fa-check-circle text-green-500"></i>
+                                <span>AI风险评估</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 结果预览页 -->
+            <section id="preview-page" class="section hidden">
+                <div class="max-w-md mx-auto">
+                    <!-- 返回按钮 -->
+                    <button id="back-to-search" class="flex items-center text-primary mb-6">
+                        <i class="fa fa-arrow-left mr-2"></i>返回查询
+                    </button>
+
+                    <!-- 结果标题 -->
+                    <div class="text-center mb-6">
+                        <h1 class="text-2xl font-bold text-dark mb-2">查询结果</h1>
+                        <p class="text-gray-600">以下是免费预览信息，完整结果需付费解锁</p>
+                    </div>
+
+                    <!-- 结果卡片 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <!-- 个人基本信息 -->
+                        <div id="personal-basic-info" class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-user-circle text-primary mr-2"></i>基本信息
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">姓名</span>
+                                    <span class="font-medium">张三</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">性别</span>
+                                    <span class="font-medium">男</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">年龄</span>
+                                    <span class="font-medium">35岁</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">身份证号</span>
+                                    <span class="font-medium">310************123</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">籍贯</span>
+                                    <span class="font-medium">上海市</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 婚姻状态 -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-heart text-primary mr-2"></i>婚姻状态
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">婚姻状况</span>
+                                    <span class="font-medium">已婚</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">结婚日期</span>
+                                    <span class="font-medium text-gray-400">****-**-**</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">配偶信息</span>
+                                    <span class="font-medium text-gray-400">已隐藏</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 名下车辆 -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-car text-primary mr-2"></i>名下车辆
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">车辆数量</span>
+                                    <span class="font-medium">2辆</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">车辆品牌</span>
+                                    <span class="font-medium text-gray-400">已隐藏</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">车牌号</span>
+                                    <span class="font-medium text-gray-400">已隐藏</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 涉案记录 -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-gavel text-primary mr-2"></i>涉案记录
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">涉案次数</span>
+                                    <span class="font-medium">1次</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">案件类型</span>
+                                    <span class="font-medium text-gray-400">已隐藏</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">处理结果</span>
+                                    <span class="font-medium text-gray-400">已隐藏</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 开房记录 -->
+                        <div>
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-hotel text-primary mr-2"></i>开房记录
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">近一年记录</span>
+                                    <span class="font-medium">12次</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">最近记录</span>
+                                    <span class="font-medium text-gray-400">****-**-**</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">常去城市</span>
+                                    <span class="font-medium text-gray-400">已隐藏</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 付费提示 -->
+                    <div class="bg-gradient-to-r from-primary to-secondary rounded-xl shadow-md p-6 text-white mb-6">
+                        <h3 class="text-xl font-semibold mb-3">解锁完整信息</h3>
+                        <p class="mb-4">付费后可查看全部详细信息，包括：</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle mr-2"></i>
+                                <span>完整的婚姻登记信息</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle mr-2"></i>
+                                <span>车辆详细信息及照片</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle mr-2"></i>
+                                <span>涉案详情及判决书</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle mr-2"></i>
+                                <span>详细的开房记录及地点</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle mr-2"></i>
+                                <span>AI风险评估报告</span>
+                            </li>
+                        </ul>
+                        <button id="goto-payment-btn" class="bg-white text-primary font-medium px-6 py-3 rounded-lg w-full">
+                            立即解锁
+                        </button>
+                    </div>
+
+                    <!-- AI分析预览 -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                            <i class="fa fa-line-chart text-primary mr-2"></i>AI风险评估预览
+                        </h3>
+                        <div class="mb-4">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-600">综合风险评分</span>
+                                <span class="font-medium">65/100</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-gray-600 mb-4">完整报告需付费解锁</p>
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/69a8cf13a6414230964dcd310f7af7b0~tplv-a9rns2rl98-image.image?rcl=202510241354081DAE38C4EECE81C571E9&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1763877290&x-signature=LzhBx23jUjeVn7D2b8rSST0jcQQ%3D" 
+                                 alt="风险评估图表" class="w-full max-w-xs mx-auto opacity-50 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 付费页面 -->
+            <section id="payment-page" class="section hidden">
+                <div class="max-w-md mx-auto">
+                    <!-- 返回按钮 -->
+                    <button id="back-to-preview" class="flex items-center text-primary mb-6">
+                        <i class="fa fa-arrow-left mr-2"></i>返回结果
+                    </button>
+
+                    <!-- 标题 -->
+                    <div class="text-center mb-8">
+                        <h1 class="text-2xl font-bold text-dark mb-2">选择套餐</h1>
+                        <p class="text-gray-600">解锁完整查询结果</p>
+                    </div>
+
+                    <!-- 套餐卡片 -->
+                    <div class="space-y-6 mb-8">
+                        <!-- 单次查询套餐 -->
+                        <div class="bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-primary transition-all duration-300 card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-xl font-semibold text-dark">单次查询</h3>
+                                <span class="bg-blue-100 text-primary text-sm font-medium px-3 py-1 rounded-full">推荐</span>
+                            </div>
+                            <div class="mb-4">
+                                <span class="text-3xl font-bold text-dark">¥29.9</span>
+                                <span class="text-gray-500">/次</span>
+                            </div>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">解锁当前查询的完整结果</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">包含AI风险评估报告</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">结果保存7天</span>
+                                </li>
+                            </ul>
+                            <button class="payment-option-btn btn-primary w-full" data-option="single" data-price="29.9">
+                                选择此套餐
+                            </button>
+                        </div>
+
+                        <!-- 多次查询套餐 -->
+                        <div class="bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-primary transition-all duration-300 card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-xl font-semibold text-dark">多次查询包</h3>
+                                <span class="bg-green-100 text-green-700 text-sm font-medium px-3 py-1 rounded-full">划算</span>
+                            </div>
+                            <div class="mb-4">
+                                <span class="text-3xl font-bold text-dark">¥99</span>
+                                <span class="text-gray-500">/5次</span>
+                            </div>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">5次查询机会</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">包含AI风险评估报告</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">结果保存30天</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">每次查询仅¥19.8</span>
+                                </li>
+                            </ul>
+                            <button class="payment-option-btn btn-outline w-full" data-option="multiple" data-price="99">
+                                选择此套餐
+                            </button>
+                        </div>
+
+                        <!-- 月度会员 -->
+                        <div class="bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-primary transition-all duration-300 card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-xl font-semibold text-dark">月度会员</h3>
+                                <span class="bg-purple-100 text-purple-700 text-sm font-medium px-3 py-1 rounded-full">高级</span>
+                            </div>
+                            <div class="mb-4">
+                                <span class="text-3xl font-bold text-dark">¥199</span>
+                                <span class="text-gray-500">/月</span>
+                            </div>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">无限次查询</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">包含AI风险评估报告</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">结果永久保存</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-check text-green-500 mr-2"></i>
+                                    <span class="text-gray-700">优先客服支持</span>
+                                </li>
+                            </ul>
+                            <button class="payment-option-btn btn-outline w-full" data-option="monthly" data-price="199">
+                                选择此套餐
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 支付方式 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                        <h3 class="text-xl font-semibold text-dark mb-4">选择支付方式</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer payment-method" data-method="wechat">
+                                <div class="flex items-center">
+                                    <i class="fa fa-weixin text-green-500 text-2xl mr-3"></i>
+                                    <span class="text-gray-700">微信支付</span>
+                                </div>
+                                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center payment-method-indicator">
+                                    <div class="w-3 h-3 rounded-full bg-primary hidden payment-method-check"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer payment-method" data-method="alipay">
+                                <div class="flex items-center">
+                                    <i class="fa fa-credit-card text-blue-500 text-2xl mr-3"></i>
+                                    <span class="text-gray-700">支付宝</span>
+                                </div>
+                                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center payment-method-indicator">
+                                    <div class="w-3 h-3 rounded-full bg-primary hidden payment-method-check"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 确认支付按钮 -->
+                    <button id="confirm-payment-btn" class="btn-primary w-full py-3 text-lg font-medium" disabled>
+                        确认支付 ¥<span id="payment-amount">29.9</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 详情页面 -->
+            <section id="detail-page" class="section hidden">
+                <div class="max-w-md mx-auto">
+                    <!-- 返回按钮 -->
+                    <button id="back-to-search-from-detail" class="flex items-center text-primary mb-6">
+                        <i class="fa fa-arrow-left mr-2"></i>返回查询
+                    </button>
+
+                    <!-- 结果标题 -->
+                    <div class="text-center mb-6">
+                        <h1 class="text-2xl font-bold text-dark mb-2">完整查询结果</h1>
+                        <p class="text-gray-600">查询时间: 2025-07-21 15:30:45</p>
+                    </div>
+
+                    <!-- 结果卡片 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <!-- 个人基本信息 -->
+                        <div id="personal-detail-info" class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-user-circle text-primary mr-2"></i>基本信息
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">姓名</span>
+                                    <span class="font-medium">张三</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">性别</span>
+                                    <span class="font-medium">男</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">年龄</span>
+                                    <span class="font-medium">35岁</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">身份证号</span>
+                                    <span class="font-medium">310104199001151234</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">籍贯</span>
+                                    <span class="font-medium">上海市徐汇区</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">联系电话</span>
+                                    <span class="font-medium">138****5678</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">电子邮箱</span>
+                                    <span class="font-medium">zh****@example.com</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 婚姻状态 -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-heart text-primary mr-2"></i>婚姻状态
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">婚姻状况</span>
+                                    <span class="font-medium">已婚</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">结婚日期</span>
+                                    <span class="font-medium">2015-06-18</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">配偶姓名</span>
+                                    <span class="font-medium">李四</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">配偶身份证号</span>
+                                    <span class="font-medium">310105199203215678</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">婚姻登记地</span>
+                                    <span class="font-medium">上海市徐汇区民政局</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 名下车辆 -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-car text-primary mr-2"></i>名下车辆
+                            </h2>
+                            <div class="space-y-4">
+                                <!-- 车辆1 -->
+                                <div class="p-3 border border-gray-100 rounded-lg">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车辆品牌</span>
+                                        <span class="font-medium">宝马</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车辆型号</span>
+                                        <span class="font-medium">BMW 530Li</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车牌号</span>
+                                        <span class="font-medium">沪A12345</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车辆颜色</span>
+                                        <span class="font-medium">黑色</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">登记日期</span>
+                                        <span class="font-medium">2018-03-25</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 车辆2 -->
+                                <div class="p-3 border border-gray-100 rounded-lg">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车辆品牌</span>
+                                        <span class="font-medium">特斯拉</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车辆型号</span>
+                                        <span class="font-medium">Model 3</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车牌号</span>
+                                        <span class="font-medium">沪B67890</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">车辆颜色</span>
+                                        <span class="font-medium">白色</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">登记日期</span>
+                                        <span class="font-medium">2021-05-12</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 涉案记录 -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-gavel text-primary mr-2"></i>涉案记录
+                            </h2>
+                            <div class="space-y-4">
+                                <div class="p-3 border border-gray-100 rounded-lg">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">案件类型</span>
+                                        <span class="font-medium text-orange-500">交通违章</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">案件日期</span>
+                                        <span class="font-medium">2023-02-15</span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-600">案件详情</span>
+                                        <span class="font-medium">闯红灯</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">处理结果</span>
+                                        <span class="font-medium">已处理，罚款200元，扣6分</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 开房记录 -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                <i class="fa fa-hotel text-primary mr-2"></i>开房记录
+                            </h2>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
+                                            <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">酒店名称</th>
+                                            <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">城市</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="py-2 px-3 text-sm text-gray-900">2025-07-15</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">上海外滩华尔道夫酒店</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">上海</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 text-sm text-gray-900">2025-07-02</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">北京王府井希尔顿酒店</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">北京</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 text-sm text-gray-900">2025-06-20</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">广州天河万豪酒店</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">广州</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 text-sm text-gray-900">2025-06-05</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">深圳福田香格里拉酒店</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">深圳</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 text-sm text-gray-900">2025-05-18</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">上海浦东丽思卡尔顿酒店</td>
+                                            <td class="py-2 px-3 text-sm text-gray-900">上海</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="text-center mt-3 text-sm text-gray-500">
+                                    显示最近5条记录，共12条
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI风险评估 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                            <i class="fa fa-line-chart text-primary mr-2"></i>AI风险评估报告
+                        </h3>
+                        <div class="mb-6">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-600">综合风险评分</span>
+                                <span class="font-medium">65/100</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                                <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 65%"></div>
+                            </div>
+                            <div class="p-3 bg-yellow-50 border border-yellow-100 rounded-lg text-sm">
+                                <p class="text-yellow-800">
+                                    <i class="fa fa-info-circle mr-1"></i>
+                                    中等风险：该人员存在交通违章记录，但无严重违法行为。建议进一步核实其交通违章历史。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <h4 class="font-medium text-gray-800 mb-3">风险维度分析</h4>
+                            <div class="h-64">
+                                <canvas id="riskChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-3">AI建议</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fa fa-circle text-xs text-primary mt-1 mr-2"></i>
+                                    <span>该人员整体风险适中，无重大安全隐患</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-circle text-xs text-primary mt-1 mr-2"></i>
+                                    <span>交通违章记录较多，建议关注其驾驶习惯</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-circle text-xs text-primary mt-1 mr-2"></i>
+                                    <span>近期开房记录频繁，且涉及多个城市，建议核实其出行目的</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="flex space-x-4">
+                        <button id="download-report-btn" class="btn-outline flex-1">
+                            <i class="fa fa-download mr-2"></i>下载报告
+                        </button>
+                        <button id="share-report-btn" class="btn-primary flex-1">
+                            <i class="fa fa-share-alt mr-2"></i>分享报告
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 底部信息 -->
+    <footer class="bg-white bg-opacity-90 bg-blur shadow-sm py-4 relative z-10">
+        <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+            <p class="mb-2">© 2025 信息查询平台 版权所有</p>
+            <p>本平台仅提供信息查询服务，数据来源于公开渠道</p>
+            <p class="mt-2 text-xs">使用本平台服务即表示您同意我们的<a href="#" class="text-primary">服务条款</a>和<a href="#" class="text-primary">隐私政策</a></p>
+        </div>
+    </footer>
+
+    <!-- 加载中弹窗 -->
+    <div id="loading-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-xl p-6 flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-700 font-medium">查询中，请稍候...</p>
+        </div>
+    </div>
+
+    <!-- 支付成功弹窗 -->
+    <div id="payment-success-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-xl p-6 flex flex-col items-center max-w-xs w-full mx-4">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-check text-green-500 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-dark mb-2">支付成功</h3>
+            <p class="text-gray-600 text-center mb-6">您已成功购买查询服务，现在可以查看完整结果</p>
+            <button id="view-details-btn" class="btn-primary w-full">
+                查看完整结果
+            </button>
+        </div>
+    </div>
+
+    <!-- 帮助弹窗 -->
+    <div id="help-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-xs w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-dark">使用帮助</h3>
+                <button id="close-help-btn" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">如何查询个人信息？</h4>
+                    <p class="text-gray-600 text-sm">在首页选择"个人信息查询"，输入姓名和身份证号，点击"开始查询"按钮。</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">如何查询企业信息？</h4>
+                    <p class="text-gray-600 text-sm">在首页选择"企业信息查询"，输入公司名称和统一社会信用代码（可选），点击"开始查询"按钮。</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">如何解锁完整信息？</h4>
+                    <p class="text-gray-600 text-sm">在查询结果预览页，点击"立即解锁"按钮，选择合适的套餐并完成支付后即可查看完整信息。</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">支付方式有哪些？</h4>
+                    <p class="text-gray-600 text-sm">目前支持微信支付和支付宝两种支付方式。</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">查询结果有效期是多久？</h4>
+                    <p class="text-gray-600 text-sm">单次查询结果保存7天，多次查询包结果保存30天，月度会员结果永久保存。</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">如何下载或分享报告？</h4>
+                    <p class="text-gray-600 text-sm">在完整结果页面，点击"下载报告"按钮可下载PDF格式报告，点击"分享报告"按钮可分享查询结果。</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">数据来源是什么？</h4>
+                    <p class="text-gray-600 text-sm">本平台数据来源于公开渠道，仅供参考，不保证数据的绝对准确性和完整性。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面切换功能
+            const sections = document.querySelectorAll('.section');
+            
+            function showSection(sectionId) {
+                sections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    
+                    // 添加淡入动画
+                    targetSection.classList.add('section-fade');
+                    setTimeout(() => {
+                        targetSection.classList.add('active');
+                    }, 10);
+                    
+                    // 滚动到顶部
+                    window.scrollTo(0, 0);
+                }
+            }
+            
+            // 查询类型切换
+            const personalQueryBtn = document.getElementById('personal-query-btn');
+            const companyQueryBtn = document.getElementById('company-query-btn');
+            const personalQueryForm = document.getElementById('personal-query-form');
+            const companyQueryForm = document.getElementById('company-query-form');
+            
+            personalQueryBtn.addEventListener('click', function() {
+                personalQueryBtn.classList.remove('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                personalQueryBtn.classList.add('bg-primary', 'text-white');
+                
+                companyQueryBtn.classList.remove('bg-primary', 'text-white');
+                companyQueryBtn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                
+                personalQueryForm.classList.remove('hidden');
+                companyQueryForm.classList.add('hidden');
+            });
+            
+            companyQueryBtn.addEventListener('click', function() {
+                companyQueryBtn.classList.remove('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                companyQueryBtn.classList.add('bg-primary', 'text-white');
+                
+                personalQueryBtn.classList.remove('bg-primary', 'text-white');
+                personalQueryBtn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                
+                companyQueryForm.classList.remove('hidden');
+                personalQueryForm.classList.add('hidden');
+            });
+            
+            // 查询按钮点击事件
+            const personalSearchBtn = document.getElementById('personal-search-btn');
+            const companySearchBtn = document.getElementById('company-search-btn');
+            const loadingModal = document.getElementById('loading-modal');
+            
+            personalSearchBtn.addEventListener('click', function() {
+                const name = document.getElementById('personal-name').value;
+                const id = document.getElementById('personal-id').value;
+                
+                if (!name || !id) {
+                    alert('请输入姓名和身份证号');
+                    return;
+                }
+                
+                // 显示加载弹窗
+                loadingModal.classList.remove('hidden');
+                
+                // 模拟查询过程
+                setTimeout(() => {
+                    loadingModal.classList.add('hidden');
+                    showSection('preview-page');
+                }, 1500);
+            });
+            
+            companySearchBtn.addEventListener('click', function() {
+                const name = document.getElementById('company-name').value;
+                
+                if (!name) {
+                    alert('请输入公司名称');
+                    return;
+                }
+                
+                // 显示加载弹窗
+                loadingModal.classList.remove('hidden');
+                
+                // 模拟查询过程
+                setTimeout(() => {
+                    loadingModal.classList.add('hidden');
+                    // 企业信息查询结果预览页面
+                    alert('企业信息查询功能已上线，正在展示结果预览！');
+                    
+                    // 创建企业信息预览页面
+                    const previewHTML = `
+                        <div id="company-preview-page" class="section active">
+                            <div class="max-w-md mx-auto">
+                                <!-- 返回按钮 -->
+                                <button id="back-to-search-from-company" class="flex items-center text-primary mb-6">
+                                    <i class="fa fa-arrow-left mr-2"></i>返回查询
+                                </button>
+                                
+                                <!-- 结果标题 -->
+                                <div class="text-center mb-6">
+                                    <h1 class="text-2xl font-bold text-dark mb-2">企业信息查询结果</h1>
+                                    <p class="text-gray-600">以下是免费预览信息，完整结果需付费解锁</p>
+                                </div>
+                                
+                                <!-- 结果卡片 -->
+                                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                                    <!-- 企业基本信息 -->
+                                    <div class="mb-6">
+                                        <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                            <i class="fa fa-building text-primary mr-2"></i>基本信息
+                                        </h2>
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">公司名称</span>
+                                                <span class="font-medium">${name}</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">统一社会信用代码</span>
+                                                <span class="font-medium">91310************</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">法定代表人</span>
+                                                <span class="font-medium">王**</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">成立日期</span>
+                                                <span class="font-medium text-gray-400">****-**-**</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">注册资本状态</span>
+                                                <span class="font-medium text-green-500">存续在业</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 注册资本 -->
+                                    <div class="mb-6">
+                                        <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                            <i class="fa fa-money text-primary mr-2"></i>注册资本
+                                        </h2>
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">注册资本</span>
+                                                <span class="font-medium">1000万元人民币</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">实缴资本</span>
+                                                <span class="font-medium text-gray-400">已隐藏</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">出资方式</span>
+                                                <span class="font-medium text-gray-400">已隐藏</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 登记信息 -->
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                                            <i class="fa fa-file-text text-primary mr-2"></i>登记信息
+                                        </h2>
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">登记机关</span>
+                                                <span class="font-medium">上海市市场监督管理局</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">企业类型</span>
+                                                <span class="font-medium text-gray-400">已隐藏</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">所属行业</span>
+                                                <span class="font-medium text-gray-400">已隐藏</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">经营范围</span>
+                                                <span class="font-medium text-gray-400">已隐藏</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 付费提示 -->
+                                <div class="bg-gradient-to-r from-primary to-secondary rounded-xl shadow-md p-6 text-white mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">解锁完整信息</h3>
+                                    <p class="mb-4">付费后可查看全部详细信息，包括：</p>
+                                    <ul class="space-y-2 mb-6">
+                                        <li class="flex items-center">
+                                            <i class="fa fa-check-circle mr-2"></i>
+                                            <span>完整的工商登记信息</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fa fa-check-circle mr-2"></i>
+                                            <span>股东及出资信息</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fa fa-check-circle mr-2"></i>
+                                            <span>变更记录</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fa fa-check-circle mr-2"></i>
+                                            <span>行政处罚信息</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fa fa-check-circle mr-2"></i>
+                                            <span>AI风险评估报告</span>
+                                        </li>
+                                    </ul>
+                                    <button id="goto-company-payment-btn" class="bg-white text-primary font-medium px-6 py-3 rounded-lg w-full">
+                                        立即解锁
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // 替换当前页面内容
+                    const pageContainer = document.getElementById('page-container');
+                    pageContainer.innerHTML = previewHTML;
+                    
+                    // 添加返回按钮事件
+                    document.getElementById('back-to-search-from-company').addEventListener('click', function() {
+                        window.location.reload();
+                    });
+                    
+                    // 添加 payment button event
+                    document.getElementById('goto-company-payment-btn').addEventListener('click', function() {
+                        alert('企业信息查询付费功能即将上线，敬请期待！');
+                    });
+                }, 1500);
+            });
+            
+            // 返回按钮点击事件
+            const backToSearch = document.getElementById('back-to-search');
+            backToSearch.addEventListener('click', function() {
+                showSection('search-page');
+            });
+            
+            const backToSearchFromDetail = document.getElementById('back-to-search-from-detail');
+            backToSearchFromDetail.addEventListener('click', function() {
+                showSection('search-page');
+            });
+            
+            // 付费页面相关
+            const gotoPaymentBtn = document.getElementById('goto-payment-btn');
+            const backToPreview = document.getElementById('back-to-preview');
+            
+            gotoPaymentBtn.addEventListener('click', function() {
+                showSection('payment-page');
+            });
+            
+            backToPreview.addEventListener('click', function() {
+                showSection('preview-page');
+            });
+            
+            // 支付选项选择
+            const paymentOptionBtns = document.querySelectorAll('.payment-option-btn');
+            const paymentAmount = document.getElementById('payment-amount');
+            
+            paymentOptionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 重置所有按钮样式
+                    paymentOptionBtns.forEach(b => {
+                        b.classList.remove('btn-primary');
+                        b.classList.add('btn-outline');
+                    });
+                    
+                    // 设置当前选中按钮样式
+                    this.classList.remove('btn-outline');
+                    this.classList.add('btn-primary');
+                    
+                    // 更新支付金额
+                    const price = this.getAttribute('data-price');
+                    paymentAmount.textContent = price;
+                    
+                    // 启用确认支付按钮
+                    confirmPaymentBtn.disabled = false;
+                });
+            });
+            
+            // 支付方式选择
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    // 重置所有支付方式
+                    paymentMethods.forEach(m => {
+                        const indicator = m.querySelector('.payment-method-indicator');
+                        const check = m.querySelector('.payment-method-check');
+                        
+                        indicator.classList.remove('border-primary');
+                        indicator.classList.add('border-gray-300');
+                        check.classList.add('hidden');
+                    });
+                    
+                    // 设置当前选中支付方式
+                    const indicator = this.querySelector('.payment-method-indicator');
+                    const check = this.querySelector('.payment-method-check');
+                    
+                    indicator.classList.remove('border-gray-300');
+                    indicator.classList.add('border-primary');
+                    check.classList.remove('hidden');
+                    
+                    // 启用确认支付按钮
+                    confirmPaymentBtn.disabled = false;
+                });
+            });
+            
+            // 确认支付按钮
+            const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+            const paymentSuccessModal = document.getElementById('payment-success-modal');
+            
+            confirmPaymentBtn.addEventListener('click', function() {
+                // 显示加载弹窗
+                loadingModal.classList.remove('hidden');
+                
+                // 模拟支付过程
+                setTimeout(() => {
+                    loadingModal.classList.add('hidden');
+                    paymentSuccessModal.classList.remove('hidden');
+                }, 1500);
+            });
+            
+            // 查看详情按钮
+            const viewDetailsBtn = document.getElementById('view-details-btn');
+            
+            viewDetailsBtn.addEventListener('click', function() {
+                paymentSuccessModal.classList.add('hidden');
+                showSection('detail-page');
+                
+                // 初始化风险评估图表
+                initRiskChart();
+            });
+            
+            // 帮助弹窗
+            const helpBtn = document.getElementById('help-btn');
+            const helpModal = document.getElementById('help-modal');
+            const closeHelpBtn = document.getElementById('close-help-btn');
+            
+            helpBtn.addEventListener('click', function() {
+                helpModal.classList.remove('hidden');
+            });
+            
+            closeHelpBtn.addEventListener('click', function() {
+                helpModal.classList.add('hidden');
+            });
+            
+            // 点击弹窗外部关闭弹窗
+            window.addEventListener('click', function(event) {
+                if (event.target === helpModal) {
+                    helpModal.classList.add('hidden');
+                }
+                if (event.target === paymentSuccessModal) {
+                    paymentSuccessModal.classList.add('hidden');
+                }
+            });
+            
+            // 下载报告按钮
+            const downloadReportBtn = document.getElementById('download-report-btn');
+            
+            downloadReportBtn.addEventListener('click', function() {
+                alert('报告下载已开始，请在下载管理中查看');
+            });
+            
+            // 分享报告按钮
+            const shareReportBtn = document.getElementById('share-report-btn');
+            
+            shareReportBtn.addEventListener('click', function() {
+                alert('分享链接已复制到剪贴板');
+            });
+            
+            // 初始化风险评估图表
+            function initRiskChart() {
+                const ctx = document.getElementById('riskChart').getContext('2d');
+                
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['信用风险', '法律风险', '行为风险', '社交风险', '经济风险'],
+                        datasets: [{
+                            label: '个人风险评分',
+                            data: [65, 45, 70, 55, 60],
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                        }, {
+                            label: '行业平均',
+                            data: [50, 50, 50, 50, 50],
+                            backgroundColor: 'rgba(156, 163, 175, 0.2)',
+                            borderColor: 'rgba(156, 163, 175, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(156, 163, 175, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(156, 163, 175, 1)'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    stepSize: 20
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
