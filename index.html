@@ -430,19 +430,19 @@
           <div id="test-container" class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
             <!-- 问题卡片 -->
             <div id="question-card" class="mb-6 animate-fade-in">
-              <h2 id="question-text" class="text-xl font-semibold mb-6 text-gray-800">在社交场合中，你通常：</h2>
+              <h2 id="question-text" class="text-xl md:text-2xl font-semibold mb-6 text-gray-800">在社交场合中，你通常：</h2>
               
-              <div class="space-y-4">
+              <div class="space-y-6">
                 <!-- 选项A -->
-                <div class="flex items-center">
-                  <input type="radio" id="option-a" name="answer" value="a" class="w-5 h-5 text-primary focus:ring-primary">
-                  <label for="option-a" id="option-a-text" class="ml-3 text-gray-700">主动与他人交流，享受成为关注的焦点</label>
+                <div class="flex items-start">
+                  <input type="radio" id="option-a" name="answer" value="a" class="w-6 h-6 mt-1 text-primary focus:ring-primary">
+                  <label for="option-a" id="option-a-text" class="ml-3 text-gray-700 text-lg p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-all-300">主动与他人交流，享受成为关注的焦点</label>
                 </div>
                 
                 <!-- 选项B -->
-                <div class="flex items-center">
-                  <input type="radio" id="option-b" name="answer" value="b" class="w-5 h-5 text-primary focus:ring-primary">
-                  <label for="option-b" id="option-b-text" class="ml-3 text-gray-700">等待他人主动交流，喜欢在一旁观察</label>
+                <div class="flex items-start">
+                  <input type="radio" id="option-b" name="answer" value="b" class="w-6 h-6 mt-1 text-primary focus:ring-primary">
+                  <label for="option-b" id="option-b-text" class="ml-3 text-gray-700 text-lg p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-all-300">等待他人主动交流，喜欢在一旁观察</label>
                 </div>
               </div>
             </div>
@@ -482,8 +482,13 @@
                   <h2 id="personality-type" class="text-5xl font-bold mb-2">INFJ</h2>
                   <p id="personality-name" class="text-xl text-gray-100">提倡者</p>
                 </div>
-                <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
-                  <i id="personality-icon" class="fa fa-heart text-4xl"></i>
+                <div class="flex flex-cols-2 items-center space-x-4">
+                  <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
+                    <i id="personality-icon" class="fa fa-heart text-4xl"></i>
+                  </div>
+                  <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/50">
+                    <img id="personality-image" src="" alt="Personality Type" class="w-full h-full object-cover">
+                  </div>
                 </div>
               </div>
               
@@ -651,14 +656,14 @@
           </div>
           
           <!-- 分享和重新测试 -->
-          <div class="max-w-3xl mx-auto flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-            <button id="share-btn" onclick="shareResult()" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all-300 scale-hover">
+          <div class="max-w-3xl mx-auto flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <button id="share-btn" onclick="shareResult()" class="flex-1 px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all-300 scale-hover text-lg">
               <i class="fa fa-share-alt mr-2"></i>分享结果
             </button>
-            <button id="retest-btn" onclick="resetTest()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all-300 scale-hover">
+            <button id="retest-btn" onclick="resetTest()" class="flex-1 px-6 py-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all-300 scale-hover text-lg">
               <i class="fa fa-refresh mr-2"></i>重新测试
             </button>
-            <button id="explore-btn" onclick="showPage('types')" class="px-6 py-3 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-all-300 scale-hover">
+            <button id="explore-btn" onclick="showPage('types')" class="flex-1 px-6 py-4 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-all-300 scale-hover text-lg">
               <i class="fa fa-info-circle mr-2"></i>探索其他类型
             </button>
           </div>
@@ -676,15 +681,15 @@
           
           <!-- 人格类型分类标签 -->
           <div class="flex flex-wrap justify-center gap-2 mb-8">
-            <button class="type-filter px-4 py-2 rounded-full bg-primary text-white" data-filter="all">全部</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="e">外向(E)</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="i">内向(I)</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="s">感觉(S)</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="n">直觉(N)</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="t">思考(T)</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="f">情感(F)</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="j">判断(J)</button>
-            <button class="type-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="p">知觉(P)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-primary text-white text-base" data-filter="all">全部</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="e">外向(E)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="i">内向(I)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="s">感觉(S)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="n">直觉(N)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="t">思考(T)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="f">情感(F)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="j">判断(J)</button>
+            <button class="type-filter px-4 py-3 rounded-full bg-gray-200 text-gray-700 text-base" data-filter="p">知觉(P)</button>
           </div>
           
           <!-- 人格类型卡片网格 -->
@@ -1221,6 +1226,126 @@
         aValue: "E",
         bValue: "I"
       },
+      {
+        text: "在社交活动后，你通常感到：",
+        a: "精力充沛，满足",
+        b: "疲惫，需要休息",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你更喜欢的沟通方式是：",
+        a: "面对面交流",
+        b: "文字交流（如邮件、消息）",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "在团队中，你通常：",
+        a: "主动参与讨论，引领方向",
+        b: "观察和分析，提供支持",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你如何获取新想法？",
+        a: "与他人讨论和交流",
+        b: "独自思考和阅读",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你对新环境的适应能力：",
+        a: "很快适应，感到舒适",
+        b: "需要时间适应，感到谨慎",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "在聚会中，你通常：",
+        a: "主动与人交谈，结交新朋友",
+        b: "与熟悉的人交流，不太主动结识新人",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你倾向于：",
+        a: "边想边说",
+        b: "先想后说",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你更喜欢的工作方式是：",
+        a: "在开放的环境中与他人协作",
+        b: "在安静的环境中独立工作",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "当你遇到困难时，你倾向于：",
+        a: "寻求他人帮助和建议",
+        b: "自己解决问题",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你如何庆祝成功？",
+        a: "与朋友和家人一起庆祝",
+        b: "自己安静地享受成就感",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你更喜欢的学习方式是：",
+        a: "小组讨论和互动学习",
+        b: "独自阅读和思考",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "在等待时，你通常：",
+        a: "与周围的人交谈",
+        b: "独自思考或做自己的事情",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你如何表达自己的情感？",
+        a: "直接表达，不掩饰",
+        b: "内敛，不轻易表露",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "你更喜欢的娱乐活动是：",
+        a: "参加音乐会或观看演出",
+        b: "在家看电影或听音乐",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
+      {
+        text: "在社交网络上，你通常：",
+        a: "积极参与讨论，分享生活",
+        b: "潜水浏览，很少发表意见",
+        dimension: "EI",
+        aValue: "E",
+        bValue: "I"
+      },
       
       // S/N 感觉/直觉
       {
@@ -1299,6 +1424,126 @@
         text: "你更擅长：",
         a: "记住具体的事实和细节",
         b: "理解抽象的概念和关系",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更关注事物的：",
+        a: "实际用途和功能",
+        b: "象征意义和可能性",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在阅读时，你更喜欢：",
+        a: "非虚构类和实用书籍",
+        b: "小说和科幻作品",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你如何看待过去的经验？",
+        a: "作为未来决策的参考",
+        b: "作为学习的机会，但不一定限制未来",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在解决问题时，你倾向于：",
+        a: "使用已有的方法和技术",
+        b: "尝试新的方法和思路",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你对新的观点和理论：",
+        a: "持怀疑态度，需要证据支持",
+        b: "很感兴趣，愿意尝试理解",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "在旅行中，你更感兴趣：",
+        a: "景点的实际细节和体验",
+        b: "景点的文化和历史背景",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更喜欢的课程是：",
+        a: "实践操作类",
+        b: "理论分析类",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你如何处理信息？",
+        a: "一步一步地处理，注重细节",
+        b: "跳跃式地处理，注重整体",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你对未来的看法是：",
+        a: "基于当前趋势的合理预测",
+        b: "充满可能性和机遇",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更擅长：",
+        a: "执行具体的任务",
+        b: "提出创新的想法",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更喜欢的工作是：",
+        a: "有明确的任务和目标",
+        b: "有创造性和挑战性",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你如何学习新技能？",
+        a: "通过示范和实践",
+        b: "通过阅读和思考",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你对抽象概念的态度是：",
+        a: "需要具体例子才能理解",
+        b: "能够直接理解和应用",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你更关注：",
+        a: "事物的现状",
+        b: "事物的潜力",
+        dimension: "SN",
+        aValue: "S",
+        bValue: "N"
+      },
+      {
+        text: "你如何做笔记？",
+        a: "记录详细的信息和事实",
+        b: "记录关键概念和想法",
         dimension: "SN",
         aValue: "S",
         bValue: "N"
@@ -1385,6 +1630,126 @@
         aValue: "T",
         bValue: "F"
       },
+      {
+        text: "你如何评价一个想法？",
+        a: "基于其逻辑性和实用性",
+        b: "基于其对他人的影响和价值",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "在团队中，你更关注：",
+        a: "目标的实现和效率",
+        b: "成员的感受和关系",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何处理批评？",
+        a: "客观分析，从中学习",
+        b: "感到受伤，需要时间调整",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更欣赏他人的：",
+        a: "理性和能力",
+        b: "情感和价值观",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "在做决定时，你更依赖：",
+        a: "头脑和逻辑",
+        b: "心和情感",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何解决道德困境？",
+        a: "基于原则和逻辑分析",
+        b: "基于情感和价值观",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更喜欢的领导风格是：",
+        a: "理性、高效的",
+        b: "关怀、支持的",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何提供反馈？",
+        a: "直接、具体地指出问题",
+        b: "委婉、建设性地提出建议",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更看重：",
+        a: "能力和成就",
+        b: "和谐和人际关系",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何处理情绪？",
+        a: "理性分析，控制情绪",
+        b: "接纳情绪，表达感受",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更喜欢的沟通方式是：",
+        a: "直接、坦率的",
+        b: "委婉、含蓄的",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何看待规则？",
+        a: "应该遵守，确保公平",
+        b: "应该灵活，考虑人情",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你更擅长：",
+        a: "分析和解决问题",
+        b: "理解和支持他人",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你如何做决定？",
+        a: "基于事实和逻辑",
+        b: "基于情感和价值观",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
+      {
+        text: "你对他人的感受：",
+        a: "能够理解，但不一定认同",
+        b: "能够共情，并深受影响",
+        dimension: "TF",
+        aValue: "T",
+        bValue: "F"
+      },
       
       // J/P 判断/知觉
       {
@@ -1467,135 +1832,6 @@
         aValue: "J",
         bValue: "P"
       },
-      
-      // 第二组问题，增加测试的准确性
-      // E/I 外向/内向
-      {
-        text: "在社交活动后，你通常感到：",
-        a: "精力充沛，满足",
-        b: "疲惫，需要休息",
-        dimension: "EI",
-        aValue: "E",
-        bValue: "I"
-      },
-      {
-        text: "你更喜欢的沟通方式是：",
-        a: "面对面交流",
-        b: "文字交流（如邮件、消息）",
-        dimension: "EI",
-        aValue: "E",
-        bValue: "I"
-      },
-      {
-        text: "在团队中，你通常：",
-        a: "主动参与讨论，引领方向",
-        b: "观察和分析，提供支持",
-        dimension: "EI",
-        aValue: "E",
-        bValue: "I"
-      },
-      {
-        text: "你如何获取新想法？",
-        a: "与他人讨论和交流",
-        b: "独自思考和阅读",
-        dimension: "EI",
-        aValue: "E",
-        bValue: "I"
-      },
-      {
-        text: "你对新环境的适应能力：",
-        a: "很快适应，感到舒适",
-        b: "需要时间适应，感到谨慎",
-        dimension: "EI",
-        aValue: "E",
-        bValue: "I"
-      },
-      
-      // S/N 感觉/直觉
-      {
-        text: "你更关注事物的：",
-        a: "实际用途和功能",
-        b: "象征意义和可能性",
-        dimension: "SN",
-        aValue: "S",
-        bValue: "N"
-      },
-      {
-        text: "在阅读时，你更喜欢：",
-        a: "非虚构类和实用书籍",
-        b: "小说和科幻作品",
-        dimension: "SN",
-        aValue: "S",
-        bValue: "N"
-      },
-      {
-        text: "你如何看待过去的经验？",
-        a: "作为未来决策的参考",
-        b: "作为学习的机会，但不一定限制未来",
-        dimension: "SN",
-        aValue: "S",
-        bValue: "N"
-      },
-      {
-        text: "你更擅长：",
-        a: "记住具体的事实和细节",
-        b: "理解抽象的概念和关系",
-        dimension: "SN",
-        aValue: "S",
-        bValue: "N"
-      },
-      {
-        text: "在解决问题时，你倾向于：",
-        a: "使用已有的方法和技术",
-        b: "尝试新的方法和思路",
-        dimension: "SN",
-        aValue: "S",
-        bValue: "N"
-      },
-      
-      // T/F 思考/情感
-      {
-        text: "你如何评价一个想法？",
-        a: "基于其逻辑性和实用性",
-        b: "基于其对他人的影响和价值",
-        dimension: "TF",
-        aValue: "T",
-        bValue: "F"
-      },
-      {
-        text: "在团队中，你更关注：",
-        a: "目标的实现和效率",
-        b: "成员的感受和关系",
-        dimension: "TF",
-        aValue: "T",
-        bValue: "F"
-      },
-      {
-        text: "你如何处理批评？",
-        a: "客观分析，从中学习",
-        b: "感到受伤，需要时间调整",
-        dimension: "TF",
-        aValue: "T",
-        bValue: "F"
-      },
-      {
-        text: "你更欣赏他人的：",
-        a: "理性和能力",
-        b: "情感和价值观",
-        dimension: "TF",
-        aValue: "T",
-        bValue: "F"
-      },
-      {
-        text: "在做决定时，你更依赖：",
-        a: "头脑和逻辑",
-        b: "心和情感",
-        dimension: "TF",
-        aValue: "T",
-        bValue: "F"
-      },
-      
-      // J/P 判断/知觉
       {
         text: "你更喜欢的工作环境是：",
         a: "结构化和有组织的",
@@ -1635,6 +1871,86 @@
         dimension: "JP",
         aValue: "J",
         bValue: "P"
+      },
+      {
+        text: "你更喜欢的休闲方式是：",
+        a: "预先安排的活动",
+        b: "即兴的活动",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何管理时间？",
+        a: "使用日程表和待办事项列表",
+        b: "根据需要灵活安排",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你对开放性的态度是：",
+        a: "喜欢有明确的边界和结构",
+        b: "喜欢开放和灵活的可能性",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何处理多项任务？",
+        a: "按优先级排序，逐一完成",
+        b: "根据情况灵活切换",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你对完美的态度是：",
+        a: "追求完美，确保质量",
+        b: "追求足够好，接受不完美",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你更喜欢的决策方式是：",
+        a: "尽快做出决定，保持前进",
+        b: "推迟决定，收集更多信息",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何处理不确定性？",
+        a: "制定计划应对可能的情况",
+        b: "保持灵活，随机应变",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你对规则的态度是：",
+        a: "应该遵守，提供结构",
+        b: "应该质疑，保持灵活",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你更喜欢的工作节奏是：",
+        a: "稳定、可预测的",
+        b: "变化、多样的",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
+      },
+      {
+        text: "你如何看待最后期限？",
+        a: "应该严格遵守",
+        b: "可以灵活调整",
+        dimension: "JP",
+        aValue: "J",
+        bValue: "P"
       }
     ];
 
@@ -1648,7 +1964,8 @@
         careers: ["心理咨询师", "作家/编辑", "教育工作者", "人力资源管理", "社会工作者", "艺术家/设计师"],
         relationships: "作为提倡者，你在人际关系中通常表现出真诚、关怀和理解力。你重视深度和意义，喜欢与他人建立真实的情感连接。你善于倾听和支持他人，但也需要注意在关系中保持平衡，照顾自己的需求。",
         compatibleTypes: "ENFP, ENTP, INTJ, INTP",
-        icon: "heart"
+        icon: "heart",
+        image: "https://p11-doubao-search-sign.byteimg.com/labis/f13216428ddd4427bcec040039090fa0~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838319&x-signature=Yfr0YLbLF9jSyxjDg%2FIYDYuBMSI%3D"
       },
       INTJ: {
         name: "建筑师",
@@ -1658,7 +1975,8 @@
         careers: ["科学家/研究员", "工程师", "软件开发", "战略顾问", "项目经理", "金融分析师"],
         relationships: "作为建筑师，你在人际关系中通常表现出忠诚和可靠性，但可能不善于表达情感。你重视智力和能力，喜欢与志同道合的人建立深度连接。你需要学习更加开放地表达自己的情感，关注他人的感受。",
         compatibleTypes: "ENTP, ENFJ, INFJ, ISTP",
-        icon: "chess-king"
+        icon: "chess-king",
+        image: "https://p26-doubao-search-sign.byteimg.com/labis/427e360888a9f1fd7d2d97b965113633~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838356&x-signature=IC3azvciYSdCx%2FOV6f06GpRNl10%3D"
       },
       INFP: {
         name: "调停者",
@@ -1668,7 +1986,8 @@
         careers: ["作家/诗人", "艺术家/设计师", "心理咨询师", "社会工作者", "教育工作者", "人力资源"],
         relationships: "作为调停者，你在人际关系中通常表现出温柔、关怀和理解力。你重视深度和真实的情感连接，善于倾听和支持他人。你需要学习在关系中设定边界，照顾自己的需求，同时也要学会面对冲突。",
         compatibleTypes: "ENFJ, ESFJ, INFJ, ISFJ",
-        icon: "feather"
+        icon: "feather",
+        image: "https://p11-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/2085007464694808586~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838356&x-signature=KD8vv4SCGH7NaPffxm3fYoJCzp8%3D"
       },
       INTP: {
         name: "逻辑学家",
@@ -1678,7 +1997,8 @@
         careers: ["科学家/研究员", "软件开发", "数学家/统计学家", "哲学家", "工程师", "系统分析师"],
         relationships: "作为逻辑学家，你在人际关系中通常表现出聪明和独立，但可能不善于表达情感。你重视智力和能力，喜欢与志同道合的人进行深入的思想交流。你需要学习更加关注他人的情感需求，提高自己的沟通和社交能力。",
         compatibleTypes: "ENTP, ENFJ, INTJ, ISTP",
-        icon: "lightbulb-o"
+        icon: "lightbulb-o",
+        image: "https://p11-doubao-search-sign.byteimg.com/labis/9b143a80df58ae44ba84b17c7d20ec16~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776839050&x-signature=MGmyvPbHbFBdNIEJxEZkYkNXSi4%3D"
       },
       ENFJ: {
         name: "主人公",
@@ -1688,7 +2008,8 @@
         careers: ["领导者/管理者", "教育工作者", "心理咨询师", "人力资源管理", "公共关系", "社会工作者"],
         relationships: "作为主人公，你在人际关系中通常表现出热情、关怀和领导力。你重视和谐和共同成长，善于激励和支持他人。你需要学习在关系中保持平衡，照顾自己的需求，同时也要学会放手，给他人更多的空间。",
         compatibleTypes: "INFP, ISFP, ENFP, ESFP",
-        icon: "star"
+        icon: "star",
+        image: "https://p26-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1703407291213283339~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838319&x-signature=4Jy4PrEO8%2Bi5XDTlkiZGrGZxgeY%3D"
       },
       ENTJ: {
         name: "指挥官",
@@ -1698,7 +2019,8 @@
         careers: ["CEO/高管", "项目经理", "律师", "政治家", "军事领袖", "战略顾问"],
         relationships: "作为指挥官，你在人际关系中通常表现出自信和决断力，但可能显得强势或控制。你重视效率和成果，喜欢与有能力的人合作。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力。",
         compatibleTypes: "INTP, ISTP, ENTP, ESTP",
-        icon: "trophy"
+        icon: "trophy",
+        image: "https://p26-doubao-search-sign.byteimg.com/labis/e859c84b8beb4237803246f522b31e62~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838356&x-signature=YRLfarHCv0MhRqqMuCVieFac5l8%3D"
       },
       ENFP: {
         name: "活动家",
@@ -1708,7 +2030,8 @@
         careers: ["市场营销", "公共关系", "创业者", "演员/表演者", "培训师", "旅行作家"],
         relationships: "作为活动家，你在人际关系中通常表现出热情、活力和创造力。你重视多样性和新奇体验，善于与人建立连接。你需要学习在关系中保持专注和承诺，提高自己的执行力和责任感。",
         compatibleTypes: "INFJ, INTJ, ENFJ, ENTJ",
-        icon: "smile-o"
+        icon: "smile-o",
+        image: "https://p26-doubao-search-sign.byteimg.com/labis/3917bf3570990132e5a0d1d4353e1689~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838356&x-signature=2MYIcxl0EHLgbV3xfSunJmvKNhA%3D"
       },
       ENTP: {
         name: "辩论家",
@@ -1718,7 +2041,8 @@
         careers: ["律师", "创业者", "营销策划", "记者/编辑", "喜剧演员", "战略顾问"],
         relationships: "作为辩论家，你在人际关系中通常表现出聪明、幽默和挑战性。你重视智力和创新，喜欢与有能力的人进行思想交流。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力。",
         compatibleTypes: "INFJ, INTJ, ENFJ, ENTJ",
-        icon: "comment"
+        icon: "comment",
+        image: "https://p11-doubao-search-sign.byteimg.com/labis/9b143a80df58ae44ba84b17c7d20ec16~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838356&x-signature=MGmyvPbHbFBdNIEJxEZkYkNXSi4%3D"
       },
       ISFJ: {
         name: "守卫者",
@@ -1728,7 +2052,8 @@
         careers: ["护士/医生", "教师", "图书馆员", "行政助理", "人力资源", "社会工作者"],
         relationships: "作为守卫者，你在人际关系中通常表现出忠诚、关怀和可靠性。你重视传统和稳定，善于照顾他人的需求。你需要学习在关系中设定边界，照顾自己的需求，同时也要学会接受变化和不确定性。",
         compatibleTypes: "ESFP, ESTP, ISFP, ISTP",
-        icon: "home"
+        icon: "home",
+        image: "https://p26-doubao-search-sign.byteimg.com/labis/0842100042715315200000000428135~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838319&x-signature=KdJf0g%2F%2B9J4V5k%2BJ9zY%2F%2F0N5bU%3D"
       },
       ISTJ: {
         name: "检查员",
@@ -1738,7 +2063,8 @@
         careers: ["会计/财务", "项目经理", "行政主管", "警察/军人", "工程师", "图书管理员"],
         relationships: "作为检查员，你在人际关系中通常表现出忠诚、可靠和负责任。你重视稳定和秩序，善于履行自己的承诺。你需要学习更加关注他人的情感需求，提高自己的沟通和表达能力，同时也要学会接受变化和不确定性。",
         compatibleTypes: "ESFP, ESTP, ISFP, ISTP",
-        icon: "check-square-o"
+        icon: "check-square-o",
+        image: "https://p26-doubao-search-sign.byteimg.com/labis/0842100042715315200000000428135~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838319&x-signature=KdJf0g%2F%2B9J4V5k%2BJ9zY%2F%2F0N5bU%3D"
       },
       ISFP: {
         name: "艺术家",
@@ -1746,9 +2072,10 @@
         strengths: ["富有创造力和艺术感", "善于表达和感受", "具有强烈的审美能力和同理心", "注重和谐和美好", "善于通过行动表达自己"],
         challenges: ["可能过于敏感，容易受伤", "可能难以表达自己的想法", "可能缺乏自信和决断力", "可能避免冲突，难以面对批评", "可能过于关注当下，忽视未来"],
         careers: ["艺术家/设计师", "音乐家", "摄影师", "厨师", "美容师", "手工艺术家"],
-        relationships: "作为艺术家，你在人际关系中通常表现出温柔、敏感和创造力。你重视和谐和美好，善于通过行动表达自己的情感。你需要学习更加自信地表达自己的想法，提高自己的沟通和社交能力，同时也要学会面对冲突和批评。",
+        relationships: "作为艺术家，你在人际关系中通常表现出温柔、敏感和创造力。你重视和谐和美好，善于于通过行动表达自己的情感。你需要学习更加自信地表达自己的想法，提高自己的沟通和社交能力，同时也要学会面对冲突和批评。",
         compatibleTypes: "ESFJ, ESTJ, ISFJ, ISTJ",
-        icon: "paint-brush"
+        icon: "paint-brush",
+        image: "https://p26-doubao-search-sign.byteimg.com/labis/0842100042715315200000000428135~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776838319&x-signature=KdJf0g%2F%2B9J4V5k%2BJ9zY%2F%2F0N5bU%3D"
       },
       ISTP: {
         name: "手艺人",
@@ -1758,17 +2085,19 @@
         careers: ["工程师", "机械师", "程序员", "运动员", "侦探", "厨师"],
         relationships: "作为手艺人，你在人际关系中通常表现出独立、可靠和实用主义。你重视能力和实效，喜欢通过行动表达自己的关心。你需要学习更加关注他人的情感需求，提高自己的沟通和表达能力，同时也要学会制定长期计划。",
         compatibleTypes: "ESFJ, ESTJ, ISFJ, ISTJ",
-        icon: "wrench"
+        icon: "wrench",
+        image: "https://p11-doubao-search-sign.byteimg.com/labis/35c502a7a9938124d32cd9c29c4d1e87~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776839050&x-signature=ZA%2Fy6cLo4SN3m5MxKhoVVKTR8cA%3D"
       },
       ESFJ: {
         name: "执政官",
-        description: "执政官人格类型的人热情友好，善于组织和协调，注重传统和人际关系。他们具有强烈的责任感和同理心，善于记住细节和他人的需求，致力于维护和谐的人际关系。",
+        description: "执政官官人格类型的人热情友好，善于组织和协调，注重传统和人际关系。他们具有强烈的责任感和同理心，善于记住细节和他人的需求，致力于维护和谐的人际关系。",
         strengths: ["热情友好，善于交际", "善于组织和协调", "具有强烈的责任感和同理心", "注重传统和人际关系", "善于记住细节和他人的需求"],
         challenges: ["可能过于关注他人，忽视自己的需求", "可能难以说“不”", "可能对批评过于敏感", "可能过于保守，抵制变化", "可能过于关注细节，忽视整体"],
         careers: ["教师", "护士/医生", "人力资源", "活动策划", "行政主管", "社会工作者"],
         relationships: "作为执政官，你在人际关系中通常表现出热情、友好和关怀。你重视传统和和谐，善于照顾他人的需求。你需要学习在关系中设定边界，照顾自己的需求，同时也要学会接受变化和不确定性。",
         compatibleTypes: "ISFP, ISTP, INFP, INTP",
-        icon: "users"
+        icon: "users",
+        image: "https://p11-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/921422801768284200~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776850345&x-signature=azjRImiQM05gkke4moxhjuZIy2Y%3D"
       },
       ESTJ: {
         name: "总经理",
@@ -1778,17 +2107,19 @@
         careers: ["CEO/高管", "项目经理", "行政主管", "警察/军人", "教师", "财务经理"],
         relationships: "作为总经理，你在人际关系中通常表现出自信、决断和负责任。你重视效率和结果，善于组织和协调。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力，同时也要学会接受变化和不确定性。",
         compatibleTypes: "ISFP, ISTP, INFP, INTP",
-        icon: "briefcase"
+        icon: "briefcase",
+        image: "https://p26-doubao-search-sign.byteimg.com/labis/e859c84b8beb4237803246f522b31e62~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776839050&x-signature=YRLfarHCv0MhRqqMuCVieFac5l8%3D"
       },
       ESFP: {
         name: "表演者",
         description: "表演者人格类型的人活泼开朗，善于表达和娱乐，喜欢享受生活和与人交往。他们具有强烈的好奇心和乐观精神，善于适应变化的环境，能够给周围的人带来欢乐和活力。",
-        strengths: ["活泼开朗，善于表达", "具有强烈的好奇心和乐观精神", "善于娱乐和与人交往", "能够迅速适应变化", "善于给他人带来欢乐和活力"],
+        strengths: ["活泼开朗，善于表达", "具有强烈的好奇心和乐观精神", "善于娱乐和与人交往", "能够迅速适应变化", "善于于给他人带来欢乐和活力"],
         challenges: ["可能缺乏专注力和执行力", "可能过于关注当下，忽视未来", "可能难以做出决策", "可能对细节不够关注", "可能容易感到无聊或疲倦"],
         careers: ["演员/表演者", "主持人", "销售", "旅游顾问", "活动策划", "厨师"],
         relationships: "作为表演者，你在人际关系中通常表现出活泼、开朗和热情。你重视快乐和体验，善于与人建立连接。你需要学习在关系中保持专注和承诺，提高自己的执行力和责任感，同时也要学会关注未来和长期规划。",
         compatibleTypes: "ISFJ, ISTJ, INFJ, INTJ",
-        icon: "music"
+        icon: "music",
+        image: "https://p11-doubao-search-sign.byteimg.com/tos-cn-i-xv4ileqgde/acb74b875e8b4a46ab5a1c3fcb868a5e~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776850345&x-signature=iISxp8SDkb%2FIlt41BqL%2BwmWtBq8%3D"
       },
       ESTP: {
         name: "企业家",
@@ -1798,7 +2129,8 @@
         careers: ["企业家", "销售", "运动员", "警察/军人", "消防员", "项目经理"],
         relationships: "作为企业家，你在人际关系中通常表现出自信、果断和活力。你重视行动和结果，喜欢与有能力的人合作。你需要学习更加关注他人的情感需求，提高自己的同理心和沟通能力，同时也要学会制定长期计划和坚持目标。",
         compatibleTypes: "ISFJ, ISTJ, INFJ, INTJ",
-        icon: "rocket"
+        icon: "rocket",
+        image: "https://p11-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1984762945143701512~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776839050&x-signature=69w%2B9DccGg%2BSE1GZiN%2B4CGLpQz0%3D"
       }
     };
 
@@ -1976,8 +2308,17 @@
       document.getElementById('personality-name').textContent = result.details.name;
       document.getElementById('personality-description').textContent = result.details.description;
       
-      // 更新图标
+      // 更新图标和图片
       document.getElementById('personality-icon').className = `fa fa-${result.details.icon} text-4xl`;
+      
+      // 如果有图片，显示图片
+      const personalityImage = document.getElementById('personality-image');
+      if (result.details.image) {
+        personalityImage.src = result.details.image;
+        personalityImage.style.display = 'block';
+      } else {
+        personalityImage.style.display = 'none';
+      }
       
       // 更新维度得分
       document.getElementById('e-score').textContent = `${Math.round(result.percentages.E)}%`;
@@ -2072,4 +2413,3 @@
   </script>
 </body>
 </html>
-
