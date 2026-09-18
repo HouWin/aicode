@@ -1,456 +1,536 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>单词默写本</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128214;</text></svg>">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, sans-serif;
-            background: linear-gradient(135deg, #fdf6f0 0%, #f0f4f8 100%);
-            min-height: 100vh;
-            padding: 32px 20px;
-            color: #555;
-        }
-        .app {
-            max-width: 920px;
-            margin: 0 auto;
-        }
-        .page-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(180, 170, 160, 0.12);
-            transition: background-color 0.4s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>单词默写本 · Memorize Words</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<style>
+:root{
+  --bg-1:#f6f1ea;
+  --bg-2:#eef2f6;
+  --card:#ffffff;
+  --ink:#3d3a36;
+  --ink-2:#6b6660;
+  --muted:#b5aea6;
+  --line:#e3ddd5;
+  --line-strong:#cfc7bd;
+  --accent:#c9a27e;
+  --accent-ink:#8a6844;
+  --cell-word:#f0e8dd;
+  --cell-draft:#ffffff;
+  --cell-answer:#faf6f0;
+  --shadow:0 2px 6px rgba(120,105,90,.06),0 18px 48px rgba(120,105,90,.10);
+  --r-card:22px;
+  --r-cell:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,sans-serif;
+  background:
+    radial-gradient(120% 80% at 20% 0%, var(--bg-1), transparent 60%),
+    radial-gradient(120% 80% at 100% 100%, var(--bg-2), transparent 55%),
+    #f4f0ea;
+  min-height:100vh;padding:40px 20px 60px;color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+.app{max-width:960px;margin:0 auto}
 
-        /* 顶部工具栏 */
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .theme-dots {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .theme-label {
-            font-size: 13px;
-            color: #999;
-            margin-right: 4px;
-        }
-        .theme-dot {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.25s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        }
-        .theme-dot:hover {
-            transform: scale(1.15);
-        }
-        .theme-dot.active {
-            border-color: #aaa;
-            transform: scale(1.1);
-        }
-        .theme-dot[data-theme="blue"]   { background: #dce9f5; }
-        .theme-dot[data-theme="yellow"] { background: #fdf3d0; }
-        .theme-dot[data-theme="pink"]   { background: #f8e0e8; }
-        .theme-dot[data-theme="purple"]{ background: #e8e0f5; }
-        .theme-dot[data-theme="mint"]  { background: #d9f2e6; }
+/* ── 卡片 ── */
+.page-card{
+  background:var(--card);border-radius:var(--r-card);
+  padding:44px 48px 36px;box-shadow:var(--shadow);
+  position:relative;
+  transition:background-color .4s ease;
+}
+.page-card::before{
+  content:"";position:absolute;left:48px;right:48px;top:0;height:4px;
+  background:linear-gradient(90deg,var(--accent),transparent 80%);
+  border-radius:0 0 4px 4px;opacity:.7;
+}
 
-        .actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            background: #f0e9e4;
-            color: #666;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-        .btn:hover {
-            background: #e3d9d2;
-            transform: translateY(-1px);
-        }
-        .btn.primary {
-            background: #e8c9c9;
-            color: #7a5555;
-        }
-        .btn.primary:hover {
-            background: #dbaeae;
-        }
-        .btn svg {
-            width: 14px;
-            height: 14px;
-        }
+/* ── 工具栏 ── */
+.toolbar{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:14px;margin-bottom:28px;
+}
+.theme-dots{display:flex;align-items:center;gap:10px}
+.theme-label{font-size:12.5px;color:var(--muted);letter-spacing:.5px;margin-right:2px}
+.theme-dot{
+  width:24px;height:24px;border-radius:50%;cursor:pointer;
+  border:2.5px solid #fff;box-shadow:0 0 0 1.5px var(--line-strong),0 2px 5px rgba(0,0,0,.08);
+  transition:transform .2s cubic-bezier(.2,.8,.3,1.2),box-shadow .2s;
+}
+.theme-dot:hover{transform:scale(1.15)}
+.theme-dot.active{
+  transform:scale(1.12);
+  box-shadow:0 0 0 2px var(--accent),0 3px 8px rgba(0,0,0,.12);
+}
+.theme-dot[data-theme="blue"]   {background:#cfe3f0}
+.theme-dot[data-theme="yellow"] {background:#f5e6b8}
+.theme-dot[data-theme="pink"]   {background:#f2ccd6}
+.theme-dot[data-theme="purple"]{background:#d8ccee}
+.theme-dot[data-theme="mint"]   {background:#c9e8d6}
 
-        /* 标题区 */
-        .header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px dashed #eee;
-        }
-        .title-input {
-            font-size: 26px;
-            font-weight: 600;
-            border: none;
-            outline: none;
-            padding: 4px 0;
-            width: 360px;
-            background: transparent;
-            color: #444;
-            font-family: inherit;
-        }
-        .checkin {
-            font-size: 14px;
-            color: #aaa;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .checkin svg {
-            width: 16px;
-            height: 16px;
-            color: #c9a9a9;
-        }
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;border:1px solid var(--line);
+  border-radius:999px;font-size:13px;cursor:pointer;
+  background:#fff;color:var(--ink-2);font-family:inherit;
+  transition:all .2s;
+}
+.btn:hover{background:#f7f3ee;border-color:var(--line-strong);transform:translateY(-1px)}
+.btn svg{width:14px;height:14px}
+.btn.primary{
+  background:var(--accent);color:#fff;border-color:var(--accent);
+  box-shadow:0 4px 12px rgba(201,162,126,.35);
+}
+.btn.primary:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.btn.toggle-col{
+  background:#f9f6f2; border-color:var(--line-strong);
+  font-size:12.5px; padding:7px 12px;
+}
+.btn.toggle-col.active{
+  background:var(--accent); color:#fff; border-color:var(--accent);
+  box-shadow:0 2px 8px rgba(201,162,126,.3);
+}
 
-        /* 表格 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-        col.col-word { width: 25%; }
-        col.col-draft { width: 25%; }
-        col.col-answer { width: 25%; }
-        col.col-note { width: 25%; }
+/* ── 标题区 ── */
+.header-row{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:8px;padding-bottom:18px;
+  border-bottom:2px solid var(--line);
+  position:relative;
+}
+.header-row::after{
+  content:"";position:absolute;left:0;bottom:-2px;width:64px;height:2px;
+  background:var(--accent);
+}
+.title-input{
+  font-size:32px;font-weight:600;border:none;outline:none;
+  width:420px;background:transparent;color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;font-style:italic;
+  letter-spacing:.3px;
+}
+.checkin{
+  font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;
+  font-family:Georgia,serif;font-style:italic;
+}
+.checkin svg{width:15px;height:15px;color:var(--accent)}
 
-        td {
-            border: 1px solid #ccc;
-            height: 42px;
-            transition: background-color 0.4s ease;
-        }
-        td:first-child {
-            background: #f5f0ec;
-        }
-        td input {
-            width: 100%;
-            height: 100%;
-            border: none;
-            outline: none;
-            padding: 0 12px;
-            font-size: 14.5px;
-            background: transparent;
-            color: #444;
-            font-family: inherit;
-        }
-        td input::placeholder {
-            color: #ccc;
-        }
+/* ── 列表头：三列布局，释义列更宽 ── */
+.colhead{
+  display:grid;
+  grid-template-columns:44px 1fr 1.7fr 1fr; /* 单词 1, 释义 1.7, 默写 1 */
+  gap:10px;margin:18px 0 10px;padding:0 4px;
+  font-size:11.5px;font-weight:700;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;
+  transition:grid-template-columns .2s;
+}
+.colhead span:nth-child(n+2){text-align:left}
 
-        /* 答案列隐藏 */
-        .answer-col {
-            transition: all 0.3s ease;
-        }
-        .hide-answer .answer-col {
-            display: none;
-        }
+/* ── 表格行：同样三列，释义列更宽 ── */
+.tbody{display:flex;flex-direction:column;gap:8px}
+.row{
+  display:grid;
+  grid-template-columns:44px 1fr 1.7fr 1fr;
+  gap:10px;align-items:stretch;
+  transition:grid-template-columns .2s;
+}
+.row .num{
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--muted);font-family:Georgia,serif;font-style:italic;
+}
+.cell{
+  height:46px;border-radius:var(--r-cell);
+  background:var(--cell-draft);border:1px solid var(--line);
+  transition:border-color .2s,background-color .3s;
+  display:flex;align-items:center;
+}
+.cell:hover{border-color:var(--line-strong)}
+.cell input{
+  width:100%;height:100%;border:none;outline:none;
+  padding:0 14px;font-size:14.5px;background:transparent;
+  color:var(--ink);font-family:inherit;
+}
+.cell input::placeholder{color:var(--muted);opacity:.7}
+.cell input:focus{color:var(--ink)}
+.cell.word{background:var(--cell-word);border-color:transparent}
+.cell.word input{font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink);font-weight:500}
+.cell.answer{background:var(--cell-answer)}
+.cell.answer input::placeholder{color:var(--muted)}
 
-        /* 各主题：第一列底色 */
-        .theme-blue   td:first-child { background: #dce9f5; }
-        .theme-yellow td:first-child { background: #fdf3d0; }
-        .theme-pink   td:first-child { background: #f8e0e8; }
-        .theme-purple td:first-child { background: #e8e0f5; }
-        .theme-purple td:nth-child(2) { background: #f8e0e8;}
-        .theme-mint   td:first-child { background: #d9f2e6; }
+/* ── 隐藏列的类 ── */
+.hide-word-col .colhead span:nth-child(2),
+.hide-word-col .row .cell.word { display: none; }
 
-        /* 底部页码 */
-        .footer-row {
-            margin-top: 28px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 6px;
-            font-size: 15px;
-            color: #999;
-        }
-        .page-input {
-            border: none;
-            border-bottom: 1px solid #ddd;
-            width: 70px;
-            font-size: 16px;
-            outline: none;
-            text-align: center;
-            background: transparent;
-            color: #666;
-            font-family: inherit;
-        }
+.hide-answer-col .colhead span:nth-child(3),
+.hide-answer-col .row .cell.answer { display: none; }
 
-        /* 提示条 */
-        .toast {
-            position: fixed;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-80px);
-            background: rgba(100, 90, 90, 0.9);
-            color: #fff;
-            padding: 10px 22px;
-            border-radius: 24px;
-            font-size: 14px;
-            transition: transform 0.35s ease;
-            z-index: 999;
-            pointer-events: none;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
+/* 当隐藏单词列时，调整网格列 */
+.hide-word-col .colhead,
+.hide-word-col .row {
+  grid-template-columns:44px 1.7fr 1fr; /* 序号 + 释义 + 默写 */
+}
 
-        /* 打印 */
-        @media print {
-            body { background: #fff; padding: 0; }
-            .toolbar, .actions, .theme-dots, .toast { display: none !important; }
-            .page-card {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 10px;
-                max-width: 100%;
-            }
-            .answer-col { display: none !important; }
-            .title-input { border-bottom: none; }
-        }
+/* 当隐藏释义列时，调整网格列 */
+.hide-answer-col .colhead,
+.hide-answer-col .row {
+  grid-template-columns:44px 1fr 1fr; /* 序号 + 单词 + 默写 */
+}
 
-        /* 响应式 */
-        @media (max-width: 640px) {
-            body { padding: 16px 10px; }
-            .page-card { padding: 20px; }
-            .title-input { font-size: 20px; width: 100%; }
-            .header-row { flex-direction: column; align-items: flex-start; gap: 8px; }
-            td { height: 38px; }
-            td input { font-size: 13px; padding: 0 8px; }
-        }
-    </style>
+/* 当两列都隐藏时，只剩序号和默写 */
+.hide-word-col.hide-answer-col .colhead,
+.hide-word-col.hide-answer-col .row {
+  grid-template-columns:44px 1fr; /* 序号 + 默写 */
+}
+
+/* 原有隐藏释义逻辑改用新类控制，移除旧 .hide-answer 相关样式 */
+/* 但保留按钮切换时的显示/隐藏逻辑，改由 JS 控制 .hide-answer-col 类 */
+/* 原先的 .hide-answer .answer-col 等不再使用，删除以避免冲突 */
+.answer-col { transition: opacity .3s ease; } /* 保留基础过渡，但隐藏由父级类控制 */
+
+/* ── 底部页码 ── */
+.footer-row{
+  margin-top:32px;display:flex;justify-content:flex-end;align-items:center;gap:8px;
+  font-size:14px;color:var(--muted);font-family:Georgia,serif;font-style:italic;
+}
+.page-input{
+  border:none;border-bottom:1.5px solid var(--line-strong);
+  width:64px;font-size:17px;outline:none;text-align:center;
+  background:transparent;color:var(--ink);font-family:Georgia,serif;font-style:italic;
+  padding:2px 0;
+}
+.page-input:focus{border-bottom-color:var(--accent)}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;top:28px;left:50%;
+  transform:translateX(-50%) translateY(-80px);
+  background:rgba(61,58,54,.92);color:#fff;
+  padding:11px 24px;border-radius:999px;font-size:13.5px;
+  transition:transform .35s cubic-bezier(.2,.8,.3,1.2);
+  z-index:999;pointer-events:none;backdrop-filter:blur(8px);
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── 主题切换 ── */
+.theme-blue{
+  --accent:#6fa8c9;--accent-ink:#4a82a3;
+  --cell-word:#dceaf4;--cell-answer:#f2f8fb;
+}
+.theme-yellow{
+  --accent:#d4a94e;--accent-ink:#a8812f;
+  --cell-word:#f7ecd0;--cell-answer:#fdf8ea;
+}
+.theme-pink{
+  --accent:#d48a9a;--accent-ink:#a86273;
+  --cell-word:#f6dde3;--cell-answer:#fdf3f5;
+}
+.theme-purple{
+  --accent:#9b7ec4;--accent-ink:#74579e;
+  --cell-word:#e6ddf2;--cell-answer:#f5f1fb;
+}
+.theme-mint{
+  --accent:#6fb892;--accent-ink:#4a9069;
+  --cell-word:#d8eee2;--cell-answer:#eff9f3;
+}
+
+/* ── 打印 ── */
+@media print{
+  body{background:#fff;padding:0}
+  .toolbar,.actions,.theme-dots,.toast,.colhead .hint{display:none!important}
+  .page-card{box-shadow:none;border-radius:0;padding:14px;max-width:100%}
+  .page-card::before{display:none}
+  .cell{border:1px solid #999;break-inside:avoid}
+  .title-input{border:none}
+  /* 打印时默认隐藏释义列（除非用户显式显示） */
+  .hide-answer-col .colhead span:nth-child(3),
+  .hide-answer-col .row .cell.answer { display: none; }
+}
+
+/* ── 响应式 ── */
+@media (max-width:680px){
+  body{padding:16px 10px 40px}
+  .page-card{padding:24px 18px 20px;border-radius:16px}
+  .page-card::before{left:18px;right:18px}
+  .title-input{font-size:22px;width:100%}
+  .header-row{flex-direction:column;align-items:flex-start;gap:6px}
+  /* 移动端默认布局：序号+单词+默写（隐藏释义列），但可切换 */
+  .colhead{grid-template-columns:30px 1fr 1fr;gap:6px}
+  .row{grid-template-columns:30px 1fr 1fr;gap:6px}
+  /* 但可能用户隐藏了单词或释义，需覆盖保持灵活 */
+  .hide-word-col .colhead,
+  .hide-word-col .row {
+    grid-template-columns:30px 1fr 1fr; /* 实际上隐藏单词后剩序号、释义、默写 */
+  }
+  .hide-answer-col .colhead,
+  .hide-answer-col .row {
+    grid-template-columns:30px 1fr 1fr;
+  }
+  .hide-word-col.hide-answer-col .colhead,
+  .hide-word-col.hide-answer-col .row {
+    grid-template-columns:30px 1fr;
+  }
+  /* 移动端隐藏释义列时的列头处理 */
+  .cell{height:40px;border-radius:8px}
+  .cell input{font-size:13.5px;padding:0 10px}
+}
+</style>
 </head>
 <body>
 <div class="app">
-    <div class="page-card theme-purple" id="card">
-        <!-- 工具栏 -->
-        <div class="toolbar">
-            <div class="theme-dots" id="themeDots">
-                <span class="theme-label">换肤</span>
-                <span class="theme-dot active" data-theme="blue" title="浅蓝"></span>
-                <span class="theme-dot" data-theme="yellow" title="奶黄"></span>
-                <span class="theme-dot" data-theme="pink" title="豆沙粉"></span>
-                <span class="theme-dot" data-theme="purple" title="香芋紫"></span>
-                <span class="theme-dot" data-theme="mint" title="薄荷绿"></span>
-            </div>
-            <div class="actions">
-                <button class="btn" onclick="addRow()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    加一行
-                </button>
-                <button class="btn primary" id="toggleBtn" onclick="toggleAnswer()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    显示答案
-                </button>
-                <button class="btn" onclick="clearTable()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    清空
-                </button>
-            </div>
-        </div>
-
-        <!-- 标题 -->
-        <div class="header-row">
-            <input class="title-input" id="titleInput" value="Memorize words" placeholder="输入标题">
-           
-        </div>
-
-        <!-- 表格 -->
-        <table id="wordTable">
-            <colgroup>
-                <col class="col-word">
-                <col class="col-draft">
-                <col class="col-answer">
-                <col class="col-note">
-            </colgroup>
-            <!-- 行由 JS 渲染 -->
-        </table>
-
-        <!-- 页码 -->
-        <div class="footer-row">
-            <span>Page</span>
-            <input class="page-input" id="pageInput" value="1">
-        </div>
+  <div class="page-card theme-purple" id="card">
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="theme-dots" id="themeDots">
+        <span class="theme-label">换肤</span>
+        <span class="theme-dot active" data-theme="blue" title="浅蓝"></span>
+        <span class="theme-dot" data-theme="yellow" title="奶黄"></span>
+        <span class="theme-dot" data-theme="pink" title="豆沙粉"></span>
+        <span class="theme-dot" data-theme="purple" title="香芋紫"></span>
+        <span class="theme-dot" data-theme="mint" title="薄荷绿"></span>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="addRow()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          加一行
+        </button>
+        <button class="btn toggle-col active" id="toggleWordBtn" onclick="toggleWordCol()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="btn-text">隐藏单词</span>
+        </button>
+        <button class="btn toggle-col active" id="toggleAnswerBtn" onclick="toggleAnswerCol()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="btn-text">隐藏释义</span>
+        </button>
+        <button class="btn" onclick="clearTable()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          清空
+        </button>
+      </div>
     </div>
-</div>
 
+    <!-- 标题 -->
+    <div class="header-row">
+      <input class="title-input" id="titleInput" value="Memorize words" placeholder="输入标题">
+      <span class="checkin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        坚持打卡
+      </span>
+    </div>
+
+    <!-- 列头：三列：单词、释义、默写 -->
+    <div class="colhead" id="colhead">
+      <span>#</span>
+      <span class="col-word">单词 Word</span>
+      <span class="col-answer">释义 Definition</span>
+      <span>默写 Draft</span>
+    </div>
+
+    <!-- 行容器 -->
+    <div class="tbody" id="tbody"></div>
+
+    <!-- 页码 -->
+    <div class="footer-row">
+      <span>Page</span>
+      <input class="page-input" id="pageInput" value="1">
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
-(function() {
-    const STORAGE_KEY = 'wordMemoData_v2';
-    const DEFAULT_ROWS = 15;
+(function(){
+  const STORAGE_KEY='wordMemoData_v4';  // 更新版本号，避免旧数据冲突
+  const DEFAULT_ROWS=15;
+  const card=document.getElementById('card');
+  const tbody=document.getElementById('tbody');
+  const titleInput=document.getElementById('titleInput');
+  const pageInput=document.getElementById('pageInput');
+  const toggleWordBtn=document.getElementById('toggleWordBtn');
+  const toggleAnswerBtn=document.getElementById('toggleAnswerBtn');
+  const themeDots=document.getElementById('themeDots');
+  const toastEl=document.getElementById('toast');
+  let toastTimer=null;
 
-    const card = document.getElementById('card');
-    const table = document.getElementById('wordTable');
-    const titleInput = document.getElementById('titleInput');
-    const pageInput = document.getElementById('pageInput');
-    const toggleBtn = document.getElementById('toggleBtn');
-    const themeDots = document.getElementById('themeDots');
-    const toastEl = document.getElementById('toast');
+  // 状态：列可见性
+  let showWordCol=true;      // true 显示单词列
+  let showAnswerCol=true;    // true 显示释义列
 
-    let showAnswer = false;
-    let toastTimer = null;
+  function toast(msg){
+    toastEl.textContent=msg;toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>toastEl.classList.remove('show'),1800);
+  }
 
-    function toast(msg) {
-        toastEl.textContent = msg;
-        toastEl.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
-    }
+  // 根据可见性更新按钮文本和卡片类
+  function updateColumnVisibilityUI(){
+    // 更新卡片类
+    card.classList.toggle('hide-word-col', !showWordCol);
+    card.classList.toggle('hide-answer-col', !showAnswerCol);
 
-    // ---- 渲染一行 ----
-    function renderRow(cells) {
-        const tr = document.createElement('tr');
-        const defaults = ['', '', '', ''];
-        for (let i = 0; i < 3; i++) {
-            const td = document.createElement('td');
-            if (i === 2) td.classList.add('answer-col');
-            const inp = document.createElement('input');
-            inp.value = cells[i] !== undefined ? cells[i] : defaults[i];
-            if (table.rows.length === 0 && i === 0) inp.value = '单词';
-            if (table.rows.length === 0 && i === 1) inp.value = '默写';
-            if (table.rows.length === 0 && i === 2) inp.value = '答案';
-            // if (table.rows.length === 0 && i === 3) inp.placeholder = '备注';
-            inp.addEventListener('input', save);
-            td.appendChild(inp);
-            tr.appendChild(td);
-        }
-        return tr;
-    }
+    // 更新按钮文字
+    toggleWordBtn.querySelector('.btn-text').textContent = showWordCol ? '隐藏单词' : '显示单词';
+    toggleAnswerBtn.querySelector('.btn-text').textContent = showAnswerCol ? '隐藏释义' : '显示释义';
 
-    // ---- 重建表格 ----
-    function renderTable(rows) {
-        table.innerHTML = '';
-        rows.forEach(r => table.appendChild(renderRow(r)));
-    }
+    // 按钮激活样式（显示时激活，隐藏时淡出）
+    toggleWordBtn.classList.toggle('active', showWordCol);
+    toggleAnswerBtn.classList.toggle('active', showAnswerCol);
+  }
 
-    // ---- 新增行 ----
-    window.addRow = function() {
-        table.appendChild(renderRow(['', '', '', '']));
-        save();
-        toast('已加一行');
-    };
+  // 渲染行：数据顺序为 [单词, 释义, 默写]  (原来4个位置，现在3个)
+  function renderRow(cells,idx){
+    const tr=document.createElement('div');
+    tr.className='row';
+    // cells 期望长度3：0=单词,1=释义,2=默写
+    const wordVal = cells[0] || '';
+    const answerVal = cells[1] || '';
+    const draftVal = cells[2] || '';
+    tr.innerHTML=`
+      <span class="num">${String(idx+1).padStart(2,'0')}</span>
+      <div class="cell word"><input type="text" value="${escapeHtml(wordVal)}" placeholder="单词"></div>
+      <div class="cell answer"><input type="text" value="${escapeHtml(answerVal)}" placeholder="释义"></div>
+      <div class="cell"><input type="text" value="${escapeHtml(draftVal)}" placeholder="默写"></div>`;
+    tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',save));
+    return tr;
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
-    // ---- 清空 ----
-    window.clearTable = function() {
-        if (!confirm('确定清空所有内容吗？')) return;
-        table.querySelectorAll('input').forEach(i => i.value = '');
-        save();
-        toast('已清空');
-    };
+  function renderTable(rows){
+    tbody.innerHTML='';
+    rows.forEach((r,i)=>tbody.appendChild(renderRow(r,i)));
+  }
 
-    // ---- 切换答案 ----
-    window.toggleAnswer = function() {
-        showAnswer = !showAnswer;
-        if (showAnswer) {
-            card.classList.remove('hide-answer');
-            toggleBtn.childNodes[1].textContent = ' 隐藏答案';
-            toast('答案已显示');
-        } else {
-            card.classList.add('hide-answer');
-            toggleBtn.childNodes[1].textContent = ' 显示答案';
-            toast('答案已隐藏');
-        }
-        save();
-    };
+  window.addRow=function(){
+    // 新行数据：[单词, 释义, 默写] 全空
+    tbody.appendChild(renderRow(['','',''],tbody.children.length));
+    save();toast('已加一行');
+  };
 
-    // ---- 换肤 ----
-    themeDots.addEventListener('click', function(e) {
-        const dot = e.target.closest('.theme-dot');
-        if (!dot) return;
-        const theme = dot.dataset.theme;
-        card.className = 'page-card theme-' + theme + (showAnswer ? '' : ' hide-answer');
-        themeDots.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
-        dot.classList.add('active');
-        save();
+  window.clearTable=function(){
+    if(!confirm('确定清空所有内容吗？'))return;
+    tbody.querySelectorAll('input').forEach(i=>i.value='');
+    save();toast('已清空');
+  };
+
+  // 切换单词列可见性
+  window.toggleWordCol=function(){
+    showWordCol = !showWordCol;
+    updateColumnVisibilityUI();
+    save();
+    toast(showWordCol ? '单词列已显示' : '单词列已隐藏');
+  };
+
+  // 切换释义列可见性
+  window.toggleAnswerCol=function(){
+    showAnswerCol = !showAnswerCol;
+    updateColumnVisibilityUI();
+    save();
+    toast(showAnswerCol ? '释义列已显示' : '释义列已隐藏');
+  };
+
+  themeDots.addEventListener('click',function(e){
+    const dot=e.target.closest('.theme-dot');
+    if(!dot)return;
+    const theme=dot.dataset.theme;
+    // 保留当前隐藏列的类
+    const hideWordClass = showWordCol ? '' : ' hide-word-col';
+    const hideAnswerClass = showAnswerCol ? '' : ' hide-answer-col';
+    card.className='page-card theme-'+theme + hideWordClass + hideAnswerClass;
+    themeDots.querySelectorAll('.theme-dot').forEach(d=>d.classList.remove('active'));
+    dot.classList.add('active');
+    save();
+  });
+
+  function save(){
+    const rows=[];
+    tbody.querySelectorAll('.row').forEach(tr=>{
+      const inputs = tr.querySelectorAll('input');
+      // 顺序：单词、释义、默写
+      const word = inputs[0] ? inputs[0].value : '';
+      const answer = inputs[1] ? inputs[1].value : '';
+      const draft = inputs[2] ? inputs[2].value : '';
+      rows.push([word, answer, draft]);
     });
+    const data={
+      rows:rows,
+      title:titleInput.value,
+      page:pageInput.value,
+      theme:(card.className.match(/theme-\w+/)||['theme-blue'])[0],
+      showWordCol: showWordCol,
+      showAnswerCol: showAnswerCol
+    };
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}catch(e){}
+  }
 
-    // ---- 保存 / 读取 ----
-    function save() {
-        const rows = [];
-        table.querySelectorAll('tr').forEach(tr => {
-            const cells = [];
-            tr.querySelectorAll('input').forEach(i => cells.push(i.value));
-            rows.push(cells);
-        });
-        const data = {
-            rows: rows,
-            title: titleInput.value,
-            page: pageInput.value,
-            theme: card.className.match(/theme-\w+/)?.[0] || 'theme-blue',
-            showAnswer: showAnswer
-        };
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        } catch(e) {}
+  function load(){
+    let raw=null;
+    try{raw=localStorage.getItem(STORAGE_KEY)}catch(e){}
+    if(!raw){
+      // 默认15行，空数据
+      const rows=[];
+      for(let i=0;i<DEFAULT_ROWS;i++)rows.push(['','','']);
+      renderTable(rows);
+      showWordCol = true;
+      showAnswerCol = false;  // 默认隐藏释义，和之前行为类似（原先默认隐藏释义）
+      updateColumnVisibilityUI();
+      // 设置默认主题
+      card.className = 'page-card theme-blue hide-answer-col';
+      themeDots.querySelectorAll('.theme-dot').forEach(d=>{
+        d.classList.toggle('active', d.dataset.theme === 'blue');
+      });
+      return;
     }
-
-    function load() {
-        let raw = null;
-        try { raw = localStorage.getItem(STORAGE_KEY); } catch(e) {}
-        if (!raw) {
-            const rows = [];
-            for (let i = 0; i < DEFAULT_ROWS; i++) rows.push(['', '', '', '']);
-            renderTable(rows);
-            card.classList.add('hide-answer');
-            return;
+    try {
+      const data=JSON.parse(raw);
+      titleInput.value=data.title||'Memorize words';
+      pageInput.value=data.page||'1';
+      // 兼容旧数据：旧数据每行4个字段(单词,默写,释义,备注) 或 新数据3个
+      let rows = data.rows || [];
+      // 简单转换旧数据：如果行长度为4，则重新映射为 [单词(0), 释义(2), 默写(1)]
+      rows = rows.map(row => {
+        if (row.length === 4) {
+          // 旧: [单词, 默写, 释义, 备注] → 新: [单词, 释义, 默写]
+          return [row[0] || '', row[2] || '', row[1] || ''];
+        } else if (row.length === 3) {
+          return row; // 新格式直接使用
+        } else {
+          // 异常情况补全
+          return [row[0] || '', row[1] || '', row[2] || ''];
         }
-        const data = JSON.parse(raw);
-        titleInput.value = data.title || 'Memorize words';
-        pageInput.value = data.page || '1';
-        showAnswer = !!data.showAnswer;
-        renderTable(data.rows && data.rows.length ? data.rows : [['','','','']]);
-        card.className = 'page-card ' + (data.theme || 'theme-blue') + (showAnswer ? '' : ' hide-answer');
-        if (!showAnswer) toggleBtn.childNodes[1].textContent = ' 显示答案';
-        else toggleBtn.childNodes[1].textContent = ' 隐藏答案';
-        // 高亮当前主题圆点
-        themeDots.querySelectorAll('.theme-dot').forEach(d => {
-            d.classList.toggle('active', d.dataset.theme === (data.theme || 'theme-blue').replace('theme-', ''));
-        });
+      });
+      if (!rows.length) rows = [['','','']];
+      renderTable(rows);
+
+      showWordCol = data.showWordCol !== undefined ? data.showWordCol : true;
+      showAnswerCol = data.showAnswerCol !== undefined ? data.showAnswerCol : false;
+      updateColumnVisibilityUI();
+
+      // 主题
+      const theme = (data.theme || 'theme-blue').replace('theme-','');
+      card.className = 'page-card theme-' + theme + (showWordCol?'':' hide-word-col') + (showAnswerCol?'':' hide-answer-col');
+      themeDots.querySelectorAll('.theme-dot').forEach(d=>{
+        d.classList.toggle('active', d.dataset.theme === theme);
+      });
+    } catch(e) {
+      console.warn('加载数据失败，使用默认');
+      const rows=[];
+      for(let i=0;i<DEFAULT_ROWS;i++)rows.push(['','','']);
+      renderTable(rows);
+      showWordCol = true;
+      showAnswerCol = false;
+      updateColumnVisibilityUI();
     }
+  }
 
-    titleInput.addEventListener('input', save);
-    pageInput.addEventListener('input', save);
-
-    load();
+  titleInput.addEventListener('input',save);
+  pageInput.addEventListener('input',save);
+  load();
 })();
 </script>
 </body>
 </html>
-<!-- （注：内容由AI生成） -->
