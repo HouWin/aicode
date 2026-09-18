@@ -340,7 +340,7 @@
     function renderRow(cells) {
         const tr = document.createElement('tr');
         const defaults = ['', '', '', ''];
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 3; i++) {
             const td = document.createElement('td');
             if (i === 2) td.classList.add('answer-col');
             const inp = document.createElement('input');
@@ -348,7 +348,7 @@
             if (table.rows.length === 0 && i === 0) inp.placeholder = '单词';
             if (table.rows.length === 0 && i === 1) inp.placeholder = '默写';
             if (table.rows.length === 0 && i === 2) inp.placeholder = '答案';
-            if (table.rows.length === 0 && i === 3) inp.placeholder = '备注';
+            // if (table.rows.length === 0 && i === 3) inp.placeholder = '备注';
             inp.addEventListener('input', save);
             td.appendChild(inp);
             tr.appendChild(td);
