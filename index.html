@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>华研专八词汇练习-子祺版</title>
+<title>单词默写本 · Memorize Words</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
 <style>
 :root{
@@ -115,7 +115,7 @@ body{
 }
 .checkin svg{width:15px;height:15px;color:var(--accent)}
 
-/* ── 章节切换栏（新增，移到上方） ── */
+/* ── 章节切换栏 ── */
 .chapter-bar{
   display:flex;align-items:center;justify-content:space-between;
   gap:14px;margin:20px 0 6px;
@@ -183,25 +183,10 @@ body{
   font-family:Georgia,serif;font-style:italic;
 }
 
-.chapter-quick{display:flex;gap:6px;flex-wrap:wrap}
-.chip{
-  padding:6px 12px;border-radius:999px;
-  border:1px solid var(--line);
-  background:#fff;color:var(--ink-2);
-  font-size:12px;cursor:pointer;
-  font-family:inherit;
-  transition:all .2s;
-}
-.chip:hover{border-color:var(--line-strong);background:#f7f3ee}
-.chip.active{
-  background:var(--accent);color:#fff;border-color:var(--accent);
-  box-shadow:0 2px 8px rgba(201,162,126,.3);
-}
-
-/* ── 列表头 ── */
+/* ── 列表头：三列等宽 ── */
 .colhead{
   display:grid;
-  grid-template-columns:44px 1fr 1.7fr 1fr;
+  grid-template-columns:44px 1fr 1fr 1fr;
   gap:10px;margin:18px 0 10px;padding:0 4px;
   font-size:11.5px;font-weight:700;color:var(--muted);
   letter-spacing:1.5px;text-transform:uppercase;
@@ -209,11 +194,11 @@ body{
 }
 .colhead span:nth-child(n+2){text-align:left}
 
-/* ── 表格行 ── */
+/* ── 表格行：三列等宽 ── */
 .tbody{display:flex;flex-direction:column;gap:8px}
 .row{
   display:grid;
-  grid-template-columns:44px 1fr 1.7fr 1fr;
+  grid-template-columns:44px 1fr 1fr 1fr;
   gap:10px;align-items:stretch;
   transition:grid-template-columns .2s;
 }
@@ -247,16 +232,19 @@ body{
 .hide-answer-col .colhead span:nth-child(3),
 .hide-answer-col .row .cell.answer { display: none; }
 
+/* 隐藏单词列：序号 + 释义 + 默写 */
 .hide-word-col .colhead,
 .hide-word-col .row {
-  grid-template-columns:44px 1.7fr 1fr;
+  grid-template-columns:44px 1fr 1fr;
 }
 
+/* 隐藏释义列：序号 + 单词 + 默写 */
 .hide-answer-col .colhead,
 .hide-answer-col .row {
   grid-template-columns:44px 1fr 1fr;
 }
 
+/* 两列都隐藏：序号 + 默写 */
 .hide-word-col.hide-answer-col .colhead,
 .hide-word-col.hide-answer-col .row {
   grid-template-columns:44px 1fr;
@@ -286,6 +274,13 @@ body{
   box-shadow:0 8px 24px rgba(0,0,0,.18);
 }
 .toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── 加载中提示 ── */
+.loading{
+  text-align:center;padding:60px 0;
+  color:var(--muted);font-size:14px;
+  font-family:Georgia,serif;font-style:italic;
+}
 
 /* ── 主题切换 ── */
 .theme-blue{
@@ -331,9 +326,9 @@ body{
   .chapter-bar{padding:10px 12px;gap:10px}
   .chapter-bar .label{font-size:11px}
   .chapter-pill input{width:42px;font-size:15px}
-  .chip{padding:5px 10px;font-size:11.5px}
-  .colhead{grid-template-columns:30px 1fr 1fr;gap:6px}
-  .row{grid-template-columns:30px 1fr 1fr;gap:6px}
+  /* 移动端三列等宽（序号列变窄） */
+  .colhead{grid-template-columns:30px 1fr 1fr 1fr;gap:6px}
+  .row{grid-template-columns:30px 1fr 1fr 1fr;gap:6px}
   .hide-word-col .colhead,
   .hide-word-col .row { grid-template-columns:30px 1fr 1fr; }
   .hide-answer-col .colhead,
@@ -387,7 +382,7 @@ body{
       </span>
     </div>
 
-    <!-- 章节切换栏（移到上方） -->
+    <!-- 章节切换栏 -->
     <div class="chapter-bar">
       <div class="label">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -407,10 +402,6 @@ body{
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
-
-      <div class="chapter-quick" id="chapterQuick">
-        <!-- 快捷章节按钮由 JS 生成 -->
-      </div>
     </div>
 
     <!-- 列头 -->
@@ -422,7 +413,9 @@ body{
     </div>
 
     <!-- 行容器 -->
-    <div class="tbody" id="tbody"></div>
+    <div class="tbody" id="tbody">
+      <div class="loading">正在加载单词数据…</div>
+    </div>
 
     <!-- 页码 -->
     <div class="footer-row">
@@ -434,183 +427,6 @@ body{
 
 <div class="toast" id="toast"></div>
 
-<script id="word-data" type="application/json">
-{
-  "total_chapters": "Lesson 1-40",
-  "chapters": {
-    "1": {
-      "chapter": "Lesson 1",
-      "words": [
-        {"id":1,"word":"appropriate","meaning":"a.适当的 vt.私占；拨出（款项等）供专用"},
-        {"id":2,"word":"misappropriate","meaning":"v.盗用，侵吞，滥用"},
-        {"id":3,"word":"honor","meaning":"n.名誉；尊敬；荣幸；（pl.）优异成绩 vt.给...以荣誉；尊敬"},
-        {"id":4,"word":"dishonor","meaning":"n.耻辱，丢脸 v.使丢脸；拒绝承兑"},
-        {"id":5,"word":"respectable","meaning":"a.可敬的，体面的；相当好的"},
-        {"id":6,"word":"ethic","meaning":"n.道德准则；（-s）伦理学"},
-        {"id":7,"word":"ethical","meaning":"a.伦理的；道德的；合乎道德的"},
-        {"id":8,"word":"virtue","meaning":"n.美德，德行；优点"},
-        {"id":9,"word":"behave","meaning":"vi.表现；运转 vt.（oneself）检点（自己的）行为"},
-        {"id":10,"word":"conduct","meaning":"vt.管理；指挥；传导；（oneself）表现 n.举止；管理"},
-        {"id":11,"word":"principle","meaning":"n.原则；基本信念"},
-        {"id":12,"word":"orthodox","meaning":"a.传统的；正统的"},
-        {"id":13,"word":"decent","meaning":"a.体面的；宽厚的；得体的"},
-        {"id":14,"word":"decency","meaning":"n.得体；宽容；正派；（pl.）礼仪，准则"},
-        {"id":15,"word":"gracious","meaning":"a.和蔼的；优美的 int.天哪！"},
-        {"id":16,"word":"doom","meaning":"vt.注定 n.厄运"},
-        {"id":17,"word":"doomsday","meaning":"n.世界末日"},
-        {"id":18,"word":"fate","meaning":"n.命运"},
-        {"id":19,"word":"fateful","meaning":"a.重大的，决定性的"},
-        {"id":20,"word":"fatal","meaning":"a.致命的"},
-        {"id":21,"word":"acute","meaning":"a.严重的；敏锐的；急性的；尖的"},
-        {"id":22,"word":"severe","meaning":"a.严重的；严厉的；严峻的；朴素的"},
-        {"id":23,"word":"solemn","meaning":"a.严肃的；庄严的"},
-        {"id":24,"word":"rigorous","meaning":"a.严密的；严格的"},
-        {"id":25,"word":"assure","meaning":"vt.使确信；确保"},
-        {"id":26,"word":"reassure","meaning":"vt.使放心"},
-        {"id":27,"word":"definition","meaning":"n.定义；清晰（度）"},
-        {"id":28,"word":"definitive","meaning":"a.确定的；决定性的"},
-        {"id":29,"word":"dispense","meaning":"vi.分配；配（药）；实施"},
-        {"id":30,"word":"dose","meaning":"n.剂量，一剂，一份"},
-        {"id":31,"word":"dosage","meaning":"n.（药的）剂量，服法"},
-        {"id":32,"word":"abuse","meaning":"n./vt.滥用；虐待；辱骂"},
-        {"id":33,"word":"remedy","meaning":"n.补救办法；药品，治疗法 vt.补救；治疗"},
-        {"id":34,"word":"therapy","meaning":"n.治疗"},
-        {"id":35,"word":"aroma","meaning":"n.芳香，香味"},
-        {"id":36,"word":"physiotherapy","meaning":"n.物理疗法，理疗"},
-        {"id":37,"word":"psychotherapy","meaning":"n.心理疗法，精神疗法"},
-        {"id":38,"word":"insane","meaning":"a.荒唐的；精神失常的"},
-        {"id":39,"word":"spiritual","meaning":"a.精神（上）的；宗教的"},
-        {"id":40,"word":"dentist","meaning":"n.牙科医生"},
-        {"id":41,"word":"decay","meaning":"vi.腐烂；衰落 n.腐烂；衰败状态"},
-        {"id":42,"word":"decadent","meaning":"a.颓废的；衰落的；堕落的"},
-        {"id":43,"word":"claim","meaning":"vt.声称；对...提出要求；使失踪或死亡；需要 n.索赔；声称"},
-        {"id":44,"word":"warrant","meaning":"n.授权令；（正当）理由 vt.证明...是正当的"},
-        {"id":45,"word":"warranty","meaning":"n.（商品的）保证书，保证"},
-        {"id":46,"word":"authority","meaning":"n.权力；（pl.）官方；当权者；权威"},
-        {"id":47,"word":"administration","meaning":"n.管理；行政机关；执行"},
-        {"id":48,"word":"maladministration","meaning":"n.处理不善"},
-        {"id":49,"word":"municipal","meaning":"a.市的，市政的"},
-        {"id":50,"word":"function","meaning":"n.功能，职能；重大聚会；函数 vi.运行"},
-        {"id":51,"word":"malfunction","meaning":"n.失灵，故障"},
-        {"id":52,"word":"lubricate","meaning":"vt.使润滑"},
-        {"id":53,"word":"mobile","meaning":"a.运动的；机动的；多变的 n.移动电话"},
-        {"id":54,"word":"mobilize","meaning":"vt.动员；调动"},
-        {"id":55,"word":"demobilize","meaning":"v.使复员，退伍；遣散（军队）"},
-        {"id":56,"word":"motion","meaning":"n.运动；手势；提议 v.（向...）打手势"},
-        {"id":57,"word":"evoke","meaning":"vt.唤起"},
-        {"id":58,"word":"demonstrate","meaning":"vt.论证；证明；显示 vi.举行示威游行"},
-        {"id":59,"word":"manifest","meaning":"a.明显的 vt.显示；使显现"},
-        {"id":60,"word":"manifestation","meaning":"n.表明，证明；表现形式；现象"},
-        {"id":61,"word":"illustrate","meaning":"vt.说明；给...做插图说明"},
-        {"id":62,"word":"illustrious","meaning":"a.著名的，杰出的，显赫的"},
-        {"id":63,"word":"lighten","meaning":"v.（使）明亮；减轻；（使）愉快（轻松）起来"},
-        {"id":64,"word":"thunder","meaning":"n.雷，雷声；轰隆声 vi.打雷；大声喊"},
-        {"id":65,"word":"thunderclap","meaning":"n.雷声，霹雳；突然而可怕的事情或消息"},
-        {"id":66,"word":"frost","meaning":"n.霜冻；霜 v.结霜（于）"},
-        {"id":67,"word":"defrost","meaning":"v.使解冻，给（冰箱等）除霜"},
-        {"id":68,"word":"monument","meaning":"n.纪念碑；历史遗迹"},
-        {"id":69,"word":"enormous","meaning":"a.巨大的"},
-        {"id":70,"word":"multiple","meaning":"a.复合的，多种多样的 n.倍数"},
-        {"id":71,"word":"multitude","meaning":"n.大量；（the ~）大众"},
-        {"id":72,"word":"magnitude","meaning":"n.重要性；巨大；量（值）"},
-        {"id":73,"word":"expand","meaning":"v.扩张；膨胀"},
-        {"id":74,"word":"expansive","meaning":"a.易膨胀的；开朗的，健谈的"},
-        {"id":75,"word":"array","meaning":"n.一系列；排列；衣服；数组 vt.排列；打扮"},
-        {"id":76,"word":"disarray","meaning":"n.混乱，零乱"},
-        {"id":77,"word":"stimulate","meaning":"vt.刺激"},
-        {"id":78,"word":"irritate","meaning":"vt.使恼怒；使不适"},
-        {"id":79,"word":"agony","meaning":"n.痛苦"}
-      ]
-    },
-    "2": {
-      "chapter": "Lesson 2",
-      "words": [
-        {"id":1,"word":"grief","meaning":"n.悲伤；悲伤的事"},
-        {"id":2,"word":"grievance","meaning":"n.怨愤，气恼，委屈"},
-        {"id":3,"word":"tragedy","meaning":"n.灾难；悲剧"},
-        {"id":4,"word":"regret","meaning":"v./n.懊悔，悔恨，遗憾"},
-        {"id":5,"word":"optimistic","meaning":"a.乐观（主义）的"},
-        {"id":6,"word":"optimize","meaning":"v.使最优化"},
-        {"id":7,"word":"ascend","meaning":"vi.升高 vt.攀登"},
-        {"id":8,"word":"escalate","meaning":"v.（使）逐步增长，逐步升级"},
-        {"id":9,"word":"grateful","meaning":"a.感激的"},
-        {"id":10,"word":"obscure","meaning":"a.不重要的；费解的 vt.使模糊"},
-        {"id":11,"word":"economic","meaning":"a.经济的 n.（-s）经济学；经济状况"},
-        {"id":12,"word":"paralyze","meaning":"vt.使瘫痪；使丧失作用；使惊愕"},
-        {"id":13,"word":"conceive","meaning":"v.（of）构想出；怀孕"},
-        {"id":14,"word":"conceivable","meaning":"a.可想到的，可想象的"},
-        {"id":15,"word":"critical","meaning":"a.关键性的；批评的"},
-        {"id":16,"word":"hypercritical","meaning":"a.批评苛刻的，吹毛求疵的"},
-        {"id":17,"word":"critique","meaning":"n.评论性文章（书籍），评论"},
-        {"id":18,"word":"hypocrisy","meaning":"n.伪善，虚伪"},
-        {"id":19,"word":"stress","meaning":"n.压力；强调；应力；重音 vt.强调，重读"},
-        {"id":20,"word":"stressful","meaning":"a.有压力的"},
-        {"id":21,"word":"strain","meaning":"n.拉紧；极度紧张；张力；扭伤；（常 pl.）旋律；品种，气质 vt.扭伤；拉紧 vi.尽力"},
-        {"id":22,"word":"strained","meaning":"a.勉强的，紧张的；心力交瘁的"},
-        {"id":23,"word":"fierce","meaning":"a.凶猛的；狂热的；猛烈的"},
-        {"id":24,"word":"ferocity","meaning":"n.凶恶，残暴"},
-        {"id":25,"word":"savage","meaning":"a.残暴的；野蛮的 n.野蛮人 vt.（狗等）乱咬；激烈抨击"},
-        {"id":26,"word":"vulgar","meaning":"a.粗野的；粗俗的"},
-        {"id":27,"word":"scare","meaning":"n.惊恐 vt.使害怕 vi.受惊吓"},
-        {"id":28,"word":"scary","meaning":"a.可怕的；惊慌的；易受惊的"},
-        {"id":29,"word":"coward","meaning":"n.胆小鬼，懦夫"},
-        {"id":30,"word":"alcohol","meaning":"n.酒精"},
-        {"id":31,"word":"alcoholic","meaning":"a.酒精的，含有酒精的 n.酗酒者"},
-        {"id":32,"word":"addict","meaning":"n.入迷的人 vt.使成瘾"},
-        {"id":33,"word":"addictive","meaning":"a.（使人）上瘾的，沉迷的"},
-        {"id":34,"word":"restraint","meaning":"n.抑制；约束措施"},
-        {"id":35,"word":"confine","meaning":"vt.限制；使不外出 n.（pl.）界限"},
-        {"id":36,"word":"forbid","meaning":"vt.禁止"},
-        {"id":37,"word":"forbidding","meaning":"a.样子冷淡的；严峻的；令人生畏的"},
-        {"id":38,"word":"magnet","meaning":"n.磁铁；有吸引力的人（或事物）"},
-        {"id":39,"word":"magnetic","meaning":"a.磁的；有吸引力的"},
-        {"id":40,"word":"fantasy","meaning":"n.想象，幻想"},
-        {"id":41,"word":"fantasize","meaning":"v.想象，幻想"},
-        {"id":42,"word":"dynamic","meaning":"a.有活力的；不断变化（或增长）的；动力的 n.动力；（-s）动力学"},
-        {"id":43,"word":"thermodynamics","meaning":"n.热力学"},
-        {"id":44,"word":"generalize","meaning":"v.概括，推断"},
-        {"id":45,"word":"generate","meaning":"vt.产生；引起"},
-        {"id":46,"word":"degenerate","meaning":"vi.衰退，堕落 a.衰退的 n.堕落者"},
-        {"id":47,"word":"generative","meaning":"a.生成的"},
-        {"id":48,"word":"generic","meaning":"a.一般的，普通的，共有的"},
-        {"id":49,"word":"syntax","meaning":"n.句法，语句结构"},
-        {"id":50,"word":"synonym","meaning":"n.同义词"},
-        {"id":51,"word":"assume","meaning":"vt.假定；担任"},
-        {"id":52,"word":"unassuming","meaning":"a.不爱表现自己的，谦虚的"},
-        {"id":53,"word":"volunteer","meaning":"n.志愿者；志愿兵 v.自愿"},
-        {"id":54,"word":"voluntary","meaning":"a.自愿的；无偿的，义务的"},
-        {"id":55,"word":"obligation","meaning":"n.义务，责任"},
-        {"id":56,"word":"penalty","meaning":"n.处罚，罚金"},
-        {"id":57,"word":"penalize","meaning":"v.对...处以刑罚，（使）处罚"},
-        {"id":58,"word":"subjective","meaning":"a.主观（上）的"},
-        {"id":59,"word":"subjection","meaning":"n.征服，臣服"},
-        {"id":60,"word":"ceremony","meaning":"n.典礼；礼节"},
-        {"id":61,"word":"ceremonious","meaning":"a.讲究礼节的，拘泥于形式的"},
-        {"id":62,"word":"luxury","meaning":"n.奢侈；奢侈品"},
-        {"id":63,"word":"luxuriant","meaning":"a.繁密的，茂盛的"},
-        {"id":64,"word":"pest","meaning":"n.害虫；讨厌的人"},
-        {"id":65,"word":"pesticide","meaning":"n.杀虫剂"},
-        {"id":66,"word":"orchestra","meaning":"n.管弦乐队"},
-        {"id":67,"word":"arch","meaning":"n.拱，拱门 v.（使）成拱形"},
-        {"id":68,"word":"reconcile","meaning":"vt.使协调；使和解；（to）使顺从（于）"},
-        {"id":69,"word":"reconciliation","meaning":"n.和解，调和"},
-        {"id":70,"word":"resign","meaning":"vi.辞职 vt.放弃；（to）使顺从"},
-        {"id":71,"word":"resigned","meaning":"a.顺从的，逆来顺受的"},
-        {"id":72,"word":"impression","meaning":"n.印象；印记"},
-        {"id":73,"word":"impressionable","meaning":"a.易受影响的"},
-        {"id":74,"word":"parallel","meaning":"n.相似处；平行线；纬线 a.平行的；类似的；并列的 vt.与...相似"},
-        {"id":75,"word":"unparalleled","meaning":"a.无比的，无双的"},
-        {"id":76,"word":"scholar","meaning":"n.学者；奖学金获得者"},
-        {"id":77,"word":"scholastic","meaning":"a.学校的，学业的；学究的"},
-        {"id":78,"word":"academic","meaning":"a.学院的；纯理论的 n.大学教师"},
-        {"id":79,"word":"register","meaning":"n.登记；登记表 v.登记；指示；表示；注意到；挂号"},
-        {"id":80,"word":"procedure","meaning":"n.程序，步骤"}
-      ]
-    }
-  }
-}
-</script>
-
 <script>
 (function(){
   const STORAGE_KEY='wordMemoData_v4';
@@ -620,10 +436,8 @@ body{
   const pageInput=document.getElementById('pageInput');
   const chapterInput=document.getElementById('chapterInput');
   const chapterSuffix=document.getElementById('chapterSuffix');
-  const chapterQuick=document.getElementById('chapterQuick');
   const prevBtn=document.getElementById('prevChapter');
   const nextBtn=document.getElementById('nextChapter');
-  const wordData=JSON.parse(document.getElementById('word-data').textContent);
   const toggleWordBtn=document.getElementById('toggleWordBtn');
   const toggleAnswerBtn=document.getElementById('toggleAnswerBtn');
   const themeDots=document.getElementById('themeDots');
@@ -631,6 +445,7 @@ body{
   let toastTimer=null;
   let showWordCol=true;
   let showAnswerCol=true;
+  let wordData=null;   // 由 words.json 异步加载
 
   function toast(msg){
     toastEl.textContent=msg;
@@ -677,6 +492,7 @@ body{
   }
 
   function getChapterWords(ch){
+    if(!wordData || !wordData.chapters) return [];
     return (wordData.chapters[ch] && wordData.chapters[ch].words) || [];
   }
 
@@ -690,6 +506,7 @@ body{
   }
 
   function save(){
+    if(!wordData) return;
     const ch = chapterKey();
     const drafts = getDrafts();
     drafts[ch] = {};
@@ -713,6 +530,7 @@ body{
   }
 
   function updateChapterNav(ch){
+    if(!wordData || !wordData.chapters) return;
     const chNum = parseInt(ch,10) || 1;
     const keys = Object.keys(wordData.chapters).map(Number).sort((a,b)=>a-b);
     const min = keys[0] || 1;
@@ -722,26 +540,11 @@ body{
     chapterSuffix.textContent = 'Lesson ' + chNum;
   }
 
-  function buildQuickChips(){
-    chapterQuick.innerHTML='';
-    const keys = Object.keys(wordData.chapters).map(Number).sort((a,b)=>a-b);
-    keys.forEach(k=>{
-      const chip=document.createElement('button');
-      chip.className='chip';
-      chip.dataset.chapter=k;
-      chip.textContent='L'+k;
-      chip.onclick=()=>loadChapter(String(k));
-      chapterQuick.appendChild(chip);
-    });
-  }
-
-  function highlightQuick(ch){
-    chapterQuick.querySelectorAll('.chip').forEach(c=>{
-      c.classList.toggle('active', c.dataset.chapter === String(ch));
-    });
-  }
-
   function loadChapter(ch, notify=true){
+    if(!wordData || !wordData.chapters){
+      toast('单词数据尚未加载');
+      return;
+    }
     const chapter = wordData.chapters[ch];
     if(!chapter){
       toast('暂无第 ' + ch + ' 章数据');
@@ -756,7 +559,6 @@ body{
     chapterInput.value = ch;
     updateColumnVisibilityUI();
     updateChapterNav(ch);
-    highlightQuick(ch);
 
     const theme = (localStorage.getItem(STORAGE_KEY + '_theme') || 'theme-blue').replace('theme-','');
     card.className = 'page-card theme-' + theme +
@@ -833,23 +635,45 @@ body{
   });
   nextBtn.addEventListener('click',()=>{
     const ch = parseInt(chapterInput.value,10) || 1;
-    if(wordData.chapters[String(ch+1)]) loadChapter(String(ch+1));
+    if(wordData && wordData.chapters && wordData.chapters[String(ch+1)]) {
+      loadChapter(String(ch+1));
+    }
   });
 
   titleInput.addEventListener('input',save);
   pageInput.addEventListener('input',save);
 
+  // 异步加载 words.json
+  async function fetchWordData(){
+    const res = await fetch('./words.json', { cache: 'no-cache' });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  }
+
   // 初始化
-  (function init(){
+  async function init(){
     let data={};
     try{ data=JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }catch(e){}
     showWordCol = data.showWordCol !== undefined ? data.showWordCol : true;
     showAnswerCol = data.showAnswerCol !== undefined ? data.showAnswerCol : true;
-    buildQuickChips();
+
+    try{
+      wordData = await fetchWordData();
+    }catch(err){
+      console.error(err);
+      tbody.innerHTML = `<div class="loading">⚠️ 加载 words.json 失败：${escapeHtml(err.message)}<br>
+        请确认：<br>1. words.json 与本文件在同一目录<br>
+        2. 通过 http:// 服务器打开（不能直接双击 .html）</div>`;
+      toast('words.json 加载失败');
+      return;
+    }
+
     const ch = data.chapter || data.page || '1';
     chapterInput.value = ch;
     loadChapter(ch, false);
-  })();
+  }
+
+  init();
 })();
 </script>
 </body>

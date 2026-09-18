@@ -1,0 +1,2045 @@
+{
+    "total_chapters": "Lesson 1-40",
+    "chapters": {
+        "1": {
+            "chapter": "Lesson 1",
+            "words": [
+                {
+                    "id": 1,
+                    "word": "appropriate",
+                    "meaning": "a.适当的 vt.私占；拨出（款项等）供专用"
+                },
+                {
+                    "id": 2,
+                    "word": "misappropriate",
+                    "meaning": "v.盗用，侵吞，滥用"
+                },
+                {
+                    "id": 3,
+                    "word": "honor",
+                    "meaning": "n.名誉；尊敬；荣幸；（pl.）优异成绩 vt.给...以荣誉；尊敬"
+                },
+                {
+                    "id": 4,
+                    "word": "dishonor",
+                    "meaning": "n.耻辱，丢脸 v.使丢脸；拒绝承兑"
+                },
+                {
+                    "id": 5,
+                    "word": "respectable",
+                    "meaning": "a.可敬的，体面的；相当好的"
+                },
+                {
+                    "id": 6,
+                    "word": "ethic",
+                    "meaning": "n.道德准则；（-s）伦理学"
+                },
+                {
+                    "id": 7,
+                    "word": "ethical",
+                    "meaning": "a.伦理的；道德的；合乎道德的"
+                },
+                {
+                    "id": 8,
+                    "word": "virtue",
+                    "meaning": "n.美德，德行；优点"
+                },
+                {
+                    "id": 9,
+                    "word": "behave",
+                    "meaning": "vi.表现；运转 vt.（oneself）检点（自己的）行为"
+                },
+                {
+                    "id": 10,
+                    "word": "conduct",
+                    "meaning": "vt.管理；指挥；传导；（oneself）表现 n.举止；管理"
+                },
+                {
+                    "id": 11,
+                    "word": "principle",
+                    "meaning": "n.原则；基本信念"
+                },
+                {
+                    "id": 12,
+                    "word": "orthodox",
+                    "meaning": "a.传统的；正统的"
+                },
+                {
+                    "id": 13,
+                    "word": "decent",
+                    "meaning": "a.体面的；宽厚的；得体的"
+                },
+                {
+                    "id": 14,
+                    "word": "decency",
+                    "meaning": "n.得体；宽容；正派；（pl.）礼仪，准则"
+                },
+                {
+                    "id": 15,
+                    "word": "gracious",
+                    "meaning": "a.和蔼的；优美的 int.天哪！"
+                },
+                {
+                    "id": 16,
+                    "word": "doom",
+                    "meaning": "vt.注定 n.厄运"
+                },
+                {
+                    "id": 17,
+                    "word": "doomsday",
+                    "meaning": "n.世界末日"
+                },
+                {
+                    "id": 18,
+                    "word": "fate",
+                    "meaning": "n.命运"
+                },
+                {
+                    "id": 19,
+                    "word": "fateful",
+                    "meaning": "a.重大的，决定性的"
+                },
+                {
+                    "id": 20,
+                    "word": "fatal",
+                    "meaning": "a.致命的"
+                },
+                {
+                    "id": 21,
+                    "word": "acute",
+                    "meaning": "a.严重的；敏锐的；急性的；尖的"
+                },
+                {
+                    "id": 22,
+                    "word": "severe",
+                    "meaning": "a.严重的；严厉的；严峻的；朴素的"
+                },
+                {
+                    "id": 23,
+                    "word": "solemn",
+                    "meaning": "a.严肃的；庄严的"
+                },
+                {
+                    "id": 24,
+                    "word": "rigorous",
+                    "meaning": "a.严密的；严格的"
+                },
+                {
+                    "id": 25,
+                    "word": "assure",
+                    "meaning": "vt.使确信；确保"
+                },
+                {
+                    "id": 26,
+                    "word": "reassure",
+                    "meaning": "vt.使放心"
+                },
+                {
+                    "id": 27,
+                    "word": "definition",
+                    "meaning": "n.定义；清晰（度）"
+                },
+                {
+                    "id": 28,
+                    "word": "definitive",
+                    "meaning": "a.确定的；决定性的"
+                },
+                {
+                    "id": 29,
+                    "word": "dispense",
+                    "meaning": "vi.分配；配（药）；实施"
+                },
+                {
+                    "id": 30,
+                    "word": "dose",
+                    "meaning": "n.剂量，一剂，一份"
+                },
+                {
+                    "id": 31,
+                    "word": "dosage",
+                    "meaning": "n.（药的）剂量，服法"
+                },
+                {
+                    "id": 32,
+                    "word": "abuse",
+                    "meaning": "n./vt.滥用；虐待；辱骂"
+                },
+                {
+                    "id": 33,
+                    "word": "remedy",
+                    "meaning": "n.补救办法；药品，治疗法 vt.补救；治疗"
+                },
+                {
+                    "id": 34,
+                    "word": "therapy",
+                    "meaning": "n.治疗"
+                },
+                {
+                    "id": 35,
+                    "word": "aroma",
+                    "meaning": "n.芳香，香味"
+                },
+                {
+                    "id": 36,
+                    "word": "physiotherapy",
+                    "meaning": "n.物理疗法，理疗"
+                },
+                {
+                    "id": 37,
+                    "word": "psychotherapy",
+                    "meaning": "n.心理疗法，精神疗法"
+                },
+                {
+                    "id": 38,
+                    "word": "insane",
+                    "meaning": "a.荒唐的；精神失常的"
+                },
+                {
+                    "id": 39,
+                    "word": "spiritual",
+                    "meaning": "a.精神（上）的；宗教的"
+                },
+                {
+                    "id": 40,
+                    "word": "dentist",
+                    "meaning": "n.牙科医生"
+                },
+                {
+                    "id": 41,
+                    "word": "decay",
+                    "meaning": "vi.腐烂；衰落 n.腐烂；衰败状态"
+                },
+                {
+                    "id": 42,
+                    "word": "decadent",
+                    "meaning": "a.颓废的；衰落的；堕落的"
+                },
+                {
+                    "id": 43,
+                    "word": "claim",
+                    "meaning": "vt.声称；对...提出要求；使失踪或死亡；需要 n.索赔；声称"
+                },
+                {
+                    "id": 44,
+                    "word": "warrant",
+                    "meaning": "n.授权令；（正当）理由 vt.证明...是正当的"
+                },
+                {
+                    "id": 45,
+                    "word": "warranty",
+                    "meaning": "n.（商品的）保证书，保证"
+                },
+                {
+                    "id": 46,
+                    "word": "authority",
+                    "meaning": "n.权力；（pl.）官方；当权者；权威"
+                },
+                {
+                    "id": 47,
+                    "word": "administration",
+                    "meaning": "n.管理；行政机关；执行"
+                },
+                {
+                    "id": 48,
+                    "word": "maladministration",
+                    "meaning": "n.处理不善"
+                },
+                {
+                    "id": 49,
+                    "word": "municipal",
+                    "meaning": "a.市的，市政的"
+                },
+                {
+                    "id": 50,
+                    "word": "function",
+                    "meaning": "n.功能，职能；重大聚会；函数 vi.运行"
+                },
+                {
+                    "id": 51,
+                    "word": "malfunction",
+                    "meaning": "n.失灵，故障"
+                },
+                {
+                    "id": 52,
+                    "word": "lubricate",
+                    "meaning": "vt.使润滑"
+                },
+                {
+                    "id": 53,
+                    "word": "mobile",
+                    "meaning": "a.运动的；机动的；多变的 n.移动电话"
+                },
+                {
+                    "id": 54,
+                    "word": "mobilize",
+                    "meaning": "vt.动员；调动"
+                },
+                {
+                    "id": 55,
+                    "word": "demobilize",
+                    "meaning": "v.使复员，退伍；遣散（军队）"
+                },
+                {
+                    "id": 56,
+                    "word": "motion",
+                    "meaning": "n.运动；手势；提议 v.（向...）打手势"
+                },
+                {
+                    "id": 57,
+                    "word": "evoke",
+                    "meaning": "vt.唤起"
+                },
+                {
+                    "id": 58,
+                    "word": "demonstrate",
+                    "meaning": "vt.论证；证明；显示 vi.举行示威游行"
+                },
+                {
+                    "id": 59,
+                    "word": "manifest",
+                    "meaning": "a.明显的 vt.显示；使显现"
+                },
+                {
+                    "id": 60,
+                    "word": "manifestation",
+                    "meaning": "n.表明，证明；表现形式；现象"
+                },
+                {
+                    "id": 61,
+                    "word": "illustrate",
+                    "meaning": "vt.说明；给...做插图说明"
+                },
+                {
+                    "id": 62,
+                    "word": "illustrious",
+                    "meaning": "a.著名的，杰出的，显赫的"
+                },
+                {
+                    "id": 63,
+                    "word": "lighten",
+                    "meaning": "v.（使）明亮；减轻；（使）愉快（轻松）起来"
+                },
+                {
+                    "id": 64,
+                    "word": "thunder",
+                    "meaning": "n.雷，雷声；轰隆声 vi.打雷；大声喊"
+                },
+                {
+                    "id": 65,
+                    "word": "thunderclap",
+                    "meaning": "n.雷声，霹雳；突然而可怕的事情或消息"
+                },
+                {
+                    "id": 66,
+                    "word": "frost",
+                    "meaning": "n.霜冻；霜 v.结霜（于）"
+                },
+                {
+                    "id": 67,
+                    "word": "defrost",
+                    "meaning": "v.使解冻，给（冰箱等）除霜"
+                },
+                {
+                    "id": 68,
+                    "word": "monument",
+                    "meaning": "n.纪念碑；历史遗迹"
+                },
+                {
+                    "id": 69,
+                    "word": "enormous",
+                    "meaning": "a.巨大的"
+                },
+                {
+                    "id": 70,
+                    "word": "multiple",
+                    "meaning": "a.复合的，多种多样的 n.倍数"
+                },
+                {
+                    "id": 71,
+                    "word": "multitude",
+                    "meaning": "n.大量；（the ~）大众"
+                },
+                {
+                    "id": 72,
+                    "word": "magnitude",
+                    "meaning": "n.重要性；巨大；量（值）"
+                },
+                {
+                    "id": 73,
+                    "word": "expand",
+                    "meaning": "v.扩张；膨胀"
+                },
+                {
+                    "id": 74,
+                    "word": "expansive",
+                    "meaning": "a.易膨胀的；开朗的，健谈的"
+                },
+                {
+                    "id": 75,
+                    "word": "array",
+                    "meaning": "n.一系列；排列；衣服；数组 vt.排列；打扮"
+                },
+                {
+                    "id": 76,
+                    "word": "disarray",
+                    "meaning": "n.混乱，零乱"
+                },
+                {
+                    "id": 77,
+                    "word": "stimulate",
+                    "meaning": "vt.刺激"
+                },
+                {
+                    "id": 78,
+                    "word": "irritate",
+                    "meaning": "vt.使恼怒；使不适"
+                },
+                {
+                    "id": 79,
+                    "word": "agony",
+                    "meaning": "n.痛苦"
+                }
+            ]
+        },
+        "2": {
+            "chapter": "Lesson 2",
+            "words": [
+                {
+                    "id": 1,
+                    "word": "grief",
+                    "meaning": "n.悲伤；悲伤的事"
+                },
+                {
+                    "id": 2,
+                    "word": "grievance",
+                    "meaning": "n.怨愤，气恼，委屈"
+                },
+                {
+                    "id": 3,
+                    "word": "tragedy",
+                    "meaning": "n.灾难；悲剧"
+                },
+                {
+                    "id": 4,
+                    "word": "regret",
+                    "meaning": "v./n.懊悔，悔恨，遗憾"
+                },
+                {
+                    "id": 5,
+                    "word": "optimistic",
+                    "meaning": "a.乐观（主义）的"
+                },
+                {
+                    "id": 6,
+                    "word": "optimize",
+                    "meaning": "v.使最优化"
+                },
+                {
+                    "id": 7,
+                    "word": "ascend",
+                    "meaning": "vi.升高 vt.攀登"
+                },
+                {
+                    "id": 8,
+                    "word": "escalate",
+                    "meaning": "v.（使）逐步增长，逐步升级"
+                },
+                {
+                    "id": 9,
+                    "word": "grateful",
+                    "meaning": "a.感激的"
+                },
+                {
+                    "id": 10,
+                    "word": "obscure",
+                    "meaning": "a.不重要的；费解的 vt.使模糊"
+                },
+                {
+                    "id": 11,
+                    "word": "economic",
+                    "meaning": "a.经济的 n.（-s）经济学；经济状况"
+                },
+                {
+                    "id": 12,
+                    "word": "paralyze",
+                    "meaning": "vt.使瘫痪；使丧失作用；使惊愕"
+                },
+                {
+                    "id": 13,
+                    "word": "conceive",
+                    "meaning": "v.（of）构想出；怀孕"
+                },
+                {
+                    "id": 14,
+                    "word": "conceivable",
+                    "meaning": "a.可想到的，可想象的"
+                },
+                {
+                    "id": 15,
+                    "word": "critical",
+                    "meaning": "a.关键性的；批评的"
+                },
+                {
+                    "id": 16,
+                    "word": "hypercritical",
+                    "meaning": "a.批评苛刻的，吹毛求疵的"
+                },
+                {
+                    "id": 17,
+                    "word": "critique",
+                    "meaning": "n.评论性文章（书籍），评论"
+                },
+                {
+                    "id": 18,
+                    "word": "hypocrisy",
+                    "meaning": "n.伪善，虚伪"
+                },
+                {
+                    "id": 19,
+                    "word": "stress",
+                    "meaning": "n.压力；强调；应力；重音 vt.强调，重读"
+                },
+                {
+                    "id": 20,
+                    "word": "stressful",
+                    "meaning": "a.有压力的"
+                },
+                {
+                    "id": 21,
+                    "word": "strain",
+                    "meaning": "n.拉紧；极度紧张；张力；扭伤；（常 pl.）旋律；品种，气质 vt.扭伤；拉紧 vi.尽力"
+                },
+                {
+                    "id": 22,
+                    "word": "strained",
+                    "meaning": "a.勉强的，紧张的；心力交瘁的"
+                },
+                {
+                    "id": 23,
+                    "word": "fierce",
+                    "meaning": "a.凶猛的；狂热的；猛烈的"
+                },
+                {
+                    "id": 24,
+                    "word": "ferocity",
+                    "meaning": "n.凶恶，残暴"
+                },
+                {
+                    "id": 25,
+                    "word": "savage",
+                    "meaning": "a.残暴的；野蛮的 n.野蛮人 vt.（狗等）乱咬；激烈抨击"
+                },
+                {
+                    "id": 26,
+                    "word": "vulgar",
+                    "meaning": "a.粗野的；粗俗的"
+                },
+                {
+                    "id": 27,
+                    "word": "scare",
+                    "meaning": "n.惊恐 vt.使害怕 vi.受惊吓"
+                },
+                {
+                    "id": 28,
+                    "word": "scary",
+                    "meaning": "a.可怕的；惊慌的；易受惊的"
+                },
+                {
+                    "id": 29,
+                    "word": "coward",
+                    "meaning": "n.胆小鬼，懦夫"
+                },
+                {
+                    "id": 30,
+                    "word": "alcohol",
+                    "meaning": "n.酒精"
+                },
+                {
+                    "id": 31,
+                    "word": "alcoholic",
+                    "meaning": "a.酒精的，含有酒精的 n.酗酒者"
+                },
+                {
+                    "id": 32,
+                    "word": "addict",
+                    "meaning": "n.入迷的人 vt.使成瘾"
+                },
+                {
+                    "id": 33,
+                    "word": "addictive",
+                    "meaning": "a.（使人）上瘾的，沉迷的"
+                },
+                {
+                    "id": 34,
+                    "word": "restraint",
+                    "meaning": "n.抑制；约束措施"
+                },
+                {
+                    "id": 35,
+                    "word": "confine",
+                    "meaning": "vt.限制；使不外出 n.（pl.）界限"
+                },
+                {
+                    "id": 36,
+                    "word": "forbid",
+                    "meaning": "vt.禁止"
+                },
+                {
+                    "id": 37,
+                    "word": "forbidding",
+                    "meaning": "a.样子冷淡的；严峻的；令人生畏的"
+                },
+                {
+                    "id": 38,
+                    "word": "magnet",
+                    "meaning": "n.磁铁；有吸引力的人（或事物）"
+                },
+                {
+                    "id": 39,
+                    "word": "magnetic",
+                    "meaning": "a.磁的；有吸引力的"
+                },
+                {
+                    "id": 40,
+                    "word": "fantasy",
+                    "meaning": "n.想象，幻想"
+                },
+                {
+                    "id": 41,
+                    "word": "fantasize",
+                    "meaning": "v.想象，幻想"
+                },
+                {
+                    "id": 42,
+                    "word": "dynamic",
+                    "meaning": "a.有活力的；不断变化（或增长）的；动力的 n.动力；（-s）动力学"
+                },
+                {
+                    "id": 43,
+                    "word": "thermodynamics",
+                    "meaning": "n.热力学"
+                },
+                {
+                    "id": 44,
+                    "word": "generalize",
+                    "meaning": "v.概括，推断"
+                },
+                {
+                    "id": 45,
+                    "word": "generate",
+                    "meaning": "vt.产生；引起"
+                },
+                {
+                    "id": 46,
+                    "word": "degenerate",
+                    "meaning": "vi.衰退，堕落 a.衰退的 n.堕落者"
+                },
+                {
+                    "id": 47,
+                    "word": "generative",
+                    "meaning": "a.生成的"
+                },
+                {
+                    "id": 48,
+                    "word": "generic",
+                    "meaning": "a.一般的，普通的，共有的"
+                },
+                {
+                    "id": 49,
+                    "word": "syntax",
+                    "meaning": "n.句法，语句结构"
+                },
+                {
+                    "id": 50,
+                    "word": "synonym",
+                    "meaning": "n.同义词"
+                },
+                {
+                    "id": 51,
+                    "word": "assume",
+                    "meaning": "vt.假定；担任"
+                },
+                {
+                    "id": 52,
+                    "word": "unassuming",
+                    "meaning": "a.不爱表现自己的，谦虚的"
+                },
+                {
+                    "id": 53,
+                    "word": "volunteer",
+                    "meaning": "n.志愿者；志愿兵 v.自愿"
+                },
+                {
+                    "id": 54,
+                    "word": "voluntary",
+                    "meaning": "a.自愿的；无偿的，义务的"
+                },
+                {
+                    "id": 55,
+                    "word": "obligation",
+                    "meaning": "n.义务，责任"
+                },
+                {
+                    "id": 56,
+                    "word": "penalty",
+                    "meaning": "n.处罚，罚金"
+                },
+                {
+                    "id": 57,
+                    "word": "penalize",
+                    "meaning": "v.对...处以刑罚，（使）处罚"
+                },
+                {
+                    "id": 58,
+                    "word": "subjective",
+                    "meaning": "a.主观（上）的"
+                },
+                {
+                    "id": 59,
+                    "word": "subjection",
+                    "meaning": "n.征服，臣服"
+                },
+                {
+                    "id": 60,
+                    "word": "ceremony",
+                    "meaning": "n.典礼；礼节"
+                },
+                {
+                    "id": 61,
+                    "word": "ceremonious",
+                    "meaning": "a.讲究礼节的，拘泥于形式的"
+                },
+                {
+                    "id": 62,
+                    "word": "luxury",
+                    "meaning": "n.奢侈；奢侈品"
+                },
+                {
+                    "id": 63,
+                    "word": "luxuriant",
+                    "meaning": "a.繁密的，茂盛的"
+                },
+                {
+                    "id": 64,
+                    "word": "pest",
+                    "meaning": "n.害虫；讨厌的人"
+                },
+                {
+                    "id": 65,
+                    "word": "pesticide",
+                    "meaning": "n.杀虫剂"
+                },
+                {
+                    "id": 66,
+                    "word": "orchestra",
+                    "meaning": "n.管弦乐队"
+                },
+                {
+                    "id": 67,
+                    "word": "arch",
+                    "meaning": "n.拱，拱门 v.（使）成拱形"
+                },
+                {
+                    "id": 68,
+                    "word": "reconcile",
+                    "meaning": "vt.使协调；使和解；（to）使顺从（于）"
+                },
+                {
+                    "id": 69,
+                    "word": "reconciliation",
+                    "meaning": "n.和解，调和"
+                },
+                {
+                    "id": 70,
+                    "word": "resign",
+                    "meaning": "vi.辞职 vt.放弃；（to）使顺从"
+                },
+                {
+                    "id": 71,
+                    "word": "resigned",
+                    "meaning": "a.顺从的，逆来顺受的"
+                },
+                {
+                    "id": 72,
+                    "word": "impression",
+                    "meaning": "n.印象；印记"
+                },
+                {
+                    "id": 73,
+                    "word": "impressionable",
+                    "meaning": "a.易受影响的"
+                },
+                {
+                    "id": 74,
+                    "word": "parallel",
+                    "meaning": "n.相似处；平行线；纬线 a.平行的；类似的；并列的 vt.与...相似"
+                },
+                {
+                    "id": 75,
+                    "word": "unparalleled",
+                    "meaning": "a.无比的，无双的"
+                },
+                {
+                    "id": 76,
+                    "word": "scholar",
+                    "meaning": "n.学者；奖学金获得者"
+                },
+                {
+                    "id": 77,
+                    "word": "scholastic",
+                    "meaning": "a.学校的，学业的；学究的"
+                },
+                {
+                    "id": 78,
+                    "word": "academic",
+                    "meaning": "a.学院的；纯理论的 n.大学教师"
+                },
+                {
+                    "id": 79,
+                    "word": "register",
+                    "meaning": "n.登记；登记表 v.登记；指示；表示；注意到；挂号"
+                },
+                {
+                    "id": 80,
+                    "word": "procedure",
+                    "meaning": "n.程序，步骤"
+                }
+            ]
+        },
+        "3": {
+            "chapter": "Lesson 3",
+            "words": [
+                {
+                    "id": 1,
+                    "word": "literacy",
+                    "meaning": "n.有文化，读写能力"
+                },
+                {
+                    "id": 2,
+                    "word": "literal",
+                    "meaning": "a.照字面的；逐字的"
+                },
+                {
+                    "id": 3,
+                    "word": "literally",
+                    "meaning": "ad.逐字地；确实地；简直"
+                },
+                {
+                    "id": 4,
+                    "word": "literate",
+                    "meaning": "a.有读写能力的；有学识的"
+                },
+                {
+                    "id": 5,
+                    "word": "sage",
+                    "meaning": "a.贤明的，明智的 n.贤哲，圣人"
+                },
+                {
+                    "id": 6,
+                    "word": "sagacious",
+                    "meaning": "a.聪敏的，睿智的"
+                },
+                {
+                    "id": 7,
+                    "word": "volume",
+                    "meaning": "n.卷，册；体积；音量"
+                },
+                {
+                    "id": 8,
+                    "word": "voluminous",
+                    "meaning": "a.（衣物）肥大的；（指文字）大量的"
+                },
+                {
+                    "id": 9,
+                    "word": "delivery",
+                    "meaning": "n.投递；投递的邮件；分娩；演讲"
+                },
+                {
+                    "id": 10,
+                    "word": "deliverance",
+                    "meaning": "n.解救，拯救"
+                },
+                {
+                    "id": 11,
+                    "word": "transfer",
+                    "meaning": "v.转移；调动，转学；转车 n.转移；转车"
+                },
+                {
+                    "id": 12,
+                    "word": "transcend",
+                    "meaning": "vt.超出，超越...的范围"
+                },
+                {
+                    "id": 13,
+                    "word": "nuclear",
+                    "meaning": "a.核能的；核心的"
+                },
+                {
+                    "id": 14,
+                    "word": "nucleus",
+                    "meaning": "n.（原子）核；核心"
+                },
+                {
+                    "id": 15,
+                    "word": "thermonuclear",
+                    "meaning": "a.热核反应的，热核的"
+                },
+                {
+                    "id": 16,
+                    "word": "intrude",
+                    "meaning": "v.侵入；把...强加于"
+                },
+                {
+                    "id": 17,
+                    "word": "intrusive",
+                    "meaning": "a.入侵的，闯入的；打扰的"
+                },
+                {
+                    "id": 18,
+                    "word": "detach",
+                    "meaning": "vt.（from）拆卸，使分离"
+                },
+                {
+                    "id": 19,
+                    "word": "detachable",
+                    "meaning": "a.可拆卸的，可分开的"
+                },
+                {
+                    "id": 20,
+                    "word": "deposit",
+                    "meaning": "n.订金；存款；沉积物 vt.使沉淀；存放；储蓄"
+                },
+                {
+                    "id": 21,
+                    "word": "supplement",
+                    "meaning": "n.补充（物）；增刊 vt.补充"
+                },
+                {
+                    "id": 22,
+                    "word": "supplementary",
+                    "meaning": "a.补充的"
+                },
+                {
+                    "id": 23,
+                    "word": "complement",
+                    "meaning": "n.补充；编制名额；补（足）语 vt.补充"
+                },
+                {
+                    "id": 24,
+                    "word": "complementary",
+                    "meaning": "a.补充的，补足的"
+                },
+                {
+                    "id": 25,
+                    "word": "tyranny",
+                    "meaning": "n.暴政，专制；专横"
+                },
+                {
+                    "id": 26,
+                    "word": "tyrannical",
+                    "meaning": "a.（似）暴君的，专制的，暴虐的"
+                },
+                {
+                    "id": 27,
+                    "word": "tyrannize",
+                    "meaning": "v.施行暴政，虐待"
+                },
+                {
+                    "id": 28,
+                    "word": "impede",
+                    "meaning": "v.阻碍，妨碍"
+                },
+                {
+                    "id": 29,
+                    "word": "periodical",
+                    "meaning": "n.期刊 a.定期的"
+                },
+                {
+                    "id": 30,
+                    "word": "periodic",
+                    "meaning": "a.周期的，定期的"
+                },
+                {
+                    "id": 31,
+                    "word": "neutral",
+                    "meaning": "a.中立的；中性的"
+                },
+                {
+                    "id": 32,
+                    "word": "neutralize",
+                    "meaning": "v.使中立化；使无效；中和"
+                },
+                {
+                    "id": 33,
+                    "word": "tone",
+                    "meaning": "n.语气；音调；风格；色调 vt.（up）增强"
+                },
+                {
+                    "id": 34,
+                    "word": "feminine",
+                    "meaning": "a.女性的；女子气的"
+                },
+                {
+                    "id": 35,
+                    "word": "feminist",
+                    "meaning": "n.男女平等主义者 a.主张男女平等的"
+                },
+                {
+                    "id": 36,
+                    "word": "wrap",
+                    "meaning": "vt.包，裹 n.披肩，围巾"
+                },
+                {
+                    "id": 37,
+                    "word": "possess",
+                    "meaning": "vt.拥有"
+                },
+                {
+                    "id": 38,
+                    "word": "self-possessed",
+                    "meaning": "a.沉着的，冷静的；有信心的"
+                },
+                {
+                    "id": 39,
+                    "word": "capacity",
+                    "meaning": "n.容量；能力；身份"
+                },
+                {
+                    "id": 40,
+                    "word": "incapacitate",
+                    "meaning": "v.使无能力，使失去能力"
+                },
+                {
+                    "id": 41,
+                    "word": "aware",
+                    "meaning": "a.意识到的"
+                },
+                {
+                    "id": 42,
+                    "word": "unawares",
+                    "meaning": "ad.吃惊地，未料到地；无意中"
+                },
+                {
+                    "id": 43,
+                    "word": "animate",
+                    "meaning": "a.有生命的；有生气的 v.赋予生命，使活泼"
+                },
+                {
+                    "id": 44,
+                    "word": "flexible",
+                    "meaning": "a.易弯曲的；灵活的"
+                },
+                {
+                    "id": 45,
+                    "word": "flex",
+                    "meaning": "n.皮线，花线 v.弯曲，伸展"
+                },
+                {
+                    "id": 46,
+                    "word": "qualify",
+                    "meaning": "v.（使）胜任，（使）具有资格"
+                },
+                {
+                    "id": 47,
+                    "word": "qualifier",
+                    "meaning": "n.修饰词（如形容词、副词）；合格者"
+                },
+                {
+                    "id": 48,
+                    "word": "legal",
+                    "meaning": "a.法律（上）的；合法的"
+                },
+                {
+                    "id": 49,
+                    "word": "legalize",
+                    "meaning": "v.使...合法化"
+                },
+                {
+                    "id": 50,
+                    "word": "jeopardize",
+                    "meaning": "vt.危及"
+                },
+                {
+                    "id": 51,
+                    "word": "legitimate",
+                    "meaning": "a.合情合理的；合法的 vt.使合法"
+                },
+                {
+                    "id": 52,
+                    "word": "legitimize",
+                    "meaning": "v.使合法；给（孩子）合法地位"
+                },
+                {
+                    "id": 53,
+                    "word": "notify",
+                    "meaning": "vt.通知"
+                },
+                {
+                    "id": 54,
+                    "word": "notification",
+                    "meaning": "n.通知，告示；通知书"
+                },
+                {
+                    "id": 55,
+                    "word": "notorious",
+                    "meaning": "a.臭名昭著的"
+                },
+                {
+                    "id": 56,
+                    "word": "rare",
+                    "meaning": "a.稀有的；珍奇的；稀薄的；煎得嫩的"
+                },
+                {
+                    "id": 57,
+                    "word": "rarity",
+                    "meaning": "n.稀有，罕见"
+                },
+                {
+                    "id": 58,
+                    "word": "available",
+                    "meaning": "a.现成可使用的；可得到的"
+                },
+                {
+                    "id": 59,
+                    "word": "avail",
+                    "meaning": "n.效用 v.使...有价值"
+                },
+                {
+                    "id": 60,
+                    "word": "futile",
+                    "meaning": "a.无效的"
+                },
+                {
+                    "id": 61,
+                    "word": "futility",
+                    "meaning": "n.无效，无用，无益"
+                },
+                {
+                    "id": 62,
+                    "word": "novel",
+                    "meaning": "n.（长篇）小说 a.新颖的"
+                },
+                {
+                    "id": 63,
+                    "word": "novelty",
+                    "meaning": "n.新奇事物；新奇"
+                },
+                {
+                    "id": 64,
+                    "word": "convert",
+                    "meaning": "v.（使）转变；（使）改变信仰"
+                },
+                {
+                    "id": 65,
+                    "word": "convertible",
+                    "meaning": "a.可改变的，可转换的；可兑换的"
+                },
+                {
+                    "id": 66,
+                    "word": "occupy",
+                    "meaning": "vt.占用；使忙碌"
+                },
+                {
+                    "id": 67,
+                    "word": "absent",
+                    "meaning": "a.缺席的；不存在的；心不在焉的"
+                },
+                {
+                    "id": 68,
+                    "word": "accompany",
+                    "meaning": "vt.陪伴；伴随；为...伴奏（或伴唱）"
+                },
+                {
+                    "id": 69,
+                    "word": "compose",
+                    "meaning": "vt.组成；创作；使平静"
+                },
+                {
+                    "id": 70,
+                    "word": "constitute",
+                    "meaning": "vt.组成；设立，任命"
+                },
+                {
+                    "id": 71,
+                    "word": "constituent",
+                    "meaning": "n.选民；成分 a.组成的"
+                },
+                {
+                    "id": 72,
+                    "word": "nutrition",
+                    "meaning": "n.营养"
+                },
+                {
+                    "id": 73,
+                    "word": "nutrient",
+                    "meaning": "a.营养的，滋养的 n.营养物品，养分"
+                },
+                {
+                    "id": 74,
+                    "word": "benefit",
+                    "meaning": "n.益处；救济金 vt.有益于 vi.得益"
+                },
+                {
+                    "id": 75,
+                    "word": "beneficial",
+                    "meaning": "a.有益的"
+                },
+                {
+                    "id": 76,
+                    "word": "fancy",
+                    "meaning": "vt./n.喜欢；想象（力） a.昂贵的；别致的"
+                },
+                {
+                    "id": 77,
+                    "word": "preference",
+                    "meaning": "n.偏爱；偏爱的事物（或人）"
+                },
+                {
+                    "id": 78,
+                    "word": "preferential",
+                    "meaning": "a.优先的，优待的，优惠的"
+                },
+                {
+                    "id": 79,
+                    "word": "partial",
+                    "meaning": "a.部分的；（to）偏爱的；（to）偏心的"
+                },
+                {
+                    "id": 80,
+                    "word": "passion",
+                    "meaning": "n.激情；酷爱"
+                },
+                {
+                    "id": 81,
+                    "word": "impassioned",
+                    "meaning": "a.充满激情的，热烈的"
+                },
+                {
+                    "id": 82,
+                    "word": "impassive",
+                    "meaning": "a.无动于衷的，无表情的；冷漠的"
+                }
+            ]
+        },
+        "4": {
+            "chapter": "Lesson 4",
+            "words": [
+                {
+                    "id": 1,
+                    "word": "zeal",
+                    "meaning": "n. 热心"
+                },
+                {
+                    "id": 2,
+                    "word": "zealot",
+                    "meaning": "n. （对宗教或政治）极热心的人，狂热者"
+                },
+                {
+                    "id": 3,
+                    "word": "idol",
+                    "meaning": "n. 神像；偶像，崇拜的对象"
+                },
+                {
+                    "id": 4,
+                    "word": "idolize",
+                    "meaning": "v. 将...当作偶像崇拜，极度喜爱（仰慕）"
+                },
+                {
+                    "id": 5,
+                    "word": "mystery",
+                    "meaning": "n. 神秘（性），神秘的人（或物）"
+                },
+                {
+                    "id": 6,
+                    "word": "intimate",
+                    "meaning": "a. 亲密的；私人的 n. 密友 vt. 暗示"
+                },
+                {
+                    "id": 7,
+                    "word": "intimacy",
+                    "meaning": "n. 亲密，亲切，关系密切"
+                },
+                {
+                    "id": 8,
+                    "word": "envy",
+                    "meaning": "vt. 妒忌 n. 羡慕；妒忌的对象，羡慕的目标"
+                },
+                {
+                    "id": 9,
+                    "word": "account",
+                    "meaning": "n. 记述；账户；解释 vi. （for）说明...的原因；占"
+                },
+                {
+                    "id": 10,
+                    "word": "accountant",
+                    "meaning": "n. 会计师"
+                },
+                {
+                    "id": 11,
+                    "word": "calculate",
+                    "meaning": "vt. 计算；估计；计划"
+                },
+                {
+                    "id": 12,
+                    "word": "estimate",
+                    "meaning": "n. 估计；评价 vt. 估计"
+                },
+                {
+                    "id": 13,
+                    "word": "estimable",
+                    "meaning": "a. 值得尊敬的"
+                },
+                {
+                    "id": 14,
+                    "word": "inestimable",
+                    "meaning": "a. 无法评估的，无价的，非常贵重的"
+                },
+                {
+                    "id": 15,
+                    "word": "appraise",
+                    "meaning": "vt. 评定，鉴定，评价"
+                },
+                {
+                    "id": 16,
+                    "word": "appraisal",
+                    "meaning": "n. 估量，评价"
+                },
+                {
+                    "id": 17,
+                    "word": "admission",
+                    "meaning": "n. 准许进入；入场费；承认"
+                },
+                {
+                    "id": 18,
+                    "word": "admissible",
+                    "meaning": "a. 可以接受的，可以加以考虑的，可容许的"
+                },
+                {
+                    "id": 19,
+                    "word": "permission",
+                    "meaning": "n. 许可"
+                },
+                {
+                    "id": 20,
+                    "word": "permissible",
+                    "meaning": "a. 许可的"
+                },
+                {
+                    "id": 21,
+                    "word": "brief",
+                    "meaning": "a. 短暂的；简短的 vt. 向...介绍基本情况 n. 摘要"
+                },
+                {
+                    "id": 22,
+                    "word": "brevity",
+                    "meaning": "n. 简短，简洁，短暂"
+                },
+                {
+                    "id": 23,
+                    "word": "abbreviate",
+                    "meaning": "v. 缩短（字、词组等），缩写"
+                },
+                {
+                    "id": 24,
+                    "word": "browse",
+                    "meaning": "vi. 浏览；吃草"
+                },
+                {
+                    "id": 25,
+                    "word": "Catholic",
+                    "meaning": "a. 天主教的；（c-）普遍的 n. 天主教徒"
+                },
+                {
+                    "id": 26,
+                    "word": "holy",
+                    "meaning": "a. 神圣的；虔诚的"
+                },
+                {
+                    "id": 27,
+                    "word": "doctrine",
+                    "meaning": "n. 教义，教条"
+                },
+                {
+                    "id": 28,
+                    "word": "indoctrinate",
+                    "meaning": "v. 向...灌输，教导"
+                },
+                {
+                    "id": 29,
+                    "word": "command",
+                    "meaning": "n./vt. 命令；指挥；掌握 vt. 值得；俯瞰"
+                },
+                {
+                    "id": 30,
+                    "word": "constant",
+                    "meaning": "a. 始终如一的；不断的；忠实的 n. 恒量"
+                },
+                {
+                    "id": 31,
+                    "word": "intermittent",
+                    "meaning": "a. 断断续续的"
+                },
+                {
+                    "id": 32,
+                    "word": "resume",
+                    "meaning": "v. （中断后）重新开始，恢复 n. 摘要；简历"
+                },
+                {
+                    "id": 33,
+                    "word": "incredible",
+                    "meaning": "a. 不可信的；难以置信的"
+                },
+                {
+                    "id": 34,
+                    "word": "incredulous",
+                    "meaning": "a. 不轻信的，怀疑的，不相信的"
+                },
+                {
+                    "id": 35,
+                    "word": "cynical",
+                    "meaning": "a. 愤世嫉俗的，怀疑的"
+                },
+                {
+                    "id": 36,
+                    "word": "extreme",
+                    "meaning": "a. 极度的；末端的 n. 极端"
+                },
+                {
+                    "id": 37,
+                    "word": "extremity",
+                    "meaning": "n. 极端，末端，极限，尽头"
+                },
+                {
+                    "id": 38,
+                    "word": "extremities",
+                    "meaning": "n. （人的）肢体，手足；极端残暴的行为"
+                },
+                {
+                    "id": 39,
+                    "word": "deduct",
+                    "meaning": "vt. 扣除"
+                },
+                {
+                    "id": 40,
+                    "word": "deductible",
+                    "meaning": "a. 可扣除的 n. 扣除额"
+                },
+                {
+                    "id": 41,
+                    "word": "discern",
+                    "meaning": "vt. 看出；识别"
+                },
+                {
+                    "id": 42,
+                    "word": "discernible",
+                    "meaning": "a. 依稀可辨的"
+                },
+                {
+                    "id": 43,
+                    "word": "draft/draught",
+                    "meaning": "n. 草稿；汇票；征兵；通风 vt. 起草；征募"
+                },
+                {
+                    "id": 44,
+                    "word": "draughty/drafty",
+                    "meaning": "a. 通风的，有穿堂风的"
+                },
+                {
+                    "id": 45,
+                    "word": "eccentric",
+                    "meaning": "a. 古怪的 n. 古怪的人"
+                },
+                {
+                    "id": 46,
+                    "word": "eccentricity",
+                    "meaning": "n. 古怪，怪癖"
+                },
+                {
+                    "id": 47,
+                    "word": "abnormal",
+                    "meaning": "a. 反常的"
+                },
+                {
+                    "id": 48,
+                    "word": "ego",
+                    "meaning": "n. 自我，自尊"
+                },
+                {
+                    "id": 49,
+                    "word": "egotism",
+                    "meaning": "n. 自我中心；自负，自大"
+                },
+                {
+                    "id": 50,
+                    "word": "egocentric",
+                    "meaning": "a. 自我中心的，自私自利的"
+                },
+                {
+                    "id": 51,
+                    "word": "elect",
+                    "meaning": "v. 选举；选择"
+                },
+                {
+                    "id": 52,
+                    "word": "election",
+                    "meaning": "n. 选举"
+                },
+                {
+                    "id": 53,
+                    "word": "element",
+                    "meaning": "n. 元素；成分；（pl.）基础；（pl.）自然力"
+                },
+                {
+                    "id": 54,
+                    "word": "empirical",
+                    "meaning": "a. 经验的"
+                },
+                {
+                    "id": 55,
+                    "word": "erase",
+                    "meaning": "vt. 擦掉，清除"
+                },
+                {
+                    "id": 56,
+                    "word": "expire",
+                    "meaning": "vt. 期满；断气"
+                },
+                {
+                    "id": 57,
+                    "word": "expiry/expiration",
+                    "meaning": "n. 终止，期满，届期"
+                },
+                {
+                    "id": 58,
+                    "word": "extract",
+                    "meaning": "vt. 抽出；提取；获得；摘录 n. 摘录；提出物"
+                },
+                {
+                    "id": 59,
+                    "word": "federal",
+                    "meaning": "a. 联邦的，联邦政府的"
+                },
+                {
+                    "id": 60,
+                    "word": "offhand",
+                    "meaning": "a. 即席的；草率的 ad. 即席地"
+                },
+                {
+                    "id": 61,
+                    "word": "handy",
+                    "meaning": "a. 方便的；手边的；手巧的"
+                },
+                {
+                    "id": 62,
+                    "word": "handyman",
+                    "meaning": "n. 善于小修补的人；受雇干零碎杂活的人"
+                },
+                {
+                    "id": 63,
+                    "word": "versatile",
+                    "meaning": "a. 多才多艺的；多功能的"
+                },
+                {
+                    "id": 64,
+                    "word": "versatility",
+                    "meaning": "n. 多才多艺；多功能"
+                },
+                {
+                    "id": 65,
+                    "word": "digest",
+                    "meaning": "vt. 消化；吸收 n. 文摘"
+                },
+                {
+                    "id": 66,
+                    "word": "radiate",
+                    "meaning": "v. 发出（光或热）；流露"
+                },
+                {
+                    "id": 67,
+                    "word": "radiant",
+                    "meaning": "a. 容光焕发的；光芒四射的；辐射的"
+                },
+                {
+                    "id": 68,
+                    "word": "glorious",
+                    "meaning": "a. 光荣的；壮丽的；令人愉快的"
+                },
+                {
+                    "id": 69,
+                    "word": "offend",
+                    "meaning": "vt. 冒犯，伤害...的感情；使厌恶，违反"
+                },
+                {
+                    "id": 70,
+                    "word": "offensive",
+                    "meaning": "a. 冒犯的；攻击性的 n. 进攻"
+                },
+                {
+                    "id": 71,
+                    "word": "intricate",
+                    "meaning": "a. 错综复杂的"
+                },
+                {
+                    "id": 72,
+                    "word": "intricacy",
+                    "meaning": "n. 错综复杂，错综复杂的事物"
+                },
+                {
+                    "id": 73,
+                    "word": "vulnerable",
+                    "meaning": "a. 易受伤的；易受攻击的"
+                },
+                {
+                    "id": 74,
+                    "word": "reverse",
+                    "meaning": "vt. 撤销；使位置颠倒；使反向 vi. 倒转 n. 相反情况；反面；挫折 a. 相反的"
+                },
+                {
+                    "id": 75,
+                    "word": "item",
+                    "meaning": "n. 条，条款，项目；（新闻等的）一条"
+                },
+                {
+                    "id": 76,
+                    "word": "mask",
+                    "meaning": "n. 面具，伪装 vt. 用面具遮住；掩饰"
+                },
+                {
+                    "id": 77,
+                    "word": "military",
+                    "meaning": "a. 军事的 n. （the ~）军队"
+                },
+                {
+                    "id": 78,
+                    "word": "paramilitary",
+                    "meaning": "a. 准军事的"
+                },
+                {
+                    "id": 79,
+                    "word": "militant",
+                    "meaning": "a. 好斗的 n. 激进分子"
+                }
+            ]
+        },
+        "5": {
+            "chapter": "Lesson 5",
+            "words": [
+                {
+                    "id": 1,
+                    "word": "victim",
+                    "meaning": "n. 牺牲品，受害者"
+                },
+                {
+                    "id": 2,
+                    "word": "victimize",
+                    "meaning": "v. 责怪（处罚）某人不当；欺侮某人"
+                },
+                {
+                    "id": 3,
+                    "word": "observe",
+                    "meaning": "vt. 注意到；观察；评说；遵守"
+                },
+                {
+                    "id": 4,
+                    "word": "orbit",
+                    "meaning": "n. 轨道 v. （绕...）做轨道运行"
+                },
+                {
+                    "id": 5,
+                    "word": "patron",
+                    "meaning": "n. 资助人；老主顾"
+                },
+                {
+                    "id": 6,
+                    "word": "patronage",
+                    "meaning": "n. 赞助，资助；光顾；官职任命权"
+                },
+                {
+                    "id": 7,
+                    "word": "patronize",
+                    "meaning": "v. 保护，赞助；对...以恩人自居；惠顾"
+                },
+                {
+                    "id": 8,
+                    "word": "intermediate",
+                    "meaning": "a. 中间的；中级的"
+                },
+                {
+                    "id": 9,
+                    "word": "peril",
+                    "meaning": "n. 严重的危险；危险的事物"
+                },
+                {
+                    "id": 10,
+                    "word": "perilous",
+                    "meaning": "a. 多险的，危险的"
+                },
+                {
+                    "id": 11,
+                    "word": "imperil",
+                    "meaning": "vt. 危及，使陷于危险"
+                },
+                {
+                    "id": 12,
+                    "word": "pirate",
+                    "meaning": "n. 非法盗印者；海盗 vt. 盗用，非法盗印"
+                },
+                {
+                    "id": 13,
+                    "word": "piracy",
+                    "meaning": "n. 海盗的掠夺；非法复制"
+                },
+                {
+                    "id": 14,
+                    "word": "mature",
+                    "meaning": "a. 成熟的；成年人的；深思熟虑的；（票据等）到期的 v. （使）成熟"
+                },
+                {
+                    "id": 15,
+                    "word": "premature",
+                    "meaning": "a. 比预期时间早的；不成熟的"
+                },
+                {
+                    "id": 16,
+                    "word": "project",
+                    "meaning": "n. 计划；课题；工程 vt. 投射；使伸出；设计"
+                },
+                {
+                    "id": 17,
+                    "word": "propose",
+                    "meaning": "v. 提议；提名；打算；求婚"
+                },
+                {
+                    "id": 18,
+                    "word": "proposition",
+                    "meaning": "n. 论点；建议；命题"
+                },
+                {
+                    "id": 19,
+                    "word": "prospect",
+                    "meaning": "n. 前景；景象；有希望的候选人"
+                },
+                {
+                    "id": 20,
+                    "word": "prospective",
+                    "meaning": "a. 预期的，可能的"
+                },
+                {
+                    "id": 21,
+                    "word": "provision",
+                    "meaning": "n. 供应；准备；条款；（pl.）给养"
+                },
+                {
+                    "id": 22,
+                    "word": "provisional",
+                    "meaning": "a. 暂时的，临时的"
+                },
+                {
+                    "id": 23,
+                    "word": "rape",
+                    "meaning": "vt./n. 强奸"
+                },
+                {
+                    "id": 24,
+                    "word": "repel",
+                    "meaning": "vt. 使厌恶；击退；排斥"
+                },
+                {
+                    "id": 25,
+                    "word": "repellent",
+                    "meaning": "a. 令人厌恶的；防...的 n. 驱虫剂；防水剂"
+                },
+                {
+                    "id": 26,
+                    "word": "refute",
+                    "meaning": "vt. 驳斥，驳倒"
+                },
+                {
+                    "id": 27,
+                    "word": "neglect",
+                    "meaning": "vt. 忽略；疏忽 n. 疏忽"
+                },
+                {
+                    "id": 28,
+                    "word": "negligible",
+                    "meaning": "a. 微不足道的"
+                },
+                {
+                    "id": 29,
+                    "word": "royal",
+                    "meaning": "a. 王室的"
+                },
+                {
+                    "id": 30,
+                    "word": "fulfil(l)",
+                    "meaning": "vt. 实现；满足"
+                },
+                {
+                    "id": 31,
+                    "word": "senator",
+                    "meaning": "n. 参议员"
+                },
+                {
+                    "id": 32,
+                    "word": "pension",
+                    "meaning": "n. 养老金 vt. 发给...养老金"
+                },
+                {
+                    "id": 33,
+                    "word": "shrink",
+                    "meaning": "v. （使）收缩；退缩"
+                },
+                {
+                    "id": 34,
+                    "word": "shrinkage",
+                    "meaning": "n. 收缩，缩水"
+                },
+                {
+                    "id": 35,
+                    "word": "supreme",
+                    "meaning": "a. 最高的，至上的；极度的"
+                },
+                {
+                    "id": 36,
+                    "word": "tribute",
+                    "meaning": "n. 称赞；贡品"
+                },
+                {
+                    "id": 37,
+                    "word": "tributary",
+                    "meaning": "n. 支流；进贡者（国），附庸国 a. 支流的；附庸的"
+                },
+                {
+                    "id": 38,
+                    "word": "retribution",
+                    "meaning": "n. 报应，惩罚"
+                },
+                {
+                    "id": 39,
+                    "word": "trivial",
+                    "meaning": "a. 琐碎的，不重要的"
+                },
+                {
+                    "id": 40,
+                    "word": "screw",
+                    "meaning": "n. 螺丝（钉） vt. 用螺丝固定；拧"
+                },
+                {
+                    "id": 41,
+                    "word": "unscrew",
+                    "meaning": "v. 旋松（螺丝、螺母等）"
+                },
+                {
+                    "id": 42,
+                    "word": "fabricate",
+                    "meaning": "vt. 捏造，伪造；建造"
+                },
+                {
+                    "id": 43,
+                    "word": "prefabricate",
+                    "meaning": "v. （用预制构件）组装"
+                },
+                {
+                    "id": 44,
+                    "word": "vocal",
+                    "meaning": "a. 直言不讳的；嗓音的 n. （常 pl.）声乐节目"
+                },
+                {
+                    "id": 45,
+                    "word": "vocalization",
+                    "meaning": "n. 说话，唱歌，发声"
+                },
+                {
+                    "id": 46,
+                    "word": "assert",
+                    "meaning": "vt. 断言；坚持"
+                },
+                {
+                    "id": 47,
+                    "word": "locate",
+                    "meaning": "vt. 探明，找出；使坐落于"
+                },
+                {
+                    "id": 48,
+                    "word": "dislocate",
+                    "meaning": "v. 使脱位，使脱臼；扰乱"
+                },
+                {
+                    "id": 49,
+                    "word": "moisture",
+                    "meaning": "n. 潮湿，湿气"
+                },
+                {
+                    "id": 50,
+                    "word": "moisturize",
+                    "meaning": "v. 给...增加水分"
+                },
+                {
+                    "id": 51,
+                    "word": "negotiate",
+                    "meaning": "vt. 协商；顺利通过 vi. 协商"
+                },
+                {
+                    "id": 52,
+                    "word": "dispute",
+                    "meaning": "n. 争论，争吵 vt. 对...表示异议，就...发生争论 vi. 争论，争吵"
+                },
+                {
+                    "id": 53,
+                    "word": "indisputable",
+                    "meaning": "a. 不可争辩的，不容置疑的，无可否认的"
+                },
+                {
+                    "id": 54,
+                    "word": "indispensable",
+                    "meaning": "a. （to, for）必不可少的"
+                },
+                {
+                    "id": 55,
+                    "word": "dispensable",
+                    "meaning": "a. 不必要的，不重要的"
+                },
+                {
+                    "id": 56,
+                    "word": "necessity",
+                    "meaning": "n. 必需品；必要"
+                },
+                {
+                    "id": 57,
+                    "word": "necessitate",
+                    "meaning": "vt. 需要"
+                },
+                {
+                    "id": 58,
+                    "word": "polar",
+                    "meaning": "a. 地极的；磁极的；正好相反的"
+                },
+                {
+                    "id": 59,
+                    "word": "polarity",
+                    "meaning": "n. 极性，磁性引力；（性格）正相反"
+                },
+                {
+                    "id": 60,
+                    "word": "joint",
+                    "meaning": "a. 连接的；共同的 n. 关节；接头"
+                },
+                {
+                    "id": 61,
+                    "word": "disjointed",
+                    "meaning": "a. 不连贯的，支离破碎的"
+                },
+                {
+                    "id": 62,
+                    "word": "flaw",
+                    "meaning": "n. 缺点，瑕疵"
+                },
+                {
+                    "id": 63,
+                    "word": "flawless",
+                    "meaning": "a. 无瑕的，完美的"
+                },
+                {
+                    "id": 64,
+                    "word": "penetrate",
+                    "meaning": "v. 渗入；刺穿；洞察"
+                },
+                {
+                    "id": 65,
+                    "word": "affirm",
+                    "meaning": "vt. 断言；证实"
+                },
+                {
+                    "id": 66,
+                    "word": "reaffirm",
+                    "meaning": "v. 重申，再确认"
+                },
+                {
+                    "id": 67,
+                    "word": "dignity",
+                    "meaning": "n. 庄严；尊严"
+                },
+                {
+                    "id": 68,
+                    "word": "dignitary",
+                    "meaning": "n. 显贵，要人"
+                },
+                {
+                    "id": 69,
+                    "word": "charity",
+                    "meaning": "n. 救济金；（常 pl.）慈善团体；宽容"
+                },
+                {
+                    "id": 70,
+                    "word": "auction",
+                    "meaning": "n./vt. 拍卖"
+                },
+                {
+                    "id": 71,
+                    "word": "reserve",
+                    "meaning": "vt. 保留；预订 n. 储备（物）；保留；替补队员；自然保护区"
+                },
+                {
+                    "id": 72,
+                    "word": "subtle",
+                    "meaning": "a. 微妙的；诡秘的；隐约的"
+                },
+                {
+                    "id": 73,
+                    "word": "subtlety",
+                    "meaning": "n. 精细，巧妙，敏锐；细微的差别等"
+                },
+                {
+                    "id": 74,
+                    "word": "tedious",
+                    "meaning": "a. 乏味的"
+                },
+                {
+                    "id": 75,
+                    "word": "tedium",
+                    "meaning": "n. 厌倦，乏味"
+                },
+                {
+                    "id": 76,
+                    "word": "exhaust",
+                    "meaning": "vt. 使筋疲力尽；用光；详尽论述 n. 排气装置；废气"
+                },
+                {
+                    "id": 77,
+                    "word": "inexhaustible",
+                    "meaning": "a. 无穷尽的，用不完的"
+                },
+                {
+                    "id": 78,
+                    "word": "fluid",
+                    "meaning": "n. 流体 a. 流动的"
+                },
+                {
+                    "id": 79,
+                    "word": "superfluous",
+                    "meaning": "a. 过剩的"
+                },
+                {
+                    "id": 80,
+                    "word": "migrate",
+                    "meaning": "vi. （候鸟等）迁徙；移居"
+                },
+                {
+                    "id": 81,
+                    "word": "migrant",
+                    "meaning": "n. 移民；候鸟，迁移动物"
+                },
+                {
+                    "id": 82,
+                    "word": "accent",
+                    "meaning": "n. 口音；重音 vt. 重读"
+                },
+                {
+                    "id": 83,
+                    "word": "accentuate",
+                    "meaning": "v. 重读，重音读出；强调；使突出"
+                }
+            ]
+        }
+    }
+}
