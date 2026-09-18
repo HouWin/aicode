@@ -151,7 +151,7 @@
         col.col-note { width: 25%; }
 
         td {
-            border: 1px solid #ececec;
+            border: 1px solid #ccc;
             height: 42px;
             transition: background-color 0.4s ease;
         }
@@ -186,6 +186,7 @@
         .theme-yellow td:first-child { background: #fdf3d0; }
         .theme-pink   td:first-child { background: #f8e0e8; }
         .theme-purple td:first-child { background: #e8e0f5; }
+        .theme-purple td:nth-child(2) { background: #f8e0e8;}
         .theme-mint   td:first-child { background: #d9f2e6; }
 
         /* 底部页码 */
@@ -256,7 +257,7 @@
 </head>
 <body>
 <div class="app">
-    <div class="page-card theme-blue" id="card">
+    <div class="page-card theme-purple" id="card">
         <!-- 工具栏 -->
         <div class="toolbar">
             <div class="theme-dots" id="themeDots">
@@ -286,10 +287,7 @@
         <!-- 标题 -->
         <div class="header-row">
             <input class="title-input" id="titleInput" value="Memorize words" placeholder="输入标题">
-            <span class="checkin">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                掌握打卡
-            </span>
+           
         </div>
 
         <!-- 表格 -->
@@ -345,9 +343,9 @@
             if (i === 2) td.classList.add('answer-col');
             const inp = document.createElement('input');
             inp.value = cells[i] !== undefined ? cells[i] : defaults[i];
-            if (table.rows.length === 0 && i === 0) inp.placeholder = '单词';
-            if (table.rows.length === 0 && i === 1) inp.placeholder = '默写';
-            if (table.rows.length === 0 && i === 2) inp.placeholder = '答案';
+            if (table.rows.length === 0 && i === 0) inp.value = '单词';
+            if (table.rows.length === 0 && i === 1) inp.value = '默写';
+            if (table.rows.length === 0 && i === 2) inp.value = '答案';
             // if (table.rows.length === 0 && i === 3) inp.placeholder = '备注';
             inp.addEventListener('input', save);
             td.appendChild(inp);
