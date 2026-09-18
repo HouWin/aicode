@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#F4F8F9">
+<title>Memorize words · 单词记忆表</title>
+<style>
+:root{
+  --bg:#F4F8F9;
+  --surface:#FFFFFF;
+  --ink:#22383F;
+  --dim:#7C939A;
+  --line:#E2ECEE;
+  --key:#3E9AA8;          /* 主强调：参考图标题的青蓝 */
+  --key-deep:#2E7E8B;
+  --wordbg:#D2E7EC;       /* 单词栏浅蓝 */
+  --wordbg-done:#BFDCE2;
+  --done:#9FB8BF;         /* 已掌握文字褪色 */
+  --r:12px;
+  --r-sm:8px;
+  --ease:cubic-bezier(.22,.75,.3,1);
+  --tab:62px;
+
+  --frame:#FFFFFF;
+  --frame-2:#DCE6EA;
+  --stage-1:#E7F1F3;
+  --stage-2:#CFE0E5;
+  --halo-1:#3E9AA8;
+  --halo-2:#9CC9D2;
+  --halo-a:.22;
+  --stage-art:none;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);overflow:hidden;
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;min-height:24px}
+input{font:inherit;color:inherit}
+img,svg{display:block;max-width:100%}
+
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  background:radial-gradient(130% 90% at 50% 8%,var(--stage-1),var(--stage-2) 72%)}
+.stage::before{content:"";position:absolute;inset:-18%;z-index:0;pointer-events:none;
+  opacity:var(--halo-a);filter:blur(90px);
+  background:
+    radial-gradient(38% 30% at 22% 24%,var(--halo-1),transparent 70%),
+    radial-gradient(42% 34% at 78% 74%,var(--halo-2),transparent 70%)}
+.stage::after{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none;
+  background:var(--stage-art) center/cover no-repeat;filter:blur(46px) saturate(1.1);opacity:.5}
+#app{position:relative;z-index:1;width:100%;height:100%;overflow:hidden;
+  background:var(--bg)}
+@media(min-width:760px){
+  #app{width:390px;height:min(844px,86vh);border-radius:44px;
+    box-shadow:0 0 0 11px var(--frame),0 0 0 13px var(--frame-2),
+               0 44px 100px rgba(46,126,139,.22)}
+  .notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:112px;height:26px;border-radius:15px;background:var(--frame);z-index:60}
+}
+@media(max-width:759px){.notch{display:none}.stage::before,.stage::after{display:none}}
+
+.statusbar{position:absolute;top:0;left:0;right:0;z-index:55;height:44px;padding:0:22px;
+  padding:0 22px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;
+  font-size:13px;font-weight:600;color:var(--ink)}
+.sb-r{display:flex;align-items:center;gap:5px}
+.sb-r i{display:block;background:currentColor;border-radius:1px}
+.sb-r .sig{width:15px;height:10px;
+  clip-path:polygon(0 72%,18% 72%,18% 100%,0 100%,0 72%,27% 46%,45% 46%,45% 100%,27% 100%,
+    27% 46%,54% 22%,72% 22%,72% 100%,54% 100%,54% 22%,82% 0,100% 0,100% 100%,82% 100%)}
+.sb-r .wifi{width:14px;height:10px;
+  clip-path:polygon(50% 100%,32% 74%,68% 74%,50% 100%,50% 66%,20% 40%,28% 30%,72% 30%,80% 40%,
+    50% 66%,50% 24%,8% 12%,14% 2%,86% 2%,92% 12%)}
+.sb-r .bat{width:22px;height:11px;border-radius:3px;background:none;position:relative;
+  box-shadow:inset 0 0 0 1px currentColor}
+.sb-r .bat::before{content:"";position:absolute;inset:2px;width:64%;background:currentColor;border-radius:1px}
+
+/* ── 顶部栏 ── */
+.topbar{position:absolute;top:0;left:0;right:0;z-index:50;
+  padding:calc(env(safe-area-inset-top) + 50px) 22px 0;
+  background:linear-gradient(180deg,var(--bg) 78%,transparent)}
+.brand{display:flex;align-items:center;justify-content:space-between}
+.brand h1{font-size:24px;font-weight:800;color:var(--key-deep);letter-spacing:-.3px;
+  font-family:"Georgia",-apple-system,serif;font-style:italic}
+.brand .day{font-size:12px;color:var(--dim);font-weight:600}
+
+/* 进度条卡 */
+.progress-card{margin-top:14px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:14px 16px}
+.progress-card .row{display:flex;align-items:baseline;justify-content:space-between}
+.progress-card .lab{font-size:12.5px;color:var(--dim);font-weight:600}
+.progress-card .num{font-size:15px;font-weight:700;color:var(--ink)}
+.progress-card .num b{color:var(--key-deep);font-size:20px}
+.bar{margin-top:9px;height:8px;border-radius:6px;background:#EAF2F4;overflow:hidden}
+.bar > i{display:block;height:100%;width:0;border-radius:6px;
+  background:linear-gradient(90deg,#6FB7C3,var(--key));
+  transition:width .5s var(--ease)}
+.progress-card .sub{margin-top:8px;font-size:11.5px;color:var(--dim)}
+
+/* 列头 */
+.colhead{display:grid;grid-template-columns:30px 1.05fr 1.35fr;gap:8px;
+  padding:14px 2px 8px;font-size:12px;font-weight:700;color:var(--key-deep)}
+.colhead span:nth-child(2),.colhead span:nth-child(3){text-align:left}
+
+/* 内容流 */
+#flow{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top) + 200px) 20px
+          calc(var(--tab) + env(safe-area-inset-bottom) + 22px)}
+#flow::-webkit-scrollbar{display:none}
+.panel[hidden]{display:none}
+
+/* ── 单词行：还原参考图的「勾选框 | 浅蓝单词格 | 白释义格」 ── */
+.wlist{display:flex;flex-direction:column;gap:8px}
+.wrow{display:grid;grid-template-columns:30px 1.05fr 1.35fr;gap:8px;align-items:stretch}
+.chk{appearance:none;-webkit-appearance:none;width:24px;height:24px;margin:9px 0 0;
+  border:1.6px solid #B7CDD3;border-radius:7px;background:#fff;cursor:pointer;
+  position:relative;flex:0 0 auto;transition:all .18s var(--ease)}
+.chk:checked{background:var(--key);border-color:var(--key)}
+.chk:checked::after{content:"";position:absolute;left:7px;top:3.5px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2.2px 2.2px 0;transform:rotate(45deg)}
+.wcell{height:42px;border-radius:var(--r-sm);display:flex;align-items:center;
+  padding:0 12px;font-size:14px}
+.wcell.word{background:var(--wordbg);color:var(--ink);font-weight:600;
+  font-family:"Georgia",-apple-system,serif;font-style:italic;font-size:15px}
+.wcell.def{background:var(--surface);border:1px solid var(--line);color:#33494F;font-size:13.5px}
+.wrow.done .wcell.word{background:var(--wordbg-done);color:var(--done)}
+.wrow.done .wcell.def{color:var(--done)}
+.wrow .wcell.word:active,.wrow .wcell.def:active{background:#C7DFE4}
+
+.empty-hint{padding:26px 0 6px;text-align:center;font-size:12.5px;color:var(--dim)}
+
+/* ── 第二个 tab：统计 ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px}
+.stat-card .k{font-size:12px;color:var(--dim);font-weight:600}
+.stat-card .v{font-size:30px;font-weight:800;color:var(--key-deep);margin-top:6px;
+  font-family:"Georgia",serif}
+.stat-card .v small{font-size:13px;color:var(--dim);font-weight:600;margin-left:2px}
+.week{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px;margin-bottom:14px}
+.week h3{font-size:13.5px;margin-bottom:14px;color:var(--ink)}
+.bars{display:flex;align-items:flex-end;gap:10px;height:120px}
+.bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bars .i{width:100%;border-radius:5px 5px 2px 2px;background:#E3EFF2;transition:height .5s var(--ease)}
+.bars .b.on .i{background:linear-gradient(180deg,#6FB7C3,var(--key))}
+.bars .d{font-size:10.5px;color:var(--dim)}
+.mastered{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:6px 4px}
+.mastered h3{font-size:13.5px;padding:10px 12px 4px}
+.mrow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--line)}
+.mrow .dot{width:8px;height:8px;border-radius:50%;background:var(--key);flex:0 0 auto}
+.mrow .w{font-weight:600;font-family:"Georgia",serif;font-style:italic}
+.mrow .m{margin-left:auto;font-size:12.5px;color:var(--dim)}
+
+/* ── 我的 tab ── */
+.me-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#6FB7C3,#3E9AA8);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800}
+.me-card .nm{font-size:16px;font-weight:700}
+.me-card .sub{font-size:12.5px;color:var(--dim);margin-top:3px}
+.me-list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden}
+.me-list .it{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);
+  font-size:14px}
+.me-list .it:last-child{border-bottom:0}
+.me-list .it .arr{margin-left:auto;color:#B7CDD3}
+.me-list .it .ic{width:30px;height:30px;border-radius:8px;background:#EAF2F4;color:var(--key-deep);
+  display:flex;align-items:center;justify-content:center}
+
+/* ── 悬浮添加按钮 ── */
+.fab{position:absolute;right:20px;bottom:calc(var(--tab) + 22px);z-index:45;
+  width:56px;height:56px;border-radius:18px;background:var(--key);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 24px rgba(62,154,168,.4);transition:transform .15s var(--ease)}
+.fab:active{transform:scale(.94)}
+
+/* ── 底部 tab ── */
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:50;height:var(--tab);
+  padding-bottom:env(safe-area-inset-bottom);
+  display:flex;align-items:stretch;background:var(--surface);border-top:1px solid var(--line)}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;font-size:11px;color:var(--dim)}
+.tabbar button.on{color:var(--key-deep);font-weight:700}
+.tabbar svg{width:22px;height:22px}
+
+/* ── 弹层 ── */
+.scrim{position:absolute;inset:0;z-index:88;background:rgba(34,56,63,.32);
+  opacity:0;pointer-events:none;transition:opacity .26s var(--ease)}
+.scrim.on{opacity:1;pointer-events:auto}
+.modal{position:absolute;left:0;right:0;bottom:0;z-index:90;
+  background:var(--surface);border-radius:22px 22px 0 0;
+  padding:14px 20px calc(env(safe-area-inset-bottom) + 22px);
+  transform:translateY(100%);transition:transform .3s var(--ease)}
+.modal.on{transform:none}
+.modal .grab{width:38px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 16px}
+.modal h3{font-size:17px;margin-bottom:16px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:12px;color:var(--dim);font-weight:600;margin-bottom:6px}
+.fld input{width:100%;height:46px;border:1.5px solid var(--line);border-radius:10px;
+  padding:0 13px;font-size:15px;background:#F7FAFB;outline:none}
+.fld input:focus{border-color:var(--key);background:#fff}
+.modal .save{margin-top:6px;width:100%;height:48px;border-radius:12px;background:var(--key);
+  color:#fff;font-weight:700;font-size:15px}
+
+/* toast */
+.toast{position:absolute;left:50%;bottom:calc(var(--tab) + 90px);z-index:70;
+  transform:translate(-50%,14px);opacity:0;pointer-events:none;
+  max-width:78%;padding:10px 18px;border-radius:999px;
+  background:rgba(34,56,63,.92);color:#fff;font-size:13px;
+  transition:opacity .28s var(--ease),transform .28s var(--ease)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="stage"><div id="app">
+  <div class="notch"></div>
+
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="sb-r"><i class="sig"></i><i class="wifi"></i><i class="bat"></i></span>
+  </div>
+
+  <div class="topbar">
+    <div class="brand">
+      <h1>Memorize words</h1>
+      <span class="day">周三 · 9/18</span>
+    </div>
+    <div class="progress-card">
+      <div class="row">
+        <span class="lab">今日已掌握</span>
+        <span class="num"><b id="doneN">5</b> / <span id="totalN">20</span></span>
+      </div>
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="sub" id="subText">继续保持，再记 15 个就完成今日目标</div>
+    </div>
+  </div>
+
+  <div id="flow">
+    <!-- ══ 单词本 tab ══ -->
+    <section class="panel" data-panel="home">
+      <div class="colhead">
+        <span>打卡</span><span>单词栏</span><span>释义</span>
+      </div>
+      <div class="wlist" id="wlist">
+        <!-- 行由 JS 渲染，与参考图一致 -->
+      </div>
+      <div class="empty-hint" id="emptyHint" hidden>全部掌握啦，点右下角 + 添加新单词</div>
+    </section>
+
+    <!-- ══ 统计 tab ══ -->
+    <section class="panel" data-panel="stats" hidden>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="k">累计已掌握</div><div class="v">128<small>个</small></div></div>
+        <div class="stat-card"><div class="k">连续打卡</div><div class="v">14<small>天</small></div></div>
+      </div>
+      <div class="week">
+        <h3>本周记忆量</h3>
+        <div class="bars">
+          <div class="b"><div class="i" style="height:45%"></div><div class="d">一</div></div>
+          <div class="b"><div class="i" style="height:70%"></div><div class="d">二</div></div>
+          <div class="b on"><div class="i" style="height:95%"></div><div class="d">三</div></div>
+          <div class="b"><div class="i" style="height:55%"></div><div class="d">四</div></div>
+          <div class="b"><div class="i" style="height:35%"></div><div class="d">五</div></div>
+          <div class="b"><div class="i" style="height:60%"></div><div class="d">六</div></div>
+          <div class="b"><div class="i" style="height:25%"></div><div class="d">日</div></div>
+        </div>
+      </div>
+      <div class="mastered">
+        <h3>今天新掌握</h3>
+        <div id="masteredList"></div>
+      </div>
+    </section>
+
+    <!-- ══ 我的 tab ══ -->
+    <section class="panel" data-panel="me" hidden>
+      <div class="me-card">
+        <div class="avatar">词</div>
+        <div>
+          <div class="nm">单词冒险家</div>
+          <div class="sub">已坚持 14 天 · 距离下一级还差 22 词</div>
+        </div>
+      </div>
+      <div class="me-list">
+        <div class="it"><span class="ic">
+          <svg viewBox="0 0 256 256" width="18" height="18" fill="none" stroke="currentColor" stroke-width="18"><path d="M48 64h160v128H48z"/><path d="M80 96h96M80 128h96M80 160h64"/></svg>
+        </span>词书与计划<span class="arr">›</span></div>
+        <div class="it"><span class="ic">
+          <svg viewBox="0 0 256 256" width="18" height="18" fill="none" stroke="currentColor" stroke-width="18"><circle cx="128" cy="128" r="80"/><path d="M128 78v52l36 22"/></svg>
+        </span>复习提醒<span class="arr">›</span></div>
+        <div class="it"><span class="ic">
+          <svg viewBox="0 0 256 256" width="18" height="18" fill="none" stroke="currentColor" stroke-width="18"><path d="M48 128l48 48 112-112"/></svg>
+        </span>每日目标：20 词<span class="arr">›</span></div>
+        <div class="it"><span class="ic">
+          <svg viewBox="0 0 256 256" width="18" height="18" fill="none" stroke="currentColor" stroke-width="18"><circle cx="128" cy="128" r="80"/><path d="M120 96a8 8 0 1 1 16 0c0 16-16 14-16 28"/><circle cx="128" cy="168" r="6"/></svg>
+        </span>帮助与反馈<span class="arr">›</span></div>
+      </div>
+    </section>
+  </div>
+
+  <button class="fab" id="fab" aria-label="添加单词">
+    <svg viewBox="0 0 256 256" width="26" height="26" fill="none" stroke="#fff" stroke-width="20" stroke-linecap="round"><path d="M128 64v128M64 128h128"/></svg>
+  </button>
+
+  <nav class="tabbar">
+    <button class="on" data-go="home">
+      <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><rect x="48" y="48" width="160" height="160" rx="14"/><path d="M86 96h84M86 128h84M86 160h52"/></svg>
+      单词本</button>
+    <button data-go="stats">
+      <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><path d="M48 208V128M96 208V88M144 208v-80M192 208V64"/></svg>
+      统计</button>
+    <button data-go="me">
+      <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><circle cx="128" cy="96" r="40"/><path d="M48 208c16-38 48-56 80-56s64 18 80 56"/></svg>
+      我的</button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="scrim" id="scrim"></div>
+  <div class="modal" id="modal">
+    <div class="grab"></div>
+    <h3>添加新单词</h3>
+    <div class="fld"><label>单词</label><input id="inWord" placeholder="例如：resilient"></div>
+    <div class="fld"><label>释义</label><input id="inDef" placeholder="例如：有韧性的；能快速恢复的"></div>
+    <button class="save" id="saveBtn">保存到单词本</button>
+  </div>
+</div></div>
+
+<script>
+/* 初始数据：前 5 个来自参考图，后 15 个留空待填（对应打印表的空行） */
+const words=[
+  {w:"recapitulate", d:"概括；重述要点", done:true},
+  {w:"recast",       d:"重塑；重新塑造", done:true},
+  {w:"receptive",    d:"乐于接受的；对新思想开放的", done:false},
+  {w:"recession",    d:"（经济）衰退；萧条", done:true},
+  {w:"recidivism",   d:"再犯；惯犯", done:true},
+  {w:"reconcile",    d:"使和解；使一致", done:false},
+  {w:"rectify",      d:"矫正；纠正", done:false},
+  {w:"redundant",    d:"多余的；被裁员的", done:false},
+  {w:"refute",       d:"反驳；驳倒", done:false},
+  {w:"regime",       d:"政权；管理制度", done:false},
+  {w:"rehabilitate", d:"使康复；恢复名誉", done:false},
+  {w:"reign",        d:"统治；盛行", done:false},
+  {w:"relapse",       d:"复发；故态复萌", done:false},
+  {w:"relentless",   d:"持续猛烈的；不懈的", done:false},
+  {w:"relevant",     d:"相关的；切题的", done:false},
+  {w:"reliance",     d:"依赖；信任", done:false},
+  {w:"relinquish",   d:"放弃；让出", done:false},
+  {w:"relish",       d:"享受；品味", done:false},
+  {w:"remainder",    d:"剩余物；其余人员", done:false},
+  {w:"remorse",      d:"懊悔；自责", done:false},
+];
+
+const list=document.getElementById('wlist');
+const doneN=document.getElementById('doneN');
+const totalN=document.getElementById('totalN');
+const barFill=document.getElementById('barFill');
+const subText=document.getElementById('subText');
+const emptyHint=document.getElementById('emptyHint');
+
+function render(){
+  list.innerHTML='';
+  words.forEach((it,i)=>{
+    const row=document.createElement('label');
+    row.className='wrow'+(it.done?' done':'');
+    row.innerHTML=`
+      <input type="checkbox" class="chk" ${it.done?'checked':''} data-i="${i}">
+      <div class="wcell word">${it.w}</div>
+      <div class="wcell def">${it.d}</div>`;
+    list.appendChild(row);
+  });
+  const done=words.filter(w=>w.done).length;
+  doneN.textContent=done;
+  totalN.textContent=words.length;
+  const pct=Math.round(done/words.length*100);
+  barFill.style.width=pct+'%';
+  const left=words.length-done;
+  subText.textContent = left===0
+    ? '太棒了，今天全部掌握！'
+    : `继续保持，再记 ${left} 个就完成今日目标`;
+  emptyHint.hidden = !(done>0 && left===0);
+  renderMastered();
+}
+function renderMastered(){
+  const box=document.getElementById('masteredList');
+  const todays=words.filter(w=>w.done).slice(-5).reverse();
+  box.innerHTML = todays.map(it=>`
+    <div class="mrow"><span class="dot"></span>
+      <span class="w">${it.w}</span><span class="m">${it.d}</span></div>`).join('');
+}
+list.addEventListener('change',e=>{
+  const cb=e.target.closest('.chk'); if(!cb) return;
+  const i=+cb.dataset.i;
+  words[i].done=cb.checked;
+  cb.closest('.wrow').classList.toggle('done',cb.checked);
+  toast(cb.checked?`已掌握「${words[i].w}」`:`已取消「${words[i].w}」的掌握标记`);
+  const done=words.filter(w=>w.done).length;
+  doneN.textContent=done;
+  barFill.style.width=Math.round(done/words.length*100)+'%';
+  const left=words.length-done;
+  subText.textContent = left===0 ? '太棒了，今天全部掌握！' : `继续保持，再记 ${left} 个就完成今日目标`;
+  emptyHint.hidden = !(done>0 && left===0);
+  renderMastered();
+});
+
+/* toast */
+const toastEl=document.getElementById('toast');let toastT;
+function toast(msg){
+  toastEl.textContent=msg;toastEl.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('on'),1500);
+}
+
+/* tab 切换 */
+const panels=[...document.querySelectorAll('.panel')];
+const tabs=[...document.querySelectorAll('.tabbar button')];
+tabs.forEach(b=>b.onclick=()=>{
+  tabs.forEach(x=>x.classList.toggle('on',x===b));
+  panels.forEach(p=>p.hidden=p.dataset.panel!==b.dataset.go);
+  document.getElementById('flow').scrollTop=0;
+});
+
+/* 弹层 */
+const scrim=document.getElementById('scrim'),modal=document.getElementById('modal');
+function openModal(on){
+  scrim.classList.toggle('on',on); modal.classList.toggle('on',on);
+  if(on) setTimeout(()=>document.getElementById('inWord').focus(),320);
+}
+document.getElementById('fab').onclick=()=>openModal(true);
+scrim.onclick=()=>openModal(false);
+document.getElementById('saveBtn').onclick=()=>{
+  const w=document.getElementById('inWord').value.trim();
+  const d=document.getElementById('inDef').value.trim();
+  if(!w||!d){toast('请填写单词和释义');return;}
+  words.unshift({w,d,done:false});
+  document.getElementById('inWord').value='';
+  document.getElementById('inDef').value='';
+  openModal(false); render();
+  toast(`已添加「${w}」`);
+  document.querySelector('.tabbar button[data-go="home"]').click();
+};
+
+render();
+
+/* 关键屏声明 */
+window.__UI_CAPTURE__={
+  reset:async()=>{ openModal(false);
+    document.querySelector('.tabbar button[data-go="home"]').click(); },
+  states:[
+    {id:'home',   label:'单词本首页'},
+    {id:'check',  label:'勾选打卡态', go:async()=>{
+        const boxes=document.querySelectorAll('.wlist .chk');
+        if(boxes[2] && !boxes[2].checked) boxes[2].click(); }},
+    {id:'modal',  label:'添加单词弹层', go:async()=>openModal(true)},
+    {id:'stats',  label:'统计 tab', go:async()=>{
+        document.querySelector('.tabbar button[data-go="stats"]').click(); }},
+    {id:'me',     label:'我的 tab', go:async()=>{
+        document.querySelector('.tabbar button[data-go="me"]').click(); }}
+  ]};
+</script>
+</body>
+</html>
