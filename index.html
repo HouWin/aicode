@@ -2,80 +2,139 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Memorize words 单词表</title>
+    <title>Memorize words 单词默写本</title>
     <style>
         * {
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
         }
         body {
-            background-color: #f8f8f8;
-            padding: 30px;
+            background-color: #f7f5f2;
+            padding: 32px;
             margin: 0;
         }
         .page-card {
-            background: #fff;
-            width: 900px;
+            background: #ffffff;
+            width: 920px;
             margin: 0 auto;
-            padding: 32px;
-            box-shadow: 0 2px 8px #00000012;
+            padding: 36px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(180,180,180,0.15);
+            transition: background-color 0.35s;
         }
-        .header-area {
+        .header-wrap {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
         .title-input {
             font-size: 22px;
             border: none;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #d8d8d8;
             outline: none;
-            padding: 4px 0;
-            width: 320px;
+            padding: 4px 2px;
+            width: 340px;
+            background: transparent;
+            color: #444;
+        }
+        .theme-buttons{
+            display:flex;
+            gap:8px;
+            margin-bottom:20px;
+        }
+        .theme-btn{
+            width:28px;
+            height:28px;
+            border-radius:50%;
+            border:1px solid #ddd;
+            cursor:pointer;
+        }
+        .control-buttons{
+            display:flex;
+            gap:10px;
+            margin-bottom:16px;
+        }
+        .btn{
+            padding:7px 14px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:13px;
+            background:#f0e9e4;
+            color:#555;
+            transition:0.2s;
+        }
+        .btn:hover{
+            background:#e3d9d2;
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         td {
-            border: 1px solid #e6e6e6;
-            height: 36px;
+            border: 1px solid #ececec;
+            height: 38px;
+            transition: background-color 0.35s;
         }
         td input {
             width: 100%;
             height: 100%;
             border: none;
             outline: none;
-            padding: 0 8px;
+            padding: 0 10px;
             font-size:14px;
+            background:transparent;
+            color:#444;
         }
         .footer-area {
-            margin-top:24px;
+            margin-top:28px;
             text-align:right;
         }
         .page-input {
             border: none;
-            border-bottom:1px solid #ddd;
-            width:80px;
+            border-bottom:1px solid #d8d8d8;
+            width:90px;
             font-size:16px;
             outline:none;
             text-align:center;
+            background:transparent;
         }
-        /* 第一列表格浅蓝底色，和样图一致 */
-        table tr td:first-child {
-            background-color:#e7f0f8;
+        /* 主题配色定义 */
+        .theme-blue td:first-child{background:#e7f0f8;}
+        .theme-yellow td:first-child{background:#fff6d9;}
+        .theme-pink td:first-child{background:#f7e4e9;}
+        .theme-purple td:first-child{background:#ede7f5;}
+        .theme-gray td:first-child{background:#eeeeee;}
+        @media print{
+            body{background:#fff; padding:0;}
+            .page-card{box-shadow:none; width:100%; padding:10px; border-radius:0;}
+            .theme-buttons,.control-buttons{display:none;}
         }
     </style>
 </head>
 <body>
-<div class="page-card">
-    <div class="header-area">
-        <input class="title-input" value="Memorize words" placeholder="输入标题">
-        <span>☑ 掌握打卡</span>
+<div class="page-card theme-blue" id="wordCard">
+    <!-- 主题切换 -->
+    <div class="theme-buttons">
+        <button class="theme-btn" style="background:#e7f0f8" onclick="changeTheme('theme-blue')" title="浅蓝"></button>
+        <button class="theme-btn" style="background:#fff6d9" onclick="changeTheme('theme-yellow')" title="奶黄"></button>
+        <button class="theme-btn" style="background:#f7e4e9" onclick="changeTheme('theme-pink')" title="豆沙粉"></button>
+        <button class="theme-btn" style="background:#ede7f5" onclick="changeTheme('theme-purple')" title="香芋紫"></button>
+        <button class="theme-btn" style="background:#eeeeee" onclick="changeTheme('theme-gray')" title="浅灰"></button>
+    </div>
+    <!-- 功能按钮 -->
+    <div class="control-buttons">
+        <button class="btn" onclick="addRow()">➕新增单词行</button>
+        <button class="btn" onclick="clearTable()">🗑️清空表格</button>
+    </div>
+    <!-- 标题区域 -->
+    <div class="header-wrap">
+        <input class="title-input" id="titleInput" value="Memorize words" placeholder="输入标题">
+        <span style="font-size:14px; color:#666;">☑ 掌握打卡</span>
     </div>
 
-    <table>
+    <table id="wordTable">
         <tr>
             <td><input placeholder="单词"></td>
             <td><input placeholder="释义"></td>
@@ -83,94 +142,128 @@
             <td><input placeholder="复习"></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
         <tr>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
-            <td><input></td>
+            <td><input></td><td><input></td><td><input></td><td><input></td>
         </tr>
     </table>
 
     <div class="footer-area">
-        Page <input class="page-input" value="1">
+        Page <input class="page-input" id="pageInput" value="1">
     </div>
 </div>
+
+<script>
+    const tableEl = document.getElementById('wordTable');
+    const cardEl = document.getElementById('wordCard');
+    const titleInput = document.getElementById('titleInput');
+    const pageInput = document.getElementById('pageInput');
+
+    // 切换主题
+    function changeTheme(themeClass){
+        cardEl.className = "page-card " + themeClass;
+        saveAllData();
+    }
+    // 新增一行
+    function addRow(){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input></td><td><input></td><td><input></td><td><input></td>`;
+        tableEl.appendChild(tr);
+        bindInputSave(tr);
+        saveAllData();
+    }
+    // 清空表格
+    function clearTable(){
+        if(!confirm("确定清空所有单词内容吗？")) return;
+        const inputs = tableEl.querySelectorAll('input');
+        inputs.forEach(i=>i.value="");
+        saveAllData();
+    }
+    // 保存全部数据到localStorage
+    function saveAllData(){
+        const rows = [];
+        tableEl.querySelectorAll('tr').forEach(tr=>{
+            const cells = [];
+            tr.querySelectorAll('input').forEach(inp=> cells.push(inp.value));
+            rows.push(cells);
+        })
+        const data = {
+            rows:rows,
+            title:titleInput.value,
+            page:pageInput.value,
+            theme:cardEl.className
+        }
+        localStorage.setItem('wordMemoData', JSON.stringify(data));
+    }
+    // 绑定输入框自动保存
+    function bindInputSave(container=document){
+        container.querySelectorAll('input').forEach(inp=>{
+            inp.oninput = saveAllData;
+        })
+    }
+    // 读取本地存储，页面加载恢复数据
+    function loadData(){
+        const raw = localStorage.getItem('wordMemoData');
+        if(!raw) return;
+        const data = JSON.parse(raw);
+        titleInput.value = data.title;
+        pageInput.value = data.page;
+        cardEl.className = data.theme;
+        // 重建表格行
+        tableEl.innerHTML = "";
+        data.rows.forEach(rowData=>{
+            const tr = document.createElement('tr');
+            rowData.forEach(val=>{
+                const td = document.createElement('td');
+                const inp = document.createElement('input');
+                inp.value = val;
+                td.appendChild(inp);
+                tr.appendChild(td);
+            })
+            tableEl.appendChild(tr);
+        })
+        bindInputSave();
+    }
+    // 初始化
+    bindInputSave();
+    loadData();
+</script>
 </body>
 </html>
