@@ -2,268 +2,457 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Memorize words 单词默写本</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单词默写本</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128214;</text></svg>">
     <style>
         * {
             box-sizing: border-box;
-            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 0;
         }
         body {
-            background-color: #f7f5f2;
-            padding: 32px;
-            margin: 0;
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fdf6f0 0%, #f0f4f8 100%);
+            min-height: 100vh;
+            padding: 32px 20px;
+            color: #555;
+        }
+        .app {
+            max-width: 920px;
+            margin: 0 auto;
         }
         .page-card {
-            background: #ffffff;
-            width: 920px;
-            margin: 0 auto;
-            padding: 36px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(180,180,180,0.15);
-            transition: background-color 0.35s;
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(180, 170, 160, 0.12);
+            transition: background-color 0.4s ease;
         }
-        .header-wrap {
+
+        /* 顶部工具栏 */
+        .toolbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .theme-dots {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .theme-label {
+            font-size: 13px;
+            color: #999;
+            margin-right: 4px;
+        }
+        .theme-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.25s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        .theme-dot:hover {
+            transform: scale(1.15);
+        }
+        .theme-dot.active {
+            border-color: #aaa;
+            transform: scale(1.1);
+        }
+        .theme-dot[data-theme="blue"]   { background: #dce9f5; }
+        .theme-dot[data-theme="yellow"] { background: #fdf3d0; }
+        .theme-dot[data-theme="pink"]   { background: #f8e0e8; }
+        .theme-dot[data-theme="purple"]{ background: #e8e0f5; }
+        .theme-dot[data-theme="mint"]  { background: #d9f2e6; }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #f0e9e4;
+            color: #666;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background: #e3d9d2;
+            transform: translateY(-1px);
+        }
+        .btn.primary {
+            background: #e8c9c9;
+            color: #7a5555;
+        }
+        .btn.primary:hover {
+            background: #dbaeae;
+        }
+        .btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* 标题区 */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
             margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed #eee;
         }
         .title-input {
-            font-size: 22px;
+            font-size: 26px;
+            font-weight: 600;
             border: none;
-            border-bottom: 1px solid #d8d8d8;
             outline: none;
-            padding: 4px 2px;
-            width: 340px;
+            padding: 4px 0;
+            width: 360px;
             background: transparent;
             color: #444;
+            font-family: inherit;
         }
-        .theme-buttons{
-            display:flex;
-            gap:8px;
-            margin-bottom:20px;
+        .checkin {
+            font-size: 14px;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .theme-btn{
-            width:28px;
-            height:28px;
-            border-radius:50%;
-            border:1px solid #ddd;
-            cursor:pointer;
+        .checkin svg {
+            width: 16px;
+            height: 16px;
+            color: #c9a9a9;
         }
-        .control-buttons{
-            display:flex;
-            gap:10px;
-            margin-bottom:16px;
-        }
-        .btn{
-            padding:7px 14px;
-            border:none;
-            border-radius:8px;
-            cursor:pointer;
-            font-size:13px;
-            background:#f0e9e4;
-            color:#555;
-            transition:0.2s;
-        }
-        .btn:hover{
-            background:#e3d9d2;
-        }
+
+        /* 表格 */
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
+        col.col-word { width: 25%; }
+        col.col-draft { width: 25%; }
+        col.col-answer { width: 25%; }
+        col.col-note { width: 25%; }
+
         td {
             border: 1px solid #ececec;
-            height: 38px;
-            transition: background-color 0.35s;
+            height: 42px;
+            transition: background-color 0.4s ease;
+        }
+        td:first-child {
+            background: #f5f0ec;
         }
         td input {
             width: 100%;
             height: 100%;
             border: none;
             outline: none;
-            padding: 0 10px;
-            font-size:14px;
-            background:transparent;
-            color:#444;
+            padding: 0 12px;
+            font-size: 14.5px;
+            background: transparent;
+            color: #444;
+            font-family: inherit;
         }
-        .footer-area {
-            margin-top:28px;
-            text-align:right;
+        td input::placeholder {
+            color: #ccc;
+        }
+
+        /* 答案列隐藏 */
+        .answer-col {
+            transition: all 0.3s ease;
+        }
+        .hide-answer .answer-col {
+            display: none;
+        }
+
+        /* 各主题：第一列底色 */
+        .theme-blue   td:first-child { background: #dce9f5; }
+        .theme-yellow td:first-child { background: #fdf3d0; }
+        .theme-pink   td:first-child { background: #f8e0e8; }
+        .theme-purple td:first-child { background: #e8e0f5; }
+        .theme-mint   td:first-child { background: #d9f2e6; }
+
+        /* 底部页码 */
+        .footer-row {
+            margin-top: 28px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            color: #999;
         }
         .page-input {
             border: none;
-            border-bottom:1px solid #d8d8d8;
-            width:90px;
-            font-size:16px;
-            outline:none;
-            text-align:center;
-            background:transparent;
+            border-bottom: 1px solid #ddd;
+            width: 70px;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            background: transparent;
+            color: #666;
+            font-family: inherit;
         }
-        /* 主题配色定义 */
-        .theme-blue td:first-child{background:#e7f0f8;}
-        .theme-yellow td:first-child{background:#fff6d9;}
-        .theme-pink td:first-child{background:#f7e4e9;}
-        .theme-purple td:first-child{background:#ede7f5;}
-        .theme-gray td:first-child{background:#eeeeee;}
-        @media print{
-            body{background:#fff; padding:0;}
-            .page-card{box-shadow:none; width:100%; padding:10px; border-radius:0;}
-            .theme-buttons,.control-buttons{display:none;}
+
+        /* 提示条 */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-80px);
+            background: rgba(100, 90, 90, 0.9);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 24px;
+            font-size: 14px;
+            transition: transform 0.35s ease;
+            z-index: 999;
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 打印 */
+        @media print {
+            body { background: #fff; padding: 0; }
+            .toolbar, .actions, .theme-dots, .toast { display: none !important; }
+            .page-card {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 10px;
+                max-width: 100%;
+            }
+            .answer-col { display: none !important; }
+            .title-input { border-bottom: none; }
+        }
+
+        /* 响应式 */
+        @media (max-width: 640px) {
+            body { padding: 16px 10px; }
+            .page-card { padding: 20px; }
+            .title-input { font-size: 20px; width: 100%; }
+            .header-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+            td { height: 38px; }
+            td input { font-size: 13px; padding: 0 8px; }
         }
     </style>
 </head>
 <body>
-<div class="page-card theme-blue" id="wordCard">
-    <!-- 主题切换 -->
-    <div class="theme-buttons">
-        <button class="theme-btn" style="background:#e7f0f8" onclick="changeTheme('theme-blue')" title="浅蓝"></button>
-        <button class="theme-btn" style="background:#fff6d9" onclick="changeTheme('theme-yellow')" title="奶黄"></button>
-        <button class="theme-btn" style="background:#f7e4e9" onclick="changeTheme('theme-pink')" title="豆沙粉"></button>
-        <button class="theme-btn" style="background:#ede7f5" onclick="changeTheme('theme-purple')" title="香芋紫"></button>
-        <button class="theme-btn" style="background:#eeeeee" onclick="changeTheme('theme-gray')" title="浅灰"></button>
-    </div>
-    <!-- 功能按钮 -->
-    <div class="control-buttons">
-        <button class="btn" onclick="addRow()">➕新增单词行</button>
-        <button class="btn" onclick="clearTable()">🗑️清空表格</button>
-    </div>
-    <!-- 标题区域 -->
-    <div class="header-wrap">
-        <input class="title-input" id="titleInput" value="Memorize words" placeholder="输入标题">
-        <span style="font-size:14px; color:#666;">☑ 掌握打卡</span>
-    </div>
+<div class="app">
+    <div class="page-card theme-blue" id="card">
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <div class="theme-dots" id="themeDots">
+                <span class="theme-label">换肤</span>
+                <span class="theme-dot active" data-theme="blue" title="浅蓝"></span>
+                <span class="theme-dot" data-theme="yellow" title="奶黄"></span>
+                <span class="theme-dot" data-theme="pink" title="豆沙粉"></span>
+                <span class="theme-dot" data-theme="purple" title="香芋紫"></span>
+                <span class="theme-dot" data-theme="mint" title="薄荷绿"></span>
+            </div>
+            <div class="actions">
+                <button class="btn" onclick="addRow()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    加一行
+                </button>
+                <button class="btn primary" id="toggleBtn" onclick="toggleAnswer()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    显示答案
+                </button>
+                <button class="btn" onclick="clearTable()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    清空
+                </button>
+            </div>
+        </div>
 
-    <table id="wordTable">
-        <tr>
-            <td><input placeholder="单词"></td>
-            <td><input placeholder="释义"></td>
-            <td><input placeholder="备注"></td>
-            <td><input placeholder="复习"></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-        <tr>
-            <td><input></td><td><input></td><td><input></td><td><input></td>
-        </tr>
-    </table>
+        <!-- 标题 -->
+        <div class="header-row">
+            <input class="title-input" id="titleInput" value="Memorize words" placeholder="输入标题">
+            <span class="checkin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                掌握打卡
+            </span>
+        </div>
 
-    <div class="footer-area">
-        Page <input class="page-input" id="pageInput" value="1">
+        <!-- 表格 -->
+        <table id="wordTable">
+            <colgroup>
+                <col class="col-word">
+                <col class="col-draft">
+                <col class="col-answer">
+                <col class="col-note">
+            </colgroup>
+            <!-- 行由 JS 渲染 -->
+        </table>
+
+        <!-- 页码 -->
+        <div class="footer-row">
+            <span>Page</span>
+            <input class="page-input" id="pageInput" value="1">
+        </div>
     </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-    const tableEl = document.getElementById('wordTable');
-    const cardEl = document.getElementById('wordCard');
+(function() {
+    const STORAGE_KEY = 'wordMemoData_v2';
+    const DEFAULT_ROWS = 15;
+
+    const card = document.getElementById('card');
+    const table = document.getElementById('wordTable');
     const titleInput = document.getElementById('titleInput');
     const pageInput = document.getElementById('pageInput');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const themeDots = document.getElementById('themeDots');
+    const toastEl = document.getElementById('toast');
 
-    // 切换主题
-    function changeTheme(themeClass){
-        cardEl.className = "page-card " + themeClass;
-        saveAllData();
+    let showAnswer = false;
+    let toastTimer = null;
+
+    function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
     }
-    // 新增一行
-    function addRow(){
+
+    // ---- 渲染一行 ----
+    function renderRow(cells) {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td><input></td><td><input></td><td><input></td><td><input></td>`;
-        tableEl.appendChild(tr);
-        bindInputSave(tr);
-        saveAllData();
-    }
-    // 清空表格
-    function clearTable(){
-        if(!confirm("确定清空所有单词内容吗？")) return;
-        const inputs = tableEl.querySelectorAll('input');
-        inputs.forEach(i=>i.value="");
-        saveAllData();
-    }
-    // 保存全部数据到localStorage
-    function saveAllData(){
-        const rows = [];
-        tableEl.querySelectorAll('tr').forEach(tr=>{
-            const cells = [];
-            tr.querySelectorAll('input').forEach(inp=> cells.push(inp.value));
-            rows.push(cells);
-        })
-        const data = {
-            rows:rows,
-            title:titleInput.value,
-            page:pageInput.value,
-            theme:cardEl.className
+        const defaults = ['', '', '', ''];
+        for (let i = 0; i < 4; i++) {
+            const td = document.createElement('td');
+            if (i === 2) td.classList.add('answer-col');
+            const inp = document.createElement('input');
+            inp.value = cells[i] !== undefined ? cells[i] : defaults[i];
+            if (table.rows.length === 0 && i === 0) inp.placeholder = '单词';
+            if (table.rows.length === 0 && i === 1) inp.placeholder = '默写';
+            if (table.rows.length === 0 && i === 2) inp.placeholder = '答案';
+            if (table.rows.length === 0 && i === 3) inp.placeholder = '备注';
+            inp.addEventListener('input', save);
+            td.appendChild(inp);
+            tr.appendChild(td);
         }
-        localStorage.setItem('wordMemoData', JSON.stringify(data));
+        return tr;
     }
-    // 绑定输入框自动保存
-    function bindInputSave(container=document){
-        container.querySelectorAll('input').forEach(inp=>{
-            inp.oninput = saveAllData;
-        })
+
+    // ---- 重建表格 ----
+    function renderTable(rows) {
+        table.innerHTML = '';
+        rows.forEach(r => table.appendChild(renderRow(r)));
     }
-    // 读取本地存储，页面加载恢复数据
-    function loadData(){
-        const raw = localStorage.getItem('wordMemoData');
-        if(!raw) return;
+
+    // ---- 新增行 ----
+    window.addRow = function() {
+        table.appendChild(renderRow(['', '', '', '']));
+        save();
+        toast('已加一行');
+    };
+
+    // ---- 清空 ----
+    window.clearTable = function() {
+        if (!confirm('确定清空所有内容吗？')) return;
+        table.querySelectorAll('input').forEach(i => i.value = '');
+        save();
+        toast('已清空');
+    };
+
+    // ---- 切换答案 ----
+    window.toggleAnswer = function() {
+        showAnswer = !showAnswer;
+        if (showAnswer) {
+            card.classList.remove('hide-answer');
+            toggleBtn.childNodes[1].textContent = ' 隐藏答案';
+            toast('答案已显示');
+        } else {
+            card.classList.add('hide-answer');
+            toggleBtn.childNodes[1].textContent = ' 显示答案';
+            toast('答案已隐藏');
+        }
+        save();
+    };
+
+    // ---- 换肤 ----
+    themeDots.addEventListener('click', function(e) {
+        const dot = e.target.closest('.theme-dot');
+        if (!dot) return;
+        const theme = dot.dataset.theme;
+        card.className = 'page-card theme-' + theme + (showAnswer ? '' : ' hide-answer');
+        themeDots.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        save();
+    });
+
+    // ---- 保存 / 读取 ----
+    function save() {
+        const rows = [];
+        table.querySelectorAll('tr').forEach(tr => {
+            const cells = [];
+            tr.querySelectorAll('input').forEach(i => cells.push(i.value));
+            rows.push(cells);
+        });
+        const data = {
+            rows: rows,
+            title: titleInput.value,
+            page: pageInput.value,
+            theme: card.className.match(/theme-\w+/)?.[0] || 'theme-blue',
+            showAnswer: showAnswer
+        };
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch(e) {}
+    }
+
+    function load() {
+        let raw = null;
+        try { raw = localStorage.getItem(STORAGE_KEY); } catch(e) {}
+        if (!raw) {
+            const rows = [];
+            for (let i = 0; i < DEFAULT_ROWS; i++) rows.push(['', '', '', '']);
+            renderTable(rows);
+            card.classList.add('hide-answer');
+            return;
+        }
         const data = JSON.parse(raw);
-        titleInput.value = data.title;
-        pageInput.value = data.page;
-        cardEl.className = data.theme;
-        // 重建表格行
-        tableEl.innerHTML = "";
-        data.rows.forEach(rowData=>{
-            const tr = document.createElement('tr');
-            rowData.forEach(val=>{
-                const td = document.createElement('td');
-                const inp = document.createElement('input');
-                inp.value = val;
-                td.appendChild(inp);
-                tr.appendChild(td);
-            })
-            tableEl.appendChild(tr);
-        })
-        bindInputSave();
+        titleInput.value = data.title || 'Memorize words';
+        pageInput.value = data.page || '1';
+        showAnswer = !!data.showAnswer;
+        renderTable(data.rows && data.rows.length ? data.rows : [['','','','']]);
+        card.className = 'page-card ' + (data.theme || 'theme-blue') + (showAnswer ? '' : ' hide-answer');
+        if (!showAnswer) toggleBtn.childNodes[1].textContent = ' 显示答案';
+        else toggleBtn.childNodes[1].textContent = ' 隐藏答案';
+        // 高亮当前主题圆点
+        themeDots.querySelectorAll('.theme-dot').forEach(d => {
+            d.classList.toggle('active', d.dataset.theme === (data.theme || 'theme-blue').replace('theme-', ''));
+        });
     }
-    // 初始化
-    bindInputSave();
-    loadData();
+
+    titleInput.addEventListener('input', save);
+    pageInput.addEventListener('input', save);
+
+    load();
+})();
 </script>
 </body>
 </html>
+<!-- （注：内容由AI生成） -->
