@@ -20,6 +20,8 @@
   --cell-word:#f0e8dd;
   --cell-draft:#ffffff;
   --cell-answer:#faf6f0;
+  --correct:#6fb892;
+  --wrong:#d48a9a;
   --shadow:0 2px 6px rgba(120,105,90,.06),0 18px 48px rgba(120,105,90,.10);
   --r-card:22px;
   --r-cell:10px;
@@ -35,7 +37,7 @@ body{
   min-height:100vh;padding:40px 20px 60px;color:var(--ink);
   -webkit-font-smoothing:antialiased;
 }
-.app{max-width:960px;margin:0 auto}
+.app{max-width:1100px;margin:0 auto}
 
 /* ── 卡片 ── */
 .page-card{
@@ -91,6 +93,11 @@ body{
   background:var(--accent); color:#fff; border-color:var(--accent);
   box-shadow:0 2px 8px rgba(201,162,126,.3);
 }
+.btn.btn-check{
+  background:var(--correct);color:#fff;border-color:var(--correct);
+  box-shadow:0 4px 12px rgba(111,184,146,.35);
+}
+.btn.btn-check:hover{background:#5aa17c;border-color:#5aa17c}
 
 /* ── 标题区 ── */
 .header-row{
@@ -183,22 +190,52 @@ body{
   font-family:Georgia,serif;font-style:italic;
 }
 
-/* ── 列表头：三列等宽 ── */
+/* ── 筛选栏 ── */
+.filter-bar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin:14px 0 0;
+}
+.filter-bar .filter-label{
+  font-size:11px;font-weight:700;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;
+  font-family:Georgia,serif;font-style:italic;
+  margin-right:4px;
+}
+.filter-btn{
+  padding:6px 14px;border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;color:var(--ink-2);
+  font-size:12px;cursor:pointer;font-family:inherit;
+  transition:all .2s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.filter-btn:hover{border-color:var(--line-strong);background:#f7f3ee}
+.filter-btn.active{
+  background:var(--accent);color:#fff;border-color:var(--accent);
+  box-shadow:0 2px 8px rgba(201,162,126,.3);
+}
+.filter-btn .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:currentColor;opacity:.8;
+}
+
+/* ── 列表头：四列等宽 ── */
 .colhead{
   display:grid;
-  grid-template-columns:44px 1fr 1fr 1fr;
+  grid-template-columns:44px 1fr 1fr 1fr 60px;
   gap:10px;margin:18px 0 10px;padding:0 4px;
   font-size:11.5px;font-weight:700;color:var(--muted);
   letter-spacing:1.5px;text-transform:uppercase;
   transition:grid-template-columns .2s;
 }
 .colhead span:nth-child(n+2){text-align:left}
+.colhead span:last-child{text-align:center}
 
-/* ── 表格行：三列等宽 ── */
+/* ── 表格行：四列等宽 ── */
 .tbody{display:flex;flex-direction:column;gap:8px}
 .row{
   display:grid;
-  grid-template-columns:44px 1fr 1fr 1fr;
+  grid-template-columns:44px 1fr 1fr 1fr 60px;
   gap:10px;align-items:stretch;
   transition:grid-template-columns .2s;
 }
@@ -225,6 +262,73 @@ body{
 .cell.answer{background:var(--cell-answer)}
 .cell.answer input::placeholder{color:var(--muted)}
 
+/* 默写单元格右侧的自动校验小提示 */
+.cell.draft-cell{position:relative}
+.cell.draft-cell .draft-badge{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-size:15px;font-weight:700;font-family:Georgia,serif;
+  pointer-events:none;
+  opacity:0;transition:opacity .2s;
+}
+.cell.draft-cell.is-correct .draft-badge{color:var(--correct);opacity:1}
+.cell.draft-cell.is-wrong .draft-badge{color:var(--wrong);opacity:1}
+.cell.draft-cell.is-correct .draft-badge::before{content:"✓"}
+.cell.draft-cell.is-wrong .draft-badge::before{content:"✗"}
+.cell.draft-cell.is-correct{background:rgba(111,184,146,.08)}
+.cell.draft-cell.is-wrong{background:rgba(212,138,154,.08)}
+
+/* ── 对错列 ── */
+.cell.mark{
+  cursor:pointer;
+  justify-content:center;
+  background:#fafafa;
+  border:1.5px dashed var(--line);
+  user-select:none;
+  font-size:18px;
+  font-weight:700;
+  transition:all .2s;
+}
+.cell.mark:hover{
+  border-color:var(--line-strong);
+  background:#f7f3ee;
+}
+.cell.mark .mark-inner{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;
+  font-family:Georgia,serif;
+  color:var(--muted);
+  opacity:.4;
+}
+.cell.mark.correct{
+  background:rgba(111,184,146,.12);
+  border:1.5px solid var(--correct);
+  border-style:solid;
+}
+.cell.mark.correct .mark-inner{
+  color:var(--correct);
+  opacity:1;
+}
+.cell.mark.wrong{
+  background:rgba(212,138,154,.12);
+  border:1.5px solid var(--wrong);
+  border-style:solid;
+}
+.cell.mark.wrong .mark-inner{
+  color:var(--wrong);
+  opacity:1;
+}
+.cell.mark.correct .mark-inner::before{content:"✓"}
+.cell.mark.wrong .mark-inner::before{content:"✗"}
+.cell.mark .mark-inner::before{content:"—"}
+
+/* ── 行状态颜色 ── */
+.row.is-correct .cell.draft-cell{
+  background:rgba(111,184,146,.06);
+}
+.row.is-wrong .cell.draft-cell{
+  background:rgba(212,138,154,.06);
+}
+
 /* ── 隐藏列的类 ── */
 .hide-word-col .colhead span:nth-child(2),
 .hide-word-col .row .cell.word { display: none; }
@@ -232,28 +336,32 @@ body{
 .hide-answer-col .colhead span:nth-child(3),
 .hide-answer-col .row .cell.answer { display: none; }
 
-/* 隐藏单词列：序号 + 释义 + 默写 */
+/* 隐藏单词列：序号 + 释义 + 默写 + 对错 */
 .hide-word-col .colhead,
 .hide-word-col .row {
-  grid-template-columns:44px 1fr 1fr;
+  grid-template-columns:44px 1fr 1fr 60px;
 }
 
-/* 隐藏释义列：序号 + 单词 + 默写 */
+/* 隐藏释义列：序号 + 单词 + 默写 + 对错 */
 .hide-answer-col .colhead,
 .hide-answer-col .row {
-  grid-template-columns:44px 1fr 1fr;
+  grid-template-columns:44px 1fr 1fr 60px;
 }
 
-/* 两列都隐藏：序号 + 默写 */
+/* 两列都隐藏：序号 + 默写 + 对错 */
 .hide-word-col.hide-answer-col .colhead,
 .hide-word-col.hide-answer-col .row {
-  grid-template-columns:44px 1fr;
+  grid-template-columns:44px 1fr 60px;
 }
 
 /* ── 底部页码 ── */
 .footer-row{
-  margin-top:32px;display:flex;justify-content:flex-end;align-items:center;gap:8px;
+  margin-top:32px;display:flex;justify-content:space-between;align-items:center;
+  gap:8px;flex-wrap:wrap;
   font-size:14px;color:var(--muted);font-family:Georgia,serif;font-style:italic;
+}
+.footer-row .right{
+  display:flex;align-items:center;gap:8px;
 }
 .page-input{
   border:none;border-bottom:1.5px solid var(--line-strong);
@@ -262,6 +370,22 @@ body{
   padding:2px 0;
 }
 .page-input:focus{border-bottom-color:var(--accent)}
+
+/* ── 统计 ── */
+.stats{
+  display:flex;align-items:center;gap:14px;
+  font-size:12.5px;color:var(--muted);
+  font-family:Georgia,serif;font-style:italic;
+}
+.stats .stat-item{
+  display:inline-flex;align-items:center;gap:5px;
+}
+.stats .stat-dot{
+  width:8px;height:8px;border-radius:50%;
+}
+.stats .stat-dot.correct{background:var(--correct)}
+.stats .stat-dot.wrong{background:var(--wrong)}
+.stats .stat-dot.empty{background:var(--muted);opacity:.5}
 
 /* ── Toast ── */
 .toast{
@@ -279,6 +403,11 @@ body{
 .loading{
   text-align:center;padding:60px 0;
   color:var(--muted);font-size:14px;
+  font-family:Georgia,serif;font-style:italic;
+}
+.empty-hint{
+  text-align:center;padding:40px 0;
+  color:var(--muted);font-size:13.5px;
   font-family:Georgia,serif;font-style:italic;
 }
 
@@ -307,13 +436,15 @@ body{
 /* ── 打印 ── */
 @media print{
   body{background:#fff;padding:0}
-  .toolbar,.actions,.theme-dots,.toast,.chapter-bar{display:none!important}
+  .toolbar,.actions,.theme-dots,.toast,.chapter-bar,.filter-bar{display:none!important}
   .page-card{box-shadow:none;border-radius:0;padding:14px;max-width:100%}
   .page-card::before{display:none}
   .cell{border:1px solid #999;break-inside:avoid}
   .title-input{border:none}
   .hide-answer-col .colhead span:nth-child(3),
   .hide-answer-col .row .cell.answer { display: none; }
+  .cell.mark.correct .mark-inner::before{content:"✓"}
+  .cell.mark.wrong .mark-inner::before{content:"✗"}
 }
 
 /* ── 响应式 ── */
@@ -326,17 +457,18 @@ body{
   .chapter-bar{padding:10px 12px;gap:10px}
   .chapter-bar .label{font-size:11px}
   .chapter-pill input{width:42px;font-size:15px}
-  /* 移动端三列等宽（序号列变窄） */
-  .colhead{grid-template-columns:30px 1fr 1fr 1fr;gap:6px}
-  .row{grid-template-columns:30px 1fr 1fr 1fr;gap:6px}
+  .colhead{grid-template-columns:30px 1fr 1fr 1fr 44px;gap:6px}
+  .row{grid-template-columns:30px 1fr 1fr 1fr 44px;gap:6px}
   .hide-word-col .colhead,
-  .hide-word-col .row { grid-template-columns:30px 1fr 1fr; }
+  .hide-word-col .row { grid-template-columns:30px 1fr 1fr 44px; }
   .hide-answer-col .colhead,
-  .hide-answer-col .row { grid-template-columns:30px 1fr 1fr; }
+  .hide-answer-col .row { grid-template-columns:30px 1fr 1fr 44px; }
   .hide-word-col.hide-answer-col .colhead,
-  .hide-word-col.hide-answer-col .row { grid-template-columns:30px 1fr; }
+  .hide-word-col.hide-answer-col .row { grid-template-columns:30px 1fr 44px; }
   .cell{height:40px;border-radius:8px}
   .cell input{font-size:13.5px;padding:0 10px}
+  .cell.mark{font-size:16px}
+  .cell.draft-cell .draft-badge{font-size:13px;right:6px}
 }
 </style>
 </head>
@@ -354,6 +486,10 @@ body{
         <span class="theme-dot" data-theme="mint" title="薄荷绿"></span>
       </div>
       <div class="actions">
+        <button class="btn btn-check" onclick="checkAll()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          全部对比
+        </button>
         <button class="btn" onclick="addRow()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           加一行
@@ -404,12 +540,30 @@ body{
       </div>
     </div>
 
+    <!-- 筛选栏 -->
+    <div class="filter-bar" id="filterBar">
+      <span class="filter-label">筛选</span>
+      <button class="filter-btn active" data-filter="all">
+        <span class="dot"></span>全部
+      </button>
+      <button class="filter-btn" data-filter="wrong">
+        <span class="dot" style="background:var(--wrong)"></span>只看错的
+      </button>
+      <button class="filter-btn" data-filter="correct">
+        <span class="dot" style="background:var(--correct)"></span>只看对的
+      </button>
+      <button class="filter-btn" data-filter="empty">
+        <span class="dot" style="background:var(--muted);opacity:.5"></span>未标记
+      </button>
+    </div>
+
     <!-- 列头 -->
     <div class="colhead" id="colhead">
       <span>#</span>
       <span class="col-word">单词 Word</span>
       <span class="col-answer">释义 Definition</span>
       <span>默写 Draft</span>
+      <span>对错</span>
     </div>
 
     <!-- 行容器 -->
@@ -417,10 +571,17 @@ body{
       <div class="loading">正在加载单词数据…</div>
     </div>
 
-    <!-- 页码 -->
+    <!-- 页码 + 统计 -->
     <div class="footer-row">
-      <span>Page</span>
-      <input class="page-input" id="pageInput" value="1">
+      <div class="stats" id="stats">
+        <span class="stat-item"><span class="stat-dot correct"></span><span id="statCorrect">0</span></span>
+        <span class="stat-item"><span class="stat-dot wrong"></span><span id="statWrong">0</span></span>
+        <span class="stat-item"><span class="stat-dot empty"></span><span id="statEmpty">0</span></span>
+      </div>
+      <div class="right">
+        <span>Page</span>
+        <input class="page-input" id="pageInput" value="1">
+      </div>
     </div>
   </div>
 </div>
@@ -442,10 +603,15 @@ body{
   const toggleAnswerBtn=document.getElementById('toggleAnswerBtn');
   const themeDots=document.getElementById('themeDots');
   const toastEl=document.getElementById('toast');
+  const filterBar=document.getElementById('filterBar');
+  const statCorrectEl=document.getElementById('statCorrect');
+  const statWrongEl=document.getElementById('statWrong');
+  const statEmptyEl=document.getElementById('statEmpty');
   let toastTimer=null;
   let showWordCol=true;
   let showAnswerCol=true;
-  let wordData=null;   // 由 words.json 异步加载
+  let currentFilter='all';
+  let wordData=null;
 
   function toast(msg){
     toastEl.textContent=msg;
@@ -467,24 +633,160 @@ body{
     return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
 
+  // 归一化：忽略大小写、首尾空格、连续空格
+  function normalize(s){
+    return String(s == null ? '' : s)
+      .trim()
+      .replace(/\s+/g, ' ')
+      .toLowerCase();
+  }
+
+  // 判断默写是否正确
+  // 比较对象：默写 vs 单词（不是释义）
+  function isDraftCorrect(draft, word){
+    const d = normalize(draft);
+    const w = normalize(word);
+    if(!d || !w) return null;   // 空值不算对也不算错
+    return d === w;
+  }
+
+  // 自动校验单个行
+  function autoCheckRow(tr, force=false){
+    const wordInput = tr.querySelector('.cell.word input');
+    const draftInput = tr.querySelector('.cell.draft-cell input');
+    const draftCell = tr.querySelector('.cell.draft-cell');
+    const markCell = tr.querySelector('.cell.mark');
+    if(!wordInput || !draftInput || !markCell) return;
+
+    const result = isDraftCorrect(draftInput.value, wordInput.value);
+
+    // 清除草稿格上的徽标
+    draftCell.classList.remove('is-correct','is-wrong');
+
+    if(result === null){
+      // 未填写：不自动改对错列（保留手动标记）
+      // 如果 force 则清除标记
+      if(force){
+        markCell.dataset.mark = '';
+        markCell.classList.remove('correct','wrong');
+        tr.classList.remove('is-correct','is-wrong');
+      }
+      return;
+    }
+
+    // 自动设置对错
+    const next = result ? 'correct' : 'wrong';
+    markCell.dataset.mark = next;
+    markCell.classList.remove('correct','wrong');
+    tr.classList.remove('is-correct','is-wrong');
+    if(next === 'correct'){
+      markCell.classList.add('correct');
+      tr.classList.add('is-correct');
+      draftCell.classList.add('is-correct');
+    }else{
+      markCell.classList.add('wrong');
+      tr.classList.add('is-wrong');
+      draftCell.classList.add('is-wrong');
+    }
+  }
+
+  // 渲染一行
   function renderRow(cells,idx){
     const tr=document.createElement('div');
     tr.className='row';
     const wordVal = cells[0] || '';
     const answerVal = cells[1] || '';
     const draftVal = cells[2] || '';
+    const markVal = cells[3] || '';
+    const markClass = markVal === 'correct' ? 'correct' : (markVal === 'wrong' ? 'wrong' : '');
+    if(markClass) tr.classList.add('is-' + markClass);
+
     tr.innerHTML=`
       <span class="num">${String(idx+1).padStart(2,'0')}</span>
       <div class="cell word"><input type="text" value="${escapeHtml(wordVal)}" placeholder="单词"></div>
       <div class="cell answer"><input type="text" value="${escapeHtml(answerVal)}" placeholder="释义"></div>
-      <div class="cell"><input type="text" value="${escapeHtml(draftVal)}" placeholder="默写"></div>`;
+      <div class="cell draft-cell"><input type="text" value="${escapeHtml(draftVal)}" placeholder="默写"><span class="draft-badge"></span></div>
+      <div class="cell mark ${markClass}" data-mark="${markVal}"><span class="mark-inner"></span></div>`;
+
+    const draftInput = tr.querySelector('.cell.draft-cell input');
+    const wordInput = tr.querySelector('.cell.word input');
+    const draftCell = tr.querySelector('.cell.draft-cell');
+    const markCell = tr.querySelector('.cell.mark');
+
+    // 输入时保存
     tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',save));
+
+    // 失焦时自动对比
+    draftInput.addEventListener('blur', ()=>{
+      autoCheckRow(tr);
+      save();
+      updateStats();
+      if(currentFilter !== 'all') applyFilter();
+    });
+
+    // 按回车自动对比 + 跳到下一行
+    draftInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        autoCheckRow(tr);
+        save();
+        updateStats();
+        if(currentFilter !== 'all') applyFilter();
+        // 跳到下一行
+        const allRows = Array.from(tbody.querySelectorAll('.row'));
+        const idx2 = allRows.indexOf(tr);
+        const nextRow = allRows[idx2+1];
+        if(nextRow){
+          const nextDraft = nextRow.querySelector('.cell.draft-cell input');
+          if(nextDraft) nextDraft.focus();
+        }else{
+          draftInput.blur();
+        }
+      }
+    });
+
+    // 手动点击对错列：覆盖自动结果
+    markCell.addEventListener('click', ()=>{
+      const cur = markCell.dataset.mark || '';
+      let next;
+      if(cur === '') next = 'correct';
+      else if(cur === 'correct') next = 'wrong';
+      else next = '';
+      markCell.dataset.mark = next;
+      markCell.classList.remove('correct','wrong');
+      tr.classList.remove('is-correct','is-wrong');
+      draftCell.classList.remove('is-correct','is-wrong');
+      if(next === 'correct'){
+        markCell.classList.add('correct');
+        tr.classList.add('is-correct');
+        draftCell.classList.add('is-correct');
+      }else if(next === 'wrong'){
+        markCell.classList.add('wrong');
+        tr.classList.add('is-wrong');
+        draftCell.classList.add('is-wrong');
+      }
+      save();
+      updateStats();
+      if(currentFilter !== 'all') applyFilter();
+    });
+
+    // 初始化时如果已有内容，自动对比一次（不强制覆盖已有标记）
+    if(markVal){
+      // 已经有标记，仅更新草稿格的样式
+      if(markVal === 'correct') draftCell.classList.add('is-correct');
+      else if(markVal === 'wrong') draftCell.classList.add('is-wrong');
+    }else{
+      // 没有标记但已填了默写 → 自动判断
+      autoCheckRow(tr, false);
+    }
+
     return tr;
   }
 
   function renderTable(rows){
     tbody.innerHTML='';
     rows.forEach((r,i)=>tbody.appendChild(renderRow(r,i)));
+    updateStats();
   }
 
   function chapterKey(){
@@ -505,18 +807,37 @@ body{
     try { localStorage.setItem(STORAGE_KEY + '_drafts', JSON.stringify(drafts)); } catch(e){}
   }
 
+  function getMarks(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY + '_marks') || '{}'); }
+    catch(e){ return {}; }
+  }
+
+  function saveMarks(marks){
+    try { localStorage.setItem(STORAGE_KEY + '_marks', JSON.stringify(marks)); } catch(e){}
+  }
+
   function save(){
     if(!wordData) return;
     const ch = chapterKey();
+
     const drafts = getDrafts();
     drafts[ch] = {};
+    const marks = getMarks();
+    marks[ch] = {};
+
     tbody.querySelectorAll('.row').forEach((tr, i) => {
       const inputs = tr.querySelectorAll('input');
       const draft = inputs[2] ? inputs[2].value : '';
+      const markCell = tr.querySelector('.cell.mark');
+      const mark = markCell ? (markCell.dataset.mark || '') : '';
       const item = getChapterWords(ch)[i];
-      if(item) drafts[ch][item.id] = draft;
+      if(item){
+        drafts[ch][item.id] = draft;
+        if(mark) marks[ch][item.id] = mark;
+      }
     });
     saveDrafts(drafts);
+    saveMarks(marks);
 
     const data={
       title:titleInput.value,
@@ -524,7 +845,8 @@ body{
       chapter:ch,
       theme:(card.className.match(/theme-\w+/)||['theme-blue'])[0],
       showWordCol: showWordCol,
-      showAnswerCol: showAnswerCol
+      showAnswerCol: showAnswerCol,
+      filter: currentFilter
     };
     try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}catch(e){}
   }
@@ -540,6 +862,71 @@ body{
     chapterSuffix.textContent = 'Lesson ' + chNum;
   }
 
+  function updateStats(){
+    let c=0, w=0, e=0;
+    tbody.querySelectorAll('.row').forEach(tr=>{
+      const markCell = tr.querySelector('.cell.mark');
+      const m = markCell ? (markCell.dataset.mark || '') : '';
+      if(m === 'correct') c++;
+      else if(m === 'wrong') w++;
+      else e++;
+    });
+    statCorrectEl.textContent = c;
+    statWrongEl.textContent = w;
+    statEmptyEl.textContent = e;
+  }
+
+  function applyFilter(){
+    const rows = tbody.querySelectorAll('.row');
+    let visibleCount = 0;
+    rows.forEach(tr=>{
+      const markCell = tr.querySelector('.cell.mark');
+      const m = markCell ? (markCell.dataset.mark || '') : '';
+      let show = true;
+      if(currentFilter === 'wrong') show = (m === 'wrong');
+      else if(currentFilter === 'correct') show = (m === 'correct');
+      else if(currentFilter === 'empty') show = (m === '');
+      tr.style.display = show ? '' : 'none';
+      if(show) visibleCount++;
+    });
+
+    let hint = tbody.querySelector('.empty-hint');
+    if(visibleCount === 0 && rows.length > 0){
+      if(!hint){
+        hint = document.createElement('div');
+        hint.className = 'empty-hint';
+        tbody.appendChild(hint);
+      }
+      const txt = currentFilter === 'wrong' ? '还没有标记为"错"的单词' :
+                  currentFilter === 'correct' ? '还没有标记为"对"的单词' :
+                  '所有单词都已标记';
+      hint.textContent = txt;
+    }else if(hint){
+      hint.remove();
+    }
+  }
+
+  // 全部对比按钮
+  window.checkAll=function(){
+    let total=0, correct=0, wrong=0, empty=0;
+    tbody.querySelectorAll('.row').forEach(tr=>{
+      const wordInput = tr.querySelector('.cell.word input');
+      const draftInput = tr.querySelector('.cell.draft-cell input');
+      if(!wordInput || !draftInput) return;
+      const draft = draftInput.value.trim();
+      if(!draft){ empty++; return; }   // 未填的不算
+      total++;
+      autoCheckRow(tr, true);
+      const markCell = tr.querySelector('.cell.mark');
+      if(markCell && markCell.dataset.mark === 'correct') correct++;
+      else if(markCell && markCell.dataset.mark === 'wrong') wrong++;
+    });
+    save();
+    updateStats();
+    if(currentFilter !== 'all') applyFilter();
+    toast(`已对比 ${total} 条：✓ ${correct} · ✗ ${wrong}` + (empty ? ` · 未填 ${empty}` : ''));
+  };
+
   function loadChapter(ch, notify=true){
     if(!wordData || !wordData.chapters){
       toast('单词数据尚未加载');
@@ -552,13 +939,20 @@ body{
       return;
     }
     const drafts = getDrafts()[ch] || {};
-    const rows = chapter.words.map(w => [w.word, w.meaning, drafts[w.id] || '']);
+    const marks = getMarks()[ch] || {};
+    const rows = chapter.words.map(w => [
+      w.word,
+      w.meaning,
+      drafts[w.id] || '',
+      marks[w.id] || ''
+    ]);
     renderTable(rows);
     titleInput.value = chapter.chapter;
     pageInput.value = ch;
     chapterInput.value = ch;
     updateColumnVisibilityUI();
     updateChapterNav(ch);
+    applyFilter();
 
     const theme = (localStorage.getItem(STORAGE_KEY + '_theme') || 'theme-blue').replace('theme-','');
     card.className = 'page-card theme-' + theme +
@@ -571,22 +965,37 @@ body{
   }
 
   window.addRow=function(){
-    tbody.appendChild(renderRow(['','',''],tbody.children.length));
+    tbody.appendChild(renderRow(['','','',''],tbody.children.length));
     save();
+    updateStats();
+    if(currentFilter !== 'all') applyFilter();
     toast('已加一行');
   };
 
   window.clearTable=function(){
-    if(!confirm('确定清空当前章节的默写内容吗？'))return;
+    if(!confirm('确定清空当前章节的默写和对错标记吗？'))return;
     const ch = chapterKey();
     const drafts = getDrafts();
     drafts[ch] = {};
     saveDrafts(drafts);
+    const marks = getMarks();
+    marks[ch] = {};
+    saveMarks(marks);
     tbody.querySelectorAll('.row').forEach(tr => {
       const inputs=tr.querySelectorAll('input');
       if(inputs[2]) inputs[2].value='';
+      const markCell = tr.querySelector('.cell.mark');
+      const draftCell = tr.querySelector('.cell.draft-cell');
+      if(markCell){
+        markCell.dataset.mark = '';
+        markCell.classList.remove('correct','wrong');
+        tr.classList.remove('is-correct','is-wrong');
+      }
+      if(draftCell) draftCell.classList.remove('is-correct','is-wrong');
     });
     save();
+    updateStats();
+    applyFilter();
     toast('当前章节已清空');
   };
 
@@ -604,6 +1013,18 @@ body{
     toast(showAnswerCol ? '释义列已显示' : '释义列已隐藏');
   };
 
+  filterBar.addEventListener('click',function(e){
+    const btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    currentFilter = btn.dataset.filter || 'all';
+    filterBar.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter();
+    save();
+    const label = {all:'全部', wrong:'只看错的', correct:'只看对的', empty:'未标记'}[currentFilter];
+    toast('筛选：' + label);
+  });
+
   themeDots.addEventListener('click',function(e){
     const dot=e.target.closest('.theme-dot');
     if(!dot)return;
@@ -617,7 +1038,6 @@ body{
     save();
   });
 
-  // 章节切换
   chapterInput.addEventListener('change',function(){
     loadChapter(String(parseInt(this.value,10) || 1));
   });
@@ -643,19 +1063,22 @@ body{
   titleInput.addEventListener('input',save);
   pageInput.addEventListener('input',save);
 
-  // 异步加载 words.json
   async function fetchWordData(){
     const res = await fetch('./words.json', { cache: 'no-cache' });
     if(!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
   }
 
-  // 初始化
   async function init(){
     let data={};
     try{ data=JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }catch(e){}
     showWordCol = data.showWordCol !== undefined ? data.showWordCol : true;
     showAnswerCol = data.showAnswerCol !== undefined ? data.showAnswerCol : true;
+    currentFilter = data.filter || 'all';
+
+    filterBar.querySelectorAll('.filter-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.filter === currentFilter);
+    });
 
     try{
       wordData = await fetchWordData();
