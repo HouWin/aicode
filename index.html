@@ -117,10 +117,19 @@ body{
   letter-spacing:.3px;
 }
 .checkin{
-  font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;
   font-family:Georgia,serif;font-style:italic;
+  max-width:min(380px, 48%);
+  text-align:right;line-height:1.55;cursor:pointer;
+  padding:4px 0 4px 8px;
+  transition:color .2s;
 }
-.checkin svg{width:15px;height:15px;color:var(--accent)}
+.checkin:hover{color:var(--accent-ink)}
+.checkin svg{
+  width:15px;height:15px;color:var(--accent);
+  flex-shrink:0;margin-top:2px;
+}
+.checkin .love-text{flex:1}
 
 /* ── 章节切换栏 ── */
 .chapter-bar{
@@ -454,6 +463,7 @@ body{
   .page-card::before{left:18px;right:18px}
   .title-input{font-size:22px;width:100%}
   .header-row{flex-direction:column;align-items:flex-start;gap:6px}
+  .checkin{max-width:100%;text-align:left;padding-left:0}
   .chapter-bar{padding:10px 12px;gap:10px}
   .chapter-bar .label{font-size:11px}
   .chapter-pill input{width:42px;font-size:15px}
@@ -516,9 +526,9 @@ body{
     <!-- 标题 -->
     <div class="header-row">
       <input class="title-input" id="titleInput" value="Memorize words" placeholder="输入标题">
-      <span class="checkin">
+      <span class="checkin" id="loveQuote" title="写给子祺的今日情话，点一下复制">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        坚持打卡
+        <span class="love-text"></span>
       </span>
     </div>
 
@@ -607,6 +617,7 @@ body{
   const toggleAnswerBtn=document.getElementById('toggleAnswerBtn');
   const themeDots=document.getElementById('themeDots');
   const toastEl=document.getElementById('toast');
+  const loveQuoteEl=document.getElementById('loveQuote');
   const filterBar=document.getElementById('filterBar');
   const statCorrectEl=document.getElementById('statCorrect');
   const statWrongEl=document.getElementById('statWrong');
@@ -617,6 +628,83 @@ body{
   let currentFilter='all';
   let wordData=null;
   let shuffleNonce=0;
+
+  const LOVE_QUOTES=[
+    '今天也辛苦了。背单词的时候记得：有人很喜欢你。',
+    '错几个没关系，你认真的样子我已经看见了。',
+    '这页背完就歇一会儿。你不用那么赶。',
+    '你是我心里最想被温柔对待的人。',
+    '专八很难，但你比它更让我佩服。',
+    '今天也要好好吃饭。想你的人希望你被好好照顾。',
+    '你一打开这页，我就好像准时来陪你了。',
+    '路还长，我只想和你慢慢走。',
+    '你不用很完美，你是子祺就刚好。',
+    '今晚早点睡。梦里我会准时出现。',
+    '我喜欢你，不是句子，是决定。',
+    '天气一般，想你是今天最特别的事。',
+    '牵你的手，比任何正确答案都踏实。',
+    '今天也要对自己好一点，因为你是我最心疼的人。',
+    '我把喜欢放得很轻，却放得很久。',
+    '有你在，平凡的日子也会发光。',
+    '我想听你说话，也想把今天的温柔都给你。',
+    '你是我认真生活的理由。',
+    '我想把所有好运，都换成你嘴角那一点笑。',
+    '别着急，我在，慢慢来也很好。',
+    '今天的情话很短：我很想你。',
+    '我喜欢看你认真的样子，也喜欢看你什么都不想的样子。',
+    '世界很大，我的优先事项很小，就是你。',
+    '你不必成为谁，站在我旁边就足够耀眼。',
+    '你是我愿意反复确认的那份确定。',
+    '今天也要把你放在心上最暖的位置。',
+    '我不是想占有你的时间，我只是想分享你的今天。',
+    '累了就停一停。单词可以明天再背，你要先被心疼。',
+    '想你的时候，连空气都像在轻轻叫你的名字。',
+    '我希望你被偏爱，而我正好很擅长这件事。',
+    '今天请收下这句：有我在呢。',
+    '你是我见过最温柔的答案。',
+    '想和你把以后的很多个早晨都过成这样。',
+    '喜欢你，是我每天都做对的那一件事。',
+    '把伞给你，把怀抱也给你。',
+    '你一回头，我就觉得今天没有白过。',
+    '再忙也要告诉你：你被惦记着。',
+    '今晚的月亮借我一下，我想照着对你说想你。',
+    '你不用赶路，我的喜欢会等你。',
+    '今天的风很轻，我的心思很重，全是你。',
+    '我想成为你觉得安心的那个人。',
+    '把坏心情交给我，把笑容留给你自己。',
+    '你在我这里，永远有位置，而且是最好的那个。',
+    '你值得被好好爱。这句话请你收下。',
+    '今天也要被我喜欢，这是固定安排。',
+    '和你在一起的时候，时间会变得很听话。',
+    '我希望你的每一天，都有人轻轻托着。那个人是我。',
+    '背不下来也没关系，你已经很努力了。',
+    '这一章结束后，记得给自己一点奖励。',
+    '我不知道你此刻皱不皱眉，只知道我想亲亲你的额头。',
+    '你认真学习的时候，我也在认真想你。',
+    '专八会过去，我想一直在。',
+    '喝口水，眨眨眼，然后继续。我陪着你。',
+    '你是我见过最让人心软的名字。',
+    '今天的风都在替我说：想你。',
+    '把普通的一天，过成有我惦记你的一天。',
+    '你在的地方，就是我想回家的方向。',
+    '世界上那么多词，我最想反复念的还是你的名字。',
+    '见你一面，比什么都开心。',
+    '你一笑，我这边就亮了。'
+  ];
+
+  function todayQuote(){
+    const now=new Date();
+    const day=Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())/86400000);
+    return LOVE_QUOTES[((day % LOVE_QUOTES.length)+LOVE_QUOTES.length)%LOVE_QUOTES.length];
+  }
+
+  function renderLoveQuote(){
+    if(!loveQuoteEl) return;
+    const textEl=loveQuoteEl.querySelector('.love-text');
+    const quote=todayQuote();
+    if(textEl) textEl.textContent=quote;
+    loveQuoteEl.dataset.quote=quote;
+  }
 
   function toast(msg){
     toastEl.textContent=msg;
@@ -1177,6 +1265,18 @@ body{
     return await res.json();
   }
 
+  if(loveQuoteEl){
+    loveQuoteEl.addEventListener('click', async ()=>{
+      const quote=loveQuoteEl.dataset.quote || todayQuote();
+      try{
+        await navigator.clipboard.writeText(quote);
+        toast('已复制给子祺的今日情话');
+      }catch(e){
+        toast(quote);
+      }
+    });
+  }
+
   async function init(){
     let data={};
     try{ data=JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }catch(e){}
@@ -1187,6 +1287,7 @@ body{
     filterBar.querySelectorAll('.filter-btn').forEach(b=>{
       b.classList.toggle('active', b.dataset.filter === currentFilter);
     });
+    renderLoveQuote();
 
     try{
       wordData = await fetchWordData();
