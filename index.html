@@ -490,6 +490,10 @@ body{
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           全部对比
         </button>
+        <button class="btn" onclick="shuffleRows()" title="打乱当前章节单词顺序">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+          一键乱序
+        </button>
         <button class="btn" onclick="addRow()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           加一行
@@ -612,6 +616,7 @@ body{
   let showAnswerCol=true;
   let currentFilter='all';
   let wordData=null;
+  let shuffleNonce=0;
 
   function toast(msg){
     toastEl.textContent=msg;
@@ -698,6 +703,8 @@ body{
     const answerVal = cells[1] || '';
     const draftVal = cells[2] || '';
     const markVal = cells[3] || '';
+    const wordId = cells[4] || '';
+    if(wordId) tr.dataset.id = wordId;
     const markClass = markVal === 'correct' ? 'correct' : (markVal === 'wrong' ? 'wrong' : '');
     if(markClass) tr.classList.add('is-' + markClass);
 
@@ -816,6 +823,75 @@ body{
     try { localStorage.setItem(STORAGE_KEY + '_marks', JSON.stringify(marks)); } catch(e){}
   }
 
+  function getOrders(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY + '_order') || '{}'); }
+    catch(e){ return {}; }
+  }
+
+  function saveOrders(orders){
+    try { localStorage.setItem(STORAGE_KEY + '_order', JSON.stringify(orders)); } catch(e){}
+  }
+
+  function applyOrder(words, orderIds){
+    if(!words || !words.length) return [];
+    if(!orderIds || !orderIds.length) return words.slice();
+    const map = new Map(words.map(w => [String(w.id), w]));
+    const used = new Set();
+    const result = [];
+    orderIds.forEach(id => {
+      const key = String(id);
+      const item = map.get(key);
+      if(item && !used.has(key)){
+        result.push(item);
+        used.add(key);
+      }
+    });
+    words.forEach(w => {
+      const key = String(w.id);
+      if(!used.has(key)) result.push(w);
+    });
+    return result;
+  }
+
+  function randInt(maxExclusive){
+    if(maxExclusive <= 1) return 0;
+    if(window.crypto && crypto.getRandomValues){
+      const arr = new Uint32Array(1);
+      const range = 0x100000000;
+      const limit = range - (range % maxExclusive);
+      let x;
+      do { crypto.getRandomValues(arr); x = arr[0]; } while(x >= limit);
+      return x % maxExclusive;
+    }
+    shuffleNonce++;
+    const t = (Date.now() ^ (performance.now() * 1000) ^ (shuffleNonce * 0x9e3779b9)) >>> 0;
+    return (((Math.random() * 0xffffffff) ^ t) >>> 0) % maxExclusive;
+  }
+
+  function fisherYates(ids){
+    const a = ids.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = randInt(i + 1);
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function shuffleUntilDifferent(ids){
+    if(ids.length <= 1) return ids.slice();
+    const prev = ids.join('\0');
+    let next = fisherYates(ids);
+    let tries = 0;
+    while(next.join('\0') === prev && tries < 48){
+      next = fisherYates(ids);
+      tries++;
+    }
+    if(next.join('\0') === prev && ids.length === 2){
+      next = [ids[1], ids[0]];
+    }
+    return next;
+  }
+
   function save(){
     if(!wordData) return;
     const ch = chapterKey();
@@ -825,16 +901,15 @@ body{
     const marks = getMarks();
     marks[ch] = {};
 
-    tbody.querySelectorAll('.row').forEach((tr, i) => {
+    tbody.querySelectorAll('.row').forEach(tr => {
+      const id = tr.dataset.id;
+      if(!id) return;
       const inputs = tr.querySelectorAll('input');
       const draft = inputs[2] ? inputs[2].value : '';
       const markCell = tr.querySelector('.cell.mark');
       const mark = markCell ? (markCell.dataset.mark || '') : '';
-      const item = getChapterWords(ch)[i];
-      if(item){
-        drafts[ch][item.id] = draft;
-        if(mark) marks[ch][item.id] = mark;
-      }
+      drafts[ch][id] = draft;
+      if(mark) marks[ch][id] = mark;
     });
     saveDrafts(drafts);
     saveMarks(marks);
@@ -940,11 +1015,13 @@ body{
     }
     const drafts = getDrafts()[ch] || {};
     const marks = getMarks()[ch] || {};
-    const rows = chapter.words.map(w => [
+    const ordered = applyOrder(chapter.words, getOrders()[ch]);
+    const rows = ordered.map(w => [
       w.word,
       w.meaning,
       drafts[w.id] || '',
-      marks[w.id] || ''
+      marks[w.id] || '',
+      w.id
     ]);
     renderTable(rows);
     titleInput.value = chapter.chapter;
@@ -963,6 +1040,37 @@ body{
     );
     if(notify) toast('已切换到 ' + chapter.chapter);
   }
+
+  window.shuffleRows=function(){
+    if(!wordData){
+      toast('单词数据尚未加载');
+      return;
+    }
+    const ch = chapterKey();
+    const words = getChapterWords(ch);
+    if(!words.length){
+      toast('当前没有可乱序的单词');
+      return;
+    }
+    if(words.length === 1){
+      toast('只有 1 个单词，无法打乱');
+      return;
+    }
+    save();
+    const orders = getOrders();
+    const current = (orders[ch] && orders[ch].length)
+      ? applyOrder(words, orders[ch]).map(w => w.id)
+      : words.map(w => w.id);
+    const next = shuffleUntilDifferent(current);
+    if(next.join('\0') === current.join('\0')){
+      toast('顺序未变化，再点一次');
+      return;
+    }
+    orders[ch] = next;
+    saveOrders(orders);
+    loadChapter(ch, false);
+    toast('已重新打乱，每次都不一样');
+  };
 
   window.addRow=function(){
     tbody.appendChild(renderRow(['','','',''],tbody.children.length));
